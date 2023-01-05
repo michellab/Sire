@@ -1,8 +1,7 @@
-
 import pytest
 
 from sire.units import angstrom, kcal_per_mol, GeneralUnit
-from sire.base import Properties
+from sire.legacy.Base import Properties
 
 
 def test_unitless_conversion():
@@ -122,10 +121,10 @@ def test_generalunit_zero():
     from sire.legacy.MM import CLJShiftFunction
     from sire.units import angstrom
 
-    ff = CLJShiftFunction(100*angstrom, 150*angstrom)
+    ff = CLJShiftFunction(100 * angstrom, 150 * angstrom)
 
     # this raises an exception is zero is not handled correctly
-    ff = CLJShiftFunction(100*angstrom, 0*angstrom)
+    ff = CLJShiftFunction(100 * angstrom, 0 * angstrom)
 
 
 def test_generalunit_components():
@@ -150,28 +149,28 @@ def test_generalunit_components():
     assert v.get_component("bond") == 5 * kcal_per_mol
     assert v.get_component("angle") == 3 * kcal_per_mol
 
-    v.add_component("bond", 10*kcal_per_mol)
+    v.add_component("bond", 10 * kcal_per_mol)
 
     assert v == 18 * kcal_per_mol
 
     assert v.get_component("bond") == 15 * kcal_per_mol
     assert v.get_component("angle") == 3 * kcal_per_mol
 
-    v.subtract_component("bond", 10*kcal_per_mol)
+    v.subtract_component("bond", 10 * kcal_per_mol)
 
     assert v == 8 * kcal_per_mol
 
     assert v.get_component("bond") == 5 * kcal_per_mol
     assert v.get_component("angle") == 3 * kcal_per_mol
 
-    v.set_component("bond", 2*kcal_per_mol)
+    v.set_component("bond", 2 * kcal_per_mol)
 
     assert v == 5 * kcal_per_mol
 
     assert v.get_component("bond") == 2 * kcal_per_mol
     assert v.get_component("angle") == 3 * kcal_per_mol
 
-    v.add_component("bond", -2*kcal_per_mol)
+    v.add_component("bond", -2 * kcal_per_mol)
 
     assert v == 3 * kcal_per_mol
 

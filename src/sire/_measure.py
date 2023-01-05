@@ -1,12 +1,15 @@
-
 __all__ = ["measure"]
 
 
-def measure(item0, item1=None,
-            item2=None, item3=None,
-            improper_angle: bool = False,
-            ignore_space: bool = False,
-            map=None):
+def measure(
+    item0,
+    item1=None,
+    item2=None,
+    item3=None,
+    improper_angle: bool = False,
+    ignore_space: bool = False,
+    map=None,
+):
     """
     Measure and return the distance, angle, torsion angle or improper
     angle for the passed items. The items can be points in space,
@@ -100,10 +103,9 @@ def measure(item0, item1=None,
 
             return Vector.to_vector(item)
 
-
     def _get_space(items, map):
         """Return the first space property that we find from the
-           passed items
+        passed items
         """
         try:
             space_property = map["space"]
@@ -112,7 +114,7 @@ def measure(item0, item1=None,
 
         for item in items:
             try:
-                # does this naturally have a space property?
+                # does this naturally have a space property?
                 return item.property(space_property)
             except Exception:
                 pass
@@ -156,12 +158,12 @@ def measure(item0, item1=None,
         if item3 is not None:
             item3 = space.get_minimum_image(item3, item0)
 
-
     if item3 is None:
         if item2 is None:
             return Vector.distance(item0, item1)
         else:
             from .maths import Triangle
+
             return Triangle(item0, item1, item2).angle()
 
     else:

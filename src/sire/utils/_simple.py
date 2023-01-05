@@ -1,4 +1,3 @@
-
 from dataclasses import dataclass as _dataclass
 from dataclasses import field as _field
 from typing import List as _List
@@ -10,6 +9,7 @@ __all__ = ["Simple"]
 @_dataclass
 class Simple:
     """This is the monochrome 'Simple' theme"""
+
     frames: _Dict[int, _List[str]] = _field(default_factory=dict)
 
     def should_highlight(self):
@@ -23,6 +23,7 @@ class Simple:
 
     def panel_box(self, style):
         from rich import box as _box
+
         return _box.SQUARE
 
     def padding_style(self, style):
@@ -63,10 +64,10 @@ class Simple:
 
     def get_frames(self, width: int = 80):
         """Return the frames used to animate a spinner in a console
-           of specified width
+        of specified width
 
-           This returns the list of frames plus the timeout between
-           the list
+        This returns the list of frames plus the timeout between
+        the list
         """
         if width in self.frames:
             return self.frames[width]
@@ -74,7 +75,7 @@ class Simple:
         frames = []
 
         for i in range(0, width):
-            frame = (i * '-') + '>' + ((width - i - 1) * ' ')
+            frame = (i * "-") + ">" + ((width - i - 1) * " ")
             frames.append(frame)
 
         self.frames[width] = (frames, 50)

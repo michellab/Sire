@@ -1,16 +1,16 @@
-
 __all__ = ["System"]
 
 
 class System:
-    """This class holds a complete system of molecules. This is normally
-       created by reading in molecules from an input file.
+    """
+    This class holds a complete system of molecules. This is normally
+    created by reading in molecules from an input file.
 
-       This provides a "MoleculeView"-style interface to the molecules,
-       acting very similarly to a sire.mol.SelectorMol object.
+    This provides a "MoleculeView"-style interface to the molecules,
+    acting very similarly to a sire.mol.SelectorMol object.
 
-       You can convert this to a sire.mol.SelectorMol object by
-       calling the System.molecules() function.
+    You can convert this to a sire.mol.SelectorMol object by
+    calling the System.molecules() function.
     """
 
     def __init__(self, system=None):
@@ -22,7 +22,8 @@ class System:
             if _System not in type(system).mro():
                 raise TypeError(
                     "You can only construct from a sire.legacy.System.System, "
-                    f"not a {type(system)}")
+                    f"not a {type(system)}"
+                )
 
             self._system = system
 
@@ -103,8 +104,8 @@ class System:
 
     def save_frame(self, i=None):
         """Save the current coordinates to the ith frame of this System.
-           If i is not specfied then this adds the frame onto the
-           end of the trajectory
+        If i is not specfied then this adds the frame onto the
+        end of the trajectory
         """
         if i is None:
             self._system.save_frame()
@@ -124,18 +125,19 @@ class System:
 
     def molecules(self, *args, **kwargs):
         """Return this System converted to a sire.mol.SelectorMol.
-           You can pass in arguments to search or index so that you
-           limit the number of molecules returned.
+        You can pass in arguments to search or index so that you
+        limit the number of molecules returned.
         """
         if self._molecules is not None:
             return self._molecules.molecules(*args, **kwargs)
 
         import sire.mol
+
         self._molecules = sire.mol.SelectorMol(self._system)
 
         if self._molecules.num_atoms() != self._system.num_atoms():
-            # oh dear - this is an edge case where the System does
-            # not contain complete molecules. We need to extract
+            # oh dear - this is an edge case where the System does
+            # not contain complete molecules. We need to extract
             # the molecules and re-add them
             raise NotImplementedError(
                 "sire.system.System does not yet support Systems that hold "
@@ -147,49 +149,49 @@ class System:
 
     def segments(self, *args, **kwargs):
         """Return all segments in this System (or those that match
-           the passed index, if supplied)
+        the passed index, if supplied)
         """
         return self.molecules().segments(*args, **kwargs)
 
     def chains(self, *args, **kwargs):
         """Return all chains in this System (or those that match
-           the passed index, if supplied)
+        the passed index, if supplied)
         """
         return self.molecules().chains(*args, **kwargs)
 
     def residues(self, *args, **kwargs):
         """Return all residues in this System (or those that match
-           the passed index, if supplied)
+        the passed index, if supplied)
         """
         return self.molecules().residues(*args, **kwargs)
 
     def atoms(self, *args, **kwargs):
         """Return all atoms in this System (or those that match
-           the passed index, if supplied)
+        the passed index, if supplied)
         """
         return self.molecules().atoms(*args, **kwargs)
 
     def bonds(self, *args, **kwargs):
         """Return all bonds in this System (or those that match
-           the passed index, if supplied)
+        the passed index, if supplied)
         """
         return self.molecules().bonds(*args, **kwargs)
 
     def angles(self, *args, **kwargs):
         """Return all angles in this System (or those that match
-           the passed index, if supplied)
+        the passed index, if supplied)
         """
         return self.molecules().angles(*args, **kwargs)
 
     def dihedrals(self, *args, **kwargs):
         """Return all dihedrals in this System (or those that match
-           the passed index, if supplied)
+        the passed index, if supplied)
         """
         return self.molecules().dihedrals(*args, **kwargs)
 
     def impropers(self, *args, **kwargs):
         """Return all impropers in this System (or those that match
-           the passed index, if supplied)
+        the passed index, if supplied)
         """
         return self.molecules().impropers(*args, **kwargs)
 
@@ -235,38 +237,38 @@ class System:
 
     def energy(self, *args, **kwargs):
         """Calculate and return the energy of this System
-           (or of the matching index/search subset of this System)
+        (or of the matching index/search subset of this System)
         """
         return self.molecules().energy(*args, **kwargs)
 
     def energies(self, *args, **kwargs):
         """Calculate and return the individual energies of the
-           contents of this System (or of the matching index/search
-           subset of this System)
+        contents of this System (or of the matching index/search
+        subset of this System)
         """
         return self.molecules().energies(*args, **kwargs)
 
     def charge(self, *args, **kwargs):
         """Return the total charge of this System (or of the matching
-           index/search subset of this System)
+        index/search subset of this System)
         """
         return self.molecules().charge(*args, **kwargs)
 
     def mass(self, *args, **kwargs):
         """Return the total mass of this System (or of the matching
-           index/search subset of this System)
+        index/search subset of this System)
         """
         return self.molecules().mass(*args, **kwargs)
 
     def coordinates(self, *args, **kwargs):
         """Return the center of geometry of this System (or of the matching
-           index/search subset of this System)
+        index/search subset of this System)
         """
         return self.molecules().coordinates(*args, **kwargs)
 
     def evaluate(self, *args, **kwargs):
         """Return an evaluator for this Systme (or of the matching
-           index/search subset of this System)"""
+        index/search subset of this System)"""
         return self.molecules().evaluate(*args, **kwargs)
 
     def property(self, *args, **kwargs):
@@ -283,41 +285,44 @@ class System:
 
     def property_keys(self):
         """Return the keys (IDs) of all of the System-level properties
-           of this System
+        of this System
         """
         return self._system.property_keys()
 
     def cursor(self):
         """Return a sire.mol.Cursor that can be used to edit
-           the molecules in this System
+        the molecules in this System
         """
         from ..mol._cursor import CursorsM
+
         return CursorsM(self)
 
     def view(self, *args, **kwargs):
         """View this System (or the matching index/search subset)
-           via a nglview viewer. Only works in an interactive
-           notebook session, e.g. in a Jupyter notebook
+        via a nglview viewer. Only works in an interactive
+        notebook session, e.g. in a Jupyter notebook
         """
         return self.molecules().view(*args, **kwargs)
 
     def update(self, value):
         """Update the molecules in this system so that they have
-           the same versions and data as the new molecules contained
-           in 'value'
+        the same versions and data as the new molecules contained
+        in 'value'
         """
         self._molecules = None
         self._system.update(value)
 
     def apply(self, *args, **kwargs):
-        """Apply (perform / map) the passed function (with associated arguments)
-           on all of the molecules in this System
+        """
+        Apply (perform / map) the passed function (with associated arguments)
+        on all of the molecules in this System
         """
         return self.molecules().apply(*args, **kwargs)
 
     def apply_reduce(self, *args, **kwargs):
-        """Apply (perform / map) the passed function (with associated arguments)
-           on all of the molecules in this System, reducing the result
-           using the passed reduction function
+        """
+        Apply (perform / map) the passed function (with associated arguments)
+        on all of the molecules in this System, reducing the result
+        using the passed reduction function
         """
         return self.molecules().apply_reduce(*args, **kwargs)

@@ -1,4 +1,3 @@
-
 from typing import Union as _Union
 from typing import List as _List
 from typing import IO as _IO
@@ -40,14 +39,18 @@ class _NullProgress:
 class _Progress:
     def __init__(self, show_limit: int = 50):
         from rich.progress import Progress, BarColumn, TimeRemainingColumn
+
         self._progress = Progress(
             "[progress.description]{task.description}",
-            BarColumn(style="bar.back",
-                      complete_style="bar.complete",
-                      finished_style="bar.complete"),
+            BarColumn(
+                style="bar.back",
+                complete_style="bar.complete",
+                finished_style="bar.complete",
+            ),
             "[progress.percentage]{task.percentage:>3.0f}%",
             TimeRemainingColumn(),
-            auto_refresh=False)
+            auto_refresh=False,
+        )
         self._last_update = _datetime.now()
         self._show_limit = show_limit
         self._completed = {}
@@ -73,16 +76,22 @@ class _Progress:
                 self._progress.__enter__(*args, **kwargs)
                 self._have_entered = True
 
-            task_id = self._progress.add_task(description=description,
-                                              total=total)
+            task_id = self._progress.add_task(
+                description=description, total=total
+            )
             self._completed[task_id] = 0
             self._total[task_id] = total
             return task_id
         else:
             return None
 
-    def update(self, task_id: int, completed: float = None,
-               advance: float = None, force_update: bool = False):
+    def update(
+        self,
+        task_id: int,
+        completed: float = None,
+        advance: float = None,
+        force_update: bool = False,
+    ):
         if task_id is None:
             return
         elif completed is not None:
@@ -94,17 +103,21 @@ class _Progress:
 
         now = _datetime.now()
 
-        if force_update or (now - self._last_update).total_seconds() > 0.1 or \
-                self._total[task_id] - self._completed[task_id] < 5:
-            self._progress.update(task_id=task_id,
-                                  completed=self._completed[task_id])
+        if (
+            force_update
+            or (now - self._last_update).total_seconds() > 0.1
+            or self._total[task_id] - self._completed[task_id] < 5
+        ):
+            self._progress.update(
+                task_id=task_id, completed=self._completed[task_id]
+            )
             self._progress.refresh()
             self._last_update = now
 
 
 class _NullSpinner:
     """Null spinner to use if yaspin is not available
-       disables spinners"""
+    disables spinners"""
 
     def __init__(self):
         pass
@@ -127,19 +140,27 @@ class Table:
 
     def __init__(self, title=None, show_footer=False, show_edge=True):
         from rich.table import Table as _Table
-        self._table = _Table(title=title, show_edge=show_edge,
-                             show_footer=show_footer)
 
-    def add_column(self, header, justify="center", style=None, no_wrap=False,
-                   footer=None):
+        self._table = _Table(
+            title=title, show_edge=show_edge, show_footer=show_footer
+        )
+
+    def add_column(
+        self, header, justify="center", style=None, no_wrap=False, footer=None
+    ):
         """Add a column called 'header', with specified justification,
-           style and wrapping
+        style and wrapping
         """
         if footer is not None:
             footer = str(footer)
 
-        self._table.add_column(header=header, style=style, justify=justify,
-                               no_wrap=no_wrap, footer=footer)
+        self._table.add_column(
+            header=header,
+            style=style,
+            justify=justify,
+            no_wrap=no_wrap,
+            footer=footer,
+        )
 
     def add_row(self, row):
         """Add the passed row of data to the table"""
@@ -149,6 +170,7 @@ class Table:
     def to_string(self):
         """Return this table rendered to a string"""
         from rich.console import Console as _Console
+
         console = _Console()
         output = ""
 
@@ -160,13 +182,15 @@ class Table:
 
 class Console:
     """This is a singleton class that provides access to printing
-       and logging functions to the console. This uses 'rich'
-       for rich console printing
+    and logging functions to the console. This uses 'rich'
+    for rich console printing
     """
+
     @staticmethod
     def supports_emojis():
         """Return whether or not you can print emojis to this console"""
         import sys
+
         if sys.platform == "win32":
             return False
         else:
@@ -182,16 +206,18 @@ class Console:
     @staticmethod
     def set_theme(theme):
         """Set the theme used for the console - this should be
-           one of the themes in metawards.themes
+        one of the themes in metawards.themes
         """
         global _theme
 
         if isinstance(theme, str):
             if theme.lower().strip() == "simple":
                 from ._simple import Simple
+
                 _theme = Simple()
             elif theme.lower().strip() == "default":
                 from ._spring_flowers import SpringFlowers
+
                 _theme = SpringFlowers()
         else:
             _theme = theme
@@ -202,6 +228,7 @@ class Console:
 
         if _theme is None:
             from ._spring_flowers import SpringFlowers
+
             _theme = SpringFlowers()
 
         return _theme
@@ -212,14 +239,18 @@ class Console:
 
         if _console is None:
             from rich.console import Console as _Console
+
             theme = Console._get_theme()
 
-            _console = _Console(record=True,
-                                highlight=theme.should_highlight(),
-                                highlighter=theme.highlighter(),
-                                markup=theme.should_markup(),
-                                log_time=True, log_path=True,
-                                emoji=Console.supports_emojis())
+            _console = _Console(
+                record=True,
+                highlight=theme.should_highlight(),
+                highlighter=theme.highlighter(),
+                markup=theme.should_markup(),
+                log_time=True,
+                log_path=True,
+                emoji=Console.supports_emojis(),
+            )
 
             _console._use_spinner = True
             _console._use_progress = True
@@ -228,6 +259,7 @@ class Console:
 
             # also install pretty traceback support
             from rich.traceback import install as _install_rich
+
             _install_rich()
 
         return _console
@@ -237,7 +269,6 @@ class Console:
     def redirect_output(outdir: str, auto_bzip: bool = True):
         """Redirect all output and error to the directory 'outdir'"""
         import os as os
-        import sys as sys
         import bz2
         from rich.console import Console as _Console
 
@@ -255,8 +286,13 @@ class Console:
         if console is None:
             raise AssertionError("The global console should never be None")
 
-        new_out = _Console(file=OUTFILE, record=False, log_time=True,
-                           log_path=True, emoji=Console.supports_emojis())
+        new_out = _Console(
+            file=OUTFILE,
+            record=False,
+            log_time=True,
+            log_path=True,
+            emoji=Console.supports_emojis(),
+        )
         new_out._use_spinner = False
         new_out._use_progress = False
         new_out._debugging_enabled = console._debugging_enabled
@@ -275,8 +311,8 @@ class Console:
     @staticmethod
     def debugging_enabled(level: int = None):
         """Return whether debug output is enabled (optionally for
-           the specified level) - if not, then
-           anything sent to 'debug' (for that level) is not printed
+        the specified level) - if not, then
+        anything sent to 'debug' (for that level) is not printed
         """
         console = Console._get_console()
 
@@ -294,19 +330,30 @@ class Console:
     @staticmethod
     def _retrieve_name(variable):
         # thanks to scohe001 on stackoverflow
-        # https://stackoverflow.com/questions/18425225/getting-the-name-of-a-variable-as-a-string
+        # https://stackoverflow.com/questions/18425225/getting-the-name-of-a-variable-as-a-string
         import inspect
-        callers_local_vars = inspect.currentframe().f_back.f_back.f_locals.items()
-        return [var_name for var_name, var_val in callers_local_vars
-                if var_val is variable][-1]
+
+        callers_local_vars = (
+            inspect.currentframe().f_back.f_back.f_locals.items()
+        )
+        return [
+            var_name
+            for var_name, var_val in callers_local_vars
+            if var_val is variable
+        ][-1]
 
     @staticmethod
-    def debug(text: str, variables: _List[any] = None, level: int = None,
-              markdown: bool = False, **kwargs):
+    def debug(
+        text: str,
+        variables: _List[any] = None,
+        level: int = None,
+        markdown: bool = False,
+        **kwargs,
+    ):
         """Print a debug string to the console. This will only be
-           printed if debugging is enabled. You can also print the
-           values of variables by passing them as a list to
-           'variables'
+        printed if debugging is enabled. You can also print the
+        values of variables by passing them as a list to
+        'variables'
         """
         if not Console.debugging_enabled(level=level):
             return
@@ -325,6 +372,7 @@ class Console:
 
         if markdown:
             from rich.markdown import Markdown as _Markdown
+
             try:
                 text = _Markdown(text)
             except Exception:
@@ -336,21 +384,25 @@ class Console:
             from rich.table import Table
             from rich import box
             import inspect
+
             # get the local variables in the caller's scope
             callers_local_vars = inspect.currentframe().f_back.f_locals.items()
 
             table = Table(box=box.MINIMAL_DOUBLE_HEAD, style="on magenta")
-            table.add_column("Name", justify="right", style="cyan",
-                             no_wrap=True)
+            table.add_column(
+                "Name", justify="right", style="cyan", no_wrap=True
+            )
             table.add_column("Value", justify="left", style="green")
 
             for variable in variables:
                 # get the name of the variable in the caller
                 try:
                     # go for the last matching variable in the caller's scope
-                    name = [var_name for var_name, var_val
-                            in callers_local_vars
-                            if var_val is variable][-1]
+                    name = [
+                        var_name
+                        for var_name, var_val in callers_local_vars
+                        if var_val is variable
+                    ][-1]
                 except Exception:
                     name = "variable"
 
@@ -359,11 +411,18 @@ class Console:
             console.print(table)
 
     @staticmethod
-    def print(text: str, markdown: bool = False, style: str = None,
-              markup: bool = None, *args, **kwargs):
+    def print(
+        text: str,
+        markdown: bool = False,
+        style: str = None,
+        markup: bool = None,
+        *args,
+        **kwargs,
+    ):
         """Print to the console"""
         if markdown:
             from rich.markdown import Markdown as _Markdown
+
             try:
                 text = _Markdown(text)
             except Exception:
@@ -382,8 +441,9 @@ class Console:
             if isinstance(text, str):
                 # try to print this as latin-1
                 try:
-                    text = text.encode("latin-1",
-                                       errors="replace").decode("latin-1")
+                    text = text.encode("latin-1", errors="replace").decode(
+                        "latin-1"
+                    )
                     Console._get_console().print(text, markup=markup)
                 except Exception:
                     # accept that this isn't going to be printable
@@ -393,20 +453,29 @@ class Console:
     def rule(title: str = None, style=None, **kwargs):
         """Write a rule across the screen with optional title"""
         from rich.rule import Rule as _Rule
+
         Console.print("")
         theme = Console._get_theme()
         style = theme.rule(style)
         Console.print(_Rule(title, style=style))
 
     @staticmethod
-    def panel(text: str, markdown: bool = False, width=None,
-              padding: bool = True, style: str = None,
-              expand=True, *args, **kwargs):
+    def panel(
+        text: str,
+        markdown: bool = False,
+        width=None,
+        padding: bool = True,
+        style: str = None,
+        expand=True,
+        *args,
+        **kwargs,
+    ):
         """Print within a panel to the console"""
         from rich.panel import Panel as _Panel
 
         if markdown:
             from rich.markdown import Markdown as _Markdown
+
             text = _Markdown(text)
 
         theme = Console._get_theme()
@@ -421,9 +490,17 @@ class Console:
         else:
             text = _Padding(text, (0, 1), style=padding_style)
 
-        Console.print(_Panel(text, box=box, width=width,
-                             expand=expand,
-                             style=style, *args, **kwargs))
+        Console.print(
+            _Panel(
+                text,
+                box=box,
+                width=width,
+                expand=expand,
+                style=style,
+                *args,
+                **kwargs,
+            )
+        )
 
     @staticmethod
     def error(text: str, *args, **kwargs):
@@ -449,6 +526,7 @@ class Console:
     @staticmethod
     def center(text: str, *args, **kwargs):
         from rich.text import Text as _Text
+
         Console.print(_Text(str, justify="center"), *args, **kwargs)
 
     @staticmethod
@@ -488,6 +566,7 @@ class Console:
     def spinner(text: str = ""):
         try:
             from yaspin import yaspin, Spinner
+
             have_yaspin = True
         except ImportError:
             have_yaspin = False
@@ -500,7 +579,8 @@ class Console:
         if console._use_spinner:
             theme = Console._get_theme()
             frames, delay = theme.get_frames(
-                width=console.width - len(text) - 10)
+                width=console.width - len(text) - 10
+            )
             sp = Spinner(frames, delay)
 
             y = yaspin(sp, text=text, side="right")
@@ -515,14 +595,13 @@ class Console:
     @staticmethod
     def save(file: _Union[str, _IO]):
         """Save the accumulated printing to the console to 'file'.
-           This can be a file or a filehandle. The buffer is
-           cleared after saving
+        This can be a file or a filehandle. The buffer is
+        cleared after saving
         """
 
         # get the console contents
         try:
-            text = Console._get_console().export_text(clear=True,
-                                                      styles=False)
+            text = Console._get_console().export_text(clear=True, styles=False)
         except Exception as e:
             Console.error(f"Cannot get console output: {e.__class__} {e}")
             return
@@ -536,13 +615,15 @@ class Console:
                     # make sure that encoding the file to the right character
                     # set will replace invalid characters, rather than throw
                     # unicode encoding errors
-                    text = text.encode(file.encoding,
-                                       errors="replace").decode(file.encoding)
+                    text = text.encode(file.encoding, errors="replace").decode(
+                        file.encoding
+                    )
 
                 file.write(text)
             except UnicodeEncodeError:
                 # this still didn't work - use a latin-1 round-robin
                 # to make everything ascii...
-                text = text.encode("latin-1",
-                                   errors="replace").decode("latin-1")
+                text = text.encode("latin-1", errors="replace").decode(
+                    "latin-1"
+                )
                 file.write(text)

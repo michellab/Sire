@@ -1,8 +1,10 @@
+__all__ = ["view"]
 
 _nglview_import_error = None
 
 try:
     import nglview as _nglview
+
     _has_nglview = True
 except ImportError:
     _has_nglview = False
@@ -11,10 +13,8 @@ except AttributeError as e:
     _nglview_import_error = e
 
 
-__all__ = ["view"]
-
-
 if _has_nglview:
+
     class _FrameCache:
         def __init__(self, max_frames=100):
             self._cache = {}
@@ -45,11 +45,10 @@ if _has_nglview:
         def __getitem__(self, index):
             return self._cache[index]
 
-
-    @_nglview.register_backend('sire')
+    @_nglview.register_backend("sire")
     class _SireStructureTrajectory(_nglview.Trajectory, _nglview.Structure):
         def __init__(self, obj=None, map=None):
-            if (type(obj) is _SireStructureTrajectory):
+            if type(obj) is _SireStructureTrajectory:
                 self._traj = obj._traj
                 self._map = obj._map
             elif obj is not None:
@@ -66,9 +65,10 @@ if _has_nglview:
                 self._traj = None
                 self._map = None
 
-            self.ext = 'pdb'
+            self.ext = "pdb"
             self.params = {}
             import uuid
+
             self.id = str(uuid.uuid4())
             self._cache = _FrameCache()
 
@@ -82,6 +82,7 @@ if _has_nglview:
 
         def get_structure_string(self):
             from .. import save_to_string
+
             return "\n".join(save_to_string(self._traj.first(), self.ext))
 
         @property
@@ -103,8 +104,9 @@ if _has_nglview:
                 return coords
 
             if self._cache.is_empty():
-                # work out how many frames to cache based on size (no more than 128 MB)
-                max_frames = max(1, int(32*1024*1024 / coords.size))
+                # work out how many frames to cache based on size
+                # (no more than 128 MB)
+                max_frames = max(1, int(32 * 1024 * 1024 / coords.size))
                 self._cache = _FrameCache(max_frames=max_frames)
 
             self._cache.save(index, coords)
@@ -113,31 +115,31 @@ if _has_nglview:
 
     def view(obj, representations=None, stage_parameters=None, map=None):
         """Return an NGLView viewer for this view. The returned
-           viewer can be passed directly to, e.g. a Jupyter notebook
-           to directly view the molecule(s), or it can be captured
-           in a variable so that it's NGLViewer member functions
-           can be called to edit the viewer before display.
+        viewer can be passed directly to, e.g. a Jupyter notebook
+        to directly view the molecule(s), or it can be captured
+        in a variable so that it's NGLViewer member functions
+        can be called to edit the viewer before display.
 
-           See the NGLView documentation for more information
-           on how to configure the viewer.
+        See the NGLView documentation for more information
+        on how to configure the viewer.
 
-           https://nglviewer.org/#nglview
+        https://nglviewer.org/#nglview
 
-           representations: list
-                An optional dictionary that will be passed directly
-                to the NGLView object to control the representations
-                that will be used. If this is not passed then the
-                molecule(s) will be rendered using a licorice
-                representation.
+        representations: list
+             An optional dictionary that will be passed directly
+             to the NGLView object to control the representations
+             that will be used. If this is not passed then the
+             molecule(s) will be rendered using a licorice
+             representation.
 
-            stage_parameters: dict
-                An optional dictionary that will be passed directly
-                to the NGLView object to set the stage parameters.
+         stage_parameters: dict
+             An optional dictionary that will be passed directly
+             to the NGLView object to set the stage parameters.
 
-            map: dict or sire.base.PropertyMap
-                An optional property map that can be used to control
-                which properties are used to get the molecular data
-                to be viewed.
+         map: dict or sire.base.PropertyMap
+             An optional property map that can be used to control
+             which properties are used to get the molecular data
+             to be viewed.
         """
         struc_traj = _SireStructureTrajectory(obj, map=map)
         view = _nglview.NGLWidget(struc_traj)
@@ -149,9 +151,14 @@ if _has_nglview:
             view.representations = representations
 
         if stage_parameters is None:
-            view.stage.set_parameters(clipNear=0, clipFar=100, clipDist=0,
-                                      fogNear=0, fogFar=100,
-                                      backgroundColor="black")
+            view.stage.set_parameters(
+                clipNear=0,
+                clipFar=100,
+                clipDist=0,
+                fogNear=0,
+                fogFar=100,
+                backgroundColor="black",
+            )
         else:
             view.stage.set_parameters(**stage_parameters)
 
@@ -160,6 +167,7 @@ if _has_nglview:
         return view
 
 elif _nglview_import_error is not None:
+
     def view(obj, *args, **kwargs):
         raise ImportError(
             "nglview cannot be imported. This is because of an error "
@@ -171,9 +179,11 @@ elif _nglview_import_error is not None:
         )
 
 else:
+
     def view(obj, *args, **kwargs):
         raise ImportError(
             "You need to install nglview to be able to view "
             "molecules. Do this by typing, e.g. "
             "'mamba install nglview' and then restarting Python "
-            "and running this script/notebook again.")
+            "and running this script/notebook again."
+        )
