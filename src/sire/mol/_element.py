@@ -1,21 +1,26 @@
+__all__ = ["Element"]
 
 from ..legacy.Mol import Element
 
 
 def _color(obj):
-    """Return the color of the element, as a RGB triple
-       (three integers from 0 to 255). Note that this is
-       the color typically used to represent the element
-       in a molecular viewer, not the actual color of
-       the element.
     """
+    Return the color of the element, as a RGB triple
+    (three integers from 0 to 255). Note that this is
+    the color typically used to represent the element
+    in a molecular viewer, not the actual color of
+    the element.
+    """
+
     def _float_to_int(v):
         i = int(v * 255)
         return max(0, min(i, 255))
 
-    return (_float_to_int(obj.red()),
-            _float_to_int(obj.green()),
-            _float_to_int(obj.blue()))
+    return (
+        _float_to_int(obj.red()),
+        _float_to_int(obj.green()),
+        _float_to_int(obj.blue()),
+    )
 
 
 def _hex_color(obj):
@@ -25,7 +30,7 @@ def _hex_color(obj):
     def to_hex(v):
         h = hex(v)[2:]
         if len(h) < 2:
-            return "0"+h
+            return "0" + h
         else:
             return h
 
@@ -34,22 +39,22 @@ def _hex_color(obj):
 
 def _color_name(obj):
     """Return the color name of the element. Note that this is
-       the color typically used to represent the element
-       in a molecular viewer, not the actual color of
-       the element.
+    the color typically used to represent the element
+    in a molecular viewer, not the actual color of
+    the element.
     """
     colors = {
-        1: "white",     # hydrogen
+        1: "white",  # hydrogen
         6: "charcoal",  # carbon
-        7: "blue",      # nitrogen
-        8: "red",       # oxygen
-       16: "yellow"     # sulphur
+        7: "blue",  # nitrogen
+        8: "red",  # oxygen
+        16: "yellow",  # sulphur
     }
 
     try:
         return colors[obj.num_protons()]
     except KeyError:
-        return "silver" # default
+        return "silver"  # default
 
 
 Element.color = _color

@@ -1,4 +1,3 @@
-
 import time
 
 __all__ = ["Profiler", "NullProfiler"]
@@ -25,8 +24,8 @@ class NullProfiler:
 
 class Profiler:
     """This is a simple profiling class that supports manual
-       instrumenting of the code. It is used for sub-function
-       profiling.
+    instrumenting of the code. It is used for sub-function
+    profiling.
     """
 
     def __init__(self, name: str = None, parent=None):
@@ -101,29 +100,29 @@ class Profiler:
 
     def total(self) -> float:
         """Return the amount of time that was recorded for this
-           profiler in milliseconds (accurate to ~nanoseconds)
+        profiler in milliseconds (accurate to ~nanoseconds)
         """
         if self._parent is None:
             # this is the top-level profiler - just return the child total
             return self.child_total()
         elif self._end:
-            return (self._end - self._start) * 0.000001    # ns to ms
+            return (self._end - self._start) * 0.000001  # ns to ms
         else:
             return None
 
     def start(self, name: str):
         """Start profiling the section called 'name'. This
-           returns the updated profiler, e.g.
+        returns the updated profiler, e.g.
 
-           p = Profiler()
+        p = Profiler()
 
-           p = p.start("long_loop")
+        p = p.start("long_loop")
 
-           # run some code
+        # run some code
 
-           p = p.end()
+        p = p.end()
 
-           print(p)
+        print(p)
         """
         p = Profiler(name=name, parent=self)
         self._children.append(p)
@@ -133,19 +132,24 @@ class Profiler:
 
     def stop(self):
         """Stop profiling. This records the end time
-           and returns the parent profiler (if we have one)
+        and returns the parent profiler (if we have one)
         """
         end = time.time_ns()
 
         if self._start is None:
             from ._console import Console
-            Console.warning(f"You cannot stop profiler {self._name} as "
-                            f"it has not been started!")
+
+            Console.warning(
+                f"You cannot stop profiler {self._name} as "
+                f"it has not been started!"
+            )
         elif self._end is not None:
             from ._console import Console
+
             Console.warning(
                 f"WARNING: You cannot stop profiler {self._name} as "
-                f"it has already been stopped!")
+                f"it has already been stopped!"
+            )
         else:
             self._end = end
 

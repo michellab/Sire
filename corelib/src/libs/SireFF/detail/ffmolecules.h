@@ -707,7 +707,7 @@ FFMolecule<PTNL> FFMolecule<PTNL>::getDifferences(const FFMolecule<PTNL> &newmol
                 //get the CGIdx of this group
                 if (changed_group < 0 or changed_group >= selected_cgroups.count())
                 {
-                    qDebug() << "WARNING: CHANGED GROUP ERROR?" << changed_group << selected_cgroups.count();
+                    //qDebug() << "WARNING: CHANGED GROUP ERROR?" << changed_group << selected_cgroups.count();
                     return *this;
                 }
                 else

@@ -1,49 +1,109 @@
-
 __all__ = [
-            "Atom", "AtomIdx", "AtomName", "AtomNum",
-            "BondType", "Chain", "ChainIdx", "ChainName",
-            "Cursor", "Cursors", "CursorsM",
-            "Element", "ResIdx", "ResName", "ResNum",
-            "Residue", "MolIdx", "Molecule",
-            "MolName", "MolNum", "SegIdx", "Segment",
-            "SegName", "Selector_Atom_", "Selector_Chain_",
-            "Selector_Residue_", "Selector_Segment_",
-            "SelectorM_Atom_", "SelectorM_Chain_",
-            "SelectorM_Residue_", "SelectorM_Segment_",
-            "SelectorMol", "Stereoscopy", "TrajectoryIterator"
-           ]
+    "Atom",
+    "AtomIdx",
+    "AtomName",
+    "AtomNum",
+    "BondType",
+    "Chain",
+    "ChainIdx",
+    "ChainName",
+    "Cursor",
+    "Cursors",
+    "CursorsM",
+    "Element",
+    "ResIdx",
+    "ResName",
+    "ResNum",
+    "Residue",
+    "MolIdx",
+    "Molecule",
+    "MolName",
+    "MolNum",
+    "SegIdx",
+    "Segment",
+    "SegName",
+    "Selector_Atom_",
+    "Selector_Chain_",
+    "Selector_Residue_",
+    "Selector_Segment_",
+    "SelectorM_Atom_",
+    "SelectorM_Chain_",
+    "SelectorM_Residue_",
+    "SelectorM_Segment_",
+    "SelectorMol",
+    "Stereoscopy",
+    "TrajectoryIterator",
+]
 
 
 from ..legacy import Mol as _Mol
 from .. import use_new_api as _use_new_api
-_use_new_api()
 
 from ..legacy import Base as _Base
 
-from ..legacy.Mol import AtomName, AtomNum, AtomIdx, AtomID, \
-                         ResName, ResNum, ResIdx, ResID, \
-                         ChainName, ChainIdx, ChainID, \
-                         SegName, SegIdx, SegID, \
-                         CGName, CGIdx, CGID, \
-                         MolName, MolNum, MolIdx, MolID, \
-                         BondID, AngleID, DihedralID, ImproperID, \
-                         Atom, Selector_Atom_, SelectorM_Atom_, \
-                         CutGroup, Selector_CutGroup_, SelectorM_CutGroup_, \
-                         Residue, Selector_Residue_, SelectorM_Residue_, \
-                         Chain, Selector_Chain_, SelectorM_Chain_, \
-                         Segment, Selector_Segment_, SelectorM_Segment_, \
-                         Molecule, SelectorMol, Molecules, \
-                         MoleculeView, Select, \
-                         BondType, Stereoscopy, \
-                         AtomCoords, AtomMasses, AtomCharges
+from ..legacy.Mol import (
+    AtomName,
+    AtomNum,
+    AtomIdx,
+    AtomID,
+    ResName,
+    ResNum,
+    ResIdx,
+    ResID,
+    ChainName,
+    ChainIdx,
+    ChainID,
+    SegName,
+    SegIdx,
+    SegID,
+    MolName,
+    MolNum,
+    MolIdx,
+    BondID,
+    AngleID,
+    DihedralID,
+    ImproperID,
+    Atom,
+    Selector_Atom_,
+    SelectorM_Atom_,
+    CutGroup,
+    Selector_CutGroup_,
+    SelectorM_CutGroup_,
+    Residue,
+    Selector_Residue_,
+    SelectorM_Residue_,
+    Chain,
+    Selector_Chain_,
+    SelectorM_Chain_,
+    Segment,
+    Selector_Segment_,
+    SelectorM_Segment_,
+    Molecule,
+    SelectorMol,
+    MoleculeView,
+    Select,
+    BondType,
+    Stereoscopy,
+    AtomCoords,
+)
+
+from ._cursor import Cursor, Cursors, CursorsM
+from ._trajectory import TrajectoryIterator
+from ._element import Element
+from ._view import view as _viewfunc
+
+# make sure that Vector has units attached
+from ..maths import Vector as _Vector
+
+_use_new_api()
+
 
 # Here I will define some functions that make accessing
 # things from moleculeviews more convenient
 def __is_molecule_class(obj):
     mro = type(obj).mro()
 
-    return Molecule in mro or \
-            SelectorMol in mro
+    return Molecule in mro or SelectorMol in mro
 
 
 def __is_bond_class(obj):
@@ -51,8 +111,7 @@ def __is_bond_class(obj):
 
     from sire.mm import Bond, SelectorBond
 
-    return Bond in mro or \
-        SelectorBond in mro
+    return Bond in mro or SelectorBond in mro
 
 
 def __is_angle_class(obj):
@@ -60,8 +119,7 @@ def __is_angle_class(obj):
 
     from sire.mm import Angle, SelectorAngle
 
-    return Angle in mro or \
-        SelectorAngle in mro
+    return Angle in mro or SelectorAngle in mro
 
 
 def __is_dihedral_class(obj):
@@ -69,8 +127,7 @@ def __is_dihedral_class(obj):
 
     from sire.mm import Dihedral, SelectorDihedral
 
-    return Dihedral in mro or \
-        SelectorDihedral in mro
+    return Dihedral in mro or SelectorDihedral in mro
 
 
 def __is_improper_class(obj):
@@ -78,61 +135,61 @@ def __is_improper_class(obj):
 
     from sire.mm import Improper, SelectorImproper
 
-    return Improper in mro or \
-        SelectorImproper in mro
+    return Improper in mro or SelectorImproper in mro
 
 
 def __is_atom_class(obj):
     mro = type(obj).mro()
 
-    return Atom in mro or \
-            Selector_Atom_ in mro or \
-            SelectorM_Atom_ in mro
+    return Atom in mro or Selector_Atom_ in mro or SelectorM_Atom_ in mro
 
 
 def __is_residue_class(obj):
     mro = type(obj).mro()
 
-    return Residue in mro or \
-            Selector_Residue_ in mro or \
-            SelectorM_Residue_ in mro
+    return (
+        Residue in mro or Selector_Residue_ in mro or SelectorM_Residue_ in mro
+    )
 
 
 def __is_chain_class(obj):
     mro = type(obj).mro()
 
-    return Chain in mro or \
-            Selector_Chain_ in mro or \
-            SelectorM_Chain_ in mro
+    return Chain in mro or Selector_Chain_ in mro or SelectorM_Chain_ in mro
 
 
 def __is_segment_class(obj):
     mro = type(obj).mro()
 
-    return Segment in mro or \
-            Selector_Segment_ in mro or \
-            SelectorM_Segment_ in mro
+    return (
+        Segment in mro or Selector_Segment_ in mro or SelectorM_Segment_ in mro
+    )
 
 
 def __is_cutgroup_class(obj):
     mro = type(obj).mro()
 
-    return CutGroup in mro or \
-            Selector_CutGroup_ in mro or \
-            SelectorM_CutGroup_ in mro
+    return (
+        CutGroup in mro
+        or Selector_CutGroup_ in mro
+        or SelectorM_CutGroup_ in mro
+    )
 
 
 def __is_selector_class(obj):
     try:
         t = obj.what()
-        return t.find("SireMol::Selector") != -1 or \
-                    t.find("SireMM::Selector") != -1
+        return (
+            t.find("SireMol::Selector") != -1
+            or t.find("SireMM::Selector") != -1
+        )
     except Exception:
         return False
 
 
 def __is_internal_class(obj):
     from ..mm import Bond, Angle, Dihedral, Improper
+
     return type(obj) in [Bond, Angle, Dihedral, Improper]
 
 
@@ -148,7 +205,7 @@ def __is_list_class(obj):
 
 def __fix_obj(obj):
     """This is needed because MolViewPtr objects that hold Selector_T_ types
-       do not convert properly.
+    do not convert properly.
     """
     w = obj.what()
 
@@ -170,17 +227,18 @@ def __fix_obj(obj):
 
 def __from_select_result(obj):
     """Convert the passed SelectResult from a search into the
-       most appropriate MoleculeView-derived class
+    most appropriate MoleculeView-derived class
     """
     if hasattr(obj, "listCount") and not hasattr(obj, "list_count"):
         # Sometimes the SelectResult hasn't been converted, i.e. because
-        # it has come from an old api or mixed version of Sire, or
+        # it has come from an old api or mixed version of Sire, or
         # BioSimSpace has done something weird...
         raise SystemError(
             "Something has gone wrong with sire. Despite being loaded "
             "with the new or mixed API, it is being passed the object "
             f"'{obj}' of type {type(obj)} which only has the old API active. "
-            "Has Sire been loaded with support for old module names?")
+            "Has Sire been loaded with support for old module names?"
+        )
 
     if obj.list_count() == 0:
         raise KeyError("Nothing matched the search.")
@@ -190,10 +248,12 @@ def __from_select_result(obj):
     if obj.list_count() == 1:
         obj = __fix_obj(obj.list_at(0))
 
-        if obj.what() in ["SireMM::SelectorBond",
-                          "SireMM::SelectorAngle",
-                          "SireMM::SelectorDihedral",
-                          "SireMM::SelectorImproper"]:
+        if obj.what() in [
+            "SireMM::SelectorBond",
+            "SireMM::SelectorAngle",
+            "SireMM::SelectorDihedral",
+            "SireMM::SelectorImproper",
+        ]:
             if obj.count() == 1:
                 obj = obj[0]
         elif obj.what() != typ:
@@ -224,18 +284,22 @@ def __from_select_result(obj):
         return SelectorM_CutGroup_(obj)
     else:
         from ..mm import SelectorBond, SelectorMBond
+
         if SelectorBond in type(obj.list_at(0)).mro():
             return SelectorMBond(obj)
 
         from ..mm import SelectorAngle, SelectorMAngle
+
         if SelectorAngle in type(obj.list_at(0)).mro():
             return SelectorMAngle(obj)
 
         from ..mm import SelectorDihedral, SelectorMDihedral
+
         if SelectorDihedral in type(obj.list_at(0)).mro():
             return SelectorMDihedral(obj)
 
         from ..mm import SelectorImproper, SelectorMImproper
+
         if SelectorImproper in type(obj.list_at(0)).mro():
             return SelectorMImproper(obj)
 
@@ -245,13 +309,15 @@ def __from_select_result(obj):
 
 def __select_call__(obj, molecules, map=None):
     """Search for the desired objects in the passed molecules,
-       optionally passing in a property map to identify the properties
+    optionally passing in a property map to identify the properties
     """
     from ..system import System
+
     if type(molecules) is System:
         molecules = molecules._system
 
     from ..base import create_map
+
     map = create_map(map)
 
     return __from_select_result(obj.__orig_call__(molecules, map))
@@ -271,7 +337,7 @@ def __fixed__getitem__(obj, key):
         if len(key) == 2:
             map = create_map(key[1])
             key = key[0]
-    except Exception as e:
+    except Exception:
         # the second value is not a property map
         pass
 
@@ -329,8 +395,7 @@ def __fixed__atoms__(obj, idx=None, auto_reduce=False, map=None):
     if idx is None:
         result = obj.__orig__atoms()
     elif type(idx) is range:
-        result = obj.__orig__atoms(list(idx),
-                                   map=create_map(map))
+        result = obj.__orig__atoms(list(idx), map=create_map(map))
     else:
         result = obj.__orig__atoms(idx, map=create_map(map))
 
@@ -340,8 +405,7 @@ def __fixed__atoms__(obj, idx=None, auto_reduce=False, map=None):
         return result
 
 
-def __fixed__bonds__(obj, idx=None, idx1=None,
-                     auto_reduce=False, map=None):
+def __fixed__bonds__(obj, idx=None, idx1=None, auto_reduce=False, map=None):
     if idx is None and idx1 is not None:
         idx = idx1
         idx1 = None
@@ -352,16 +416,22 @@ def __fixed__bonds__(obj, idx=None, idx1=None,
     if issubclass(type(obj), MoleculeView):
         # this is a single-molecule view
         from ..mm import SelectorBond
+
         C = SelectorBond
+
         def _fromBondID(obj, bondid):
             return SelectorBond(obj, bondid, map=create_map(map))
+
     else:
         # this is a multi-molecule container
         from ..mm import SelectorMBond
+
         C = SelectorMBond
+
         def _fromBondID(obj, bondid):
-            return SelectorMBond(obj.to_select_result(), bondid,
-                                 map=create_map(map))
+            return SelectorMBond(
+                obj.to_select_result(), bondid, map=create_map(map)
+            )
 
     if idx is None:
         try:
@@ -374,8 +444,7 @@ def __fixed__bonds__(obj, idx=None, idx1=None,
         else:
             result = C(obj.atoms(idx, map=create_map(map)))
     else:
-        result = C(obj.atoms(idx), obj.atoms(idx1),
-                   map=create_map(map))
+        result = C(obj.atoms(idx), obj.atoms(idx1), map=create_map(map))
 
     if auto_reduce and len(result) == 1:
         return result[0]
@@ -383,8 +452,9 @@ def __fixed__bonds__(obj, idx=None, idx1=None,
         return result
 
 
-def __fixed__angles__(obj, idx=None, idx1=None, idx2=None, auto_reduce=False,
-                      map=None):
+def __fixed__angles__(
+    obj, idx=None, idx1=None, idx2=None, auto_reduce=False, map=None
+):
     if idx1 is None and idx2 is not None:
         idx1 = idx2
         idx2 = None
@@ -399,16 +469,22 @@ def __fixed__angles__(obj, idx=None, idx1=None, idx2=None, auto_reduce=False,
     if issubclass(type(obj), MoleculeView):
         # this is a single-molecule view
         from ..mm import SelectorAngle
+
         C = SelectorAngle
+
         def _fromAngleID(obj, angid):
             return SelectorAngle(obj, angid, map=create_map(map))
+
     else:
         # this is a multi-molecule container
         from ..mm import SelectorMAngle
+
         C = SelectorMAngle
+
         def _fromAngleID(obj, angid):
-            return SelectorMAngle(obj.to_select_result(), angid,
-                                  map=create_map(map))
+            return SelectorMAngle(
+                obj.to_select_result(), angid, map=create_map(map)
+            )
 
     if idx is None:
         try:
@@ -421,11 +497,14 @@ def __fixed__angles__(obj, idx=None, idx1=None, idx2=None, auto_reduce=False,
         else:
             result = C(obj.atoms(idx, map=create_map(map)))
     elif idx2 is None:
-        result = C(obj.atoms(idx), obj.atoms(idx1),
-                   map=create_map(map))
+        result = C(obj.atoms(idx), obj.atoms(idx1), map=create_map(map))
     else:
-        result = C(obj.atoms(idx), obj.atoms(idx1), obj.atoms(idx2),
-                   map=create_map(map))
+        result = C(
+            obj.atoms(idx),
+            obj.atoms(idx1),
+            obj.atoms(idx2),
+            map=create_map(map),
+        )
 
     if auto_reduce and len(result) == 1:
         return result[0]
@@ -433,8 +512,9 @@ def __fixed__angles__(obj, idx=None, idx1=None, idx2=None, auto_reduce=False,
         return result
 
 
-def __fixed__dihedrals__(obj, idx=None, idx1=None,
-                         idx2=None, idx3=None, auto_reduce=False, map=None):
+def __fixed__dihedrals__(
+    obj, idx=None, idx1=None, idx2=None, idx3=None, auto_reduce=False, map=None
+):
     if idx2 is None and idx3 is not None:
         idx2 = idx3
         idx3 = None
@@ -453,16 +533,22 @@ def __fixed__dihedrals__(obj, idx=None, idx1=None,
     if issubclass(type(obj), MoleculeView):
         # this is a single-molecule view
         from ..mm import SelectorDihedral
+
         C = SelectorDihedral
+
         def _fromDihedralID(obj, dihid):
             return SelectorDihedral(obj, dihid, map=create_map(map))
+
     else:
         # this is a multi-molecule container
         from ..mm import SelectorMDihedral
+
         C = SelectorMDihedral
+
         def _fromDihedralID(obj, dihid):
-            return SelectorMDihedral(obj.to_select_result(), dihid,
-                                     map=create_map(map))
+            return SelectorMDihedral(
+                obj.to_select_result(), dihid, map=create_map(map)
+            )
 
     if idx is None:
         try:
@@ -475,15 +561,22 @@ def __fixed__dihedrals__(obj, idx=None, idx1=None,
         else:
             result = C(obj.atoms(idx), map=create_map(map))
     elif idx2 is None:
-        result = C(obj.atoms(idx), obj.atoms(idx1),
-                   map=create_map(map))
+        result = C(obj.atoms(idx), obj.atoms(idx1), map=create_map(map))
     elif idx3 is None:
-        result = C(obj.atoms(idx), obj.atoms(idx1), obj.atoms(idx2),
-                   map=create_map(map))
+        result = C(
+            obj.atoms(idx),
+            obj.atoms(idx1),
+            obj.atoms(idx2),
+            map=create_map(map),
+        )
     else:
-        result = C(obj.atoms(idx), obj.atoms(idx1),
-                   obj.atoms(idx2), obj.atoms(idx3),
-                   map=create_map(map))
+        result = C(
+            obj.atoms(idx),
+            obj.atoms(idx1),
+            obj.atoms(idx2),
+            obj.atoms(idx3),
+            map=create_map(map),
+        )
 
     if auto_reduce and len(result) == 1:
         return result[0]
@@ -491,8 +584,9 @@ def __fixed__dihedrals__(obj, idx=None, idx1=None,
         return result
 
 
-def __fixed__impropers__(obj, idx=None, idx1=None,
-                         idx2=None, idx3=None, auto_reduce=False, map=None):
+def __fixed__impropers__(
+    obj, idx=None, idx1=None, idx2=None, idx3=None, auto_reduce=False, map=None
+):
     if idx2 is None and idx3 is not None:
         idx2 = idx3
         idx3 = None
@@ -511,16 +605,22 @@ def __fixed__impropers__(obj, idx=None, idx1=None,
     if issubclass(type(obj), MoleculeView):
         # this is a single-molecule view
         from ..mm import SelectorImproper
+
         C = SelectorImproper
+
         def _fromImproperID(obj, impid):
             return SelectorImproper(obj, impid, map=create_map(map))
+
     else:
         # this is a multi-molecule container
         from ..mm import SelectorMImproper
+
         C = SelectorMImproper
+
         def _fromImproperID(obj, impid):
-            return SelectorMImproper(obj.to_select_result(), impid,
-                                     map=create_map(map))
+            return SelectorMImproper(
+                obj.to_select_result(), impid, map=create_map(map)
+            )
 
     if idx is None:
         try:
@@ -535,12 +635,20 @@ def __fixed__impropers__(obj, idx=None, idx1=None,
     elif idx2 is None:
         result = C(obj.atoms(idx), obj.atoms(idx1), map=create_map(map))
     elif idx3 is None:
-        result = C(obj.atoms(idx), obj.atoms(idx1), obj.atoms(idx2),
-                   map=create_map(map))
+        result = C(
+            obj.atoms(idx),
+            obj.atoms(idx1),
+            obj.atoms(idx2),
+            map=create_map(map),
+        )
     else:
-        result = C(obj.atoms(idx), obj.atoms(idx1),
-                   obj.atoms(idx2), obj.atoms(idx3),
-                   map=create_map(map))
+        result = C(
+            obj.atoms(idx),
+            obj.atoms(idx1),
+            obj.atoms(idx2),
+            obj.atoms(idx3),
+            map=create_map(map),
+        )
 
     if auto_reduce and len(result) == 1:
         return result[0]
@@ -555,48 +663,59 @@ def __fixed__bond__(obj, idx=None, idx1=None, map=None):
         raise KeyError("There is no matching bond in this view.")
     elif len(bonds) > 1:
         raise KeyError(
-            f"More than one bond matches. Number of matches is {len(bonds)}.")
+            f"More than one bond matches. Number of matches is {len(bonds)}."
+        )
 
     return bonds[0]
 
 
 def __fixed__angle__(obj, idx=None, idx1=None, idx2=None, map=None):
-    angles = __fixed__angles__(obj, idx, idx1, idx2,
-                               auto_reduce=False, map=map)
+    angles = __fixed__angles__(
+        obj, idx, idx1, idx2, auto_reduce=False, map=map
+    )
 
     if len(angles) == 0:
         raise KeyError("There is no matching angle in this view.")
     elif len(angles) > 1:
         raise KeyError(
-            f"More than one angle matches. Number of matches is {len(angles)}.")
+            f"More than one angle matches. Number of matches is {len(angles)}."
+        )
 
     return angles[0]
 
 
-def __fixed__dihedral__(obj, idx=None, idx1=None,
-                        idx2=None, idx3=None, map=None):
-    dihedrals = __fixed__dihedrals__(obj, idx, idx1, idx2, idx3,
-                                     auto_reduce=False, map=map)
+def __fixed__dihedral__(
+    obj, idx=None, idx1=None, idx2=None, idx3=None, map=None
+):
+    dihedrals = __fixed__dihedrals__(
+        obj, idx, idx1, idx2, idx3, auto_reduce=False, map=map
+    )
 
     if len(dihedrals) == 0:
         raise KeyError("There is no matching dihedral in this view.")
     elif len(dihedrals) > 1:
         raise KeyError(
-            f"More than one dihedral matches. Number of matches is {len(dihedrals)}.")
+            "More than one dihedral matches. Number of "
+            f"matches is {len(dihedrals)}."
+        )
 
     return dihedrals[0]
 
 
-def __fixed__improper__(obj, idx=None, idx1=None,
-                        idx2=None, idx3=None, map=None):
-    impropers = __fixed__impropers__(obj, idx, idx1, idx2, idx3,
-                                     auto_reduce=False, map=map)
+def __fixed__improper__(
+    obj, idx=None, idx1=None, idx2=None, idx3=None, map=None
+):
+    impropers = __fixed__impropers__(
+        obj, idx, idx1, idx2, idx3, auto_reduce=False, map=map
+    )
 
     if len(impropers) == 0:
         raise KeyError("There is no matching improper in this view.")
     elif len(impropers) > 1:
         raise KeyError(
-            f"More than one improper matches. Number of matches is {len(impropers)}.")
+            "More than one improper matches. Number of "
+            f"matches is {len(impropers)}."
+        )
 
     return impropers[0]
 
@@ -607,8 +726,7 @@ def __fixed__residues__(obj, idx=None, auto_reduce=False, map=None):
     if idx is None:
         result = obj.__orig__residues()
     elif type(idx) is range:
-        result = obj.__orig__residues(list(idx),
-                                      map=create_map(map))
+        result = obj.__orig__residues(list(idx), map=create_map(map))
     else:
         result = obj.__orig__residues(idx, map=create_map(map))
 
@@ -624,8 +742,7 @@ def __fixed__chains__(obj, idx=None, auto_reduce=False, map=None):
     if idx is None:
         result = obj.__orig__chains()
     elif type(idx) is range:
-        result = obj.__orig__chains(list(idx),
-                                    map=create_map(map))
+        result = obj.__orig__chains(list(idx), map=create_map(map))
     else:
         result = obj.__orig__chains(idx, map=create_map(map))
 
@@ -641,10 +758,10 @@ def __fixed__segments__(obj, idx=None, auto_reduce=False, map=None):
     if idx is None:
         result = obj.__orig__segments()
     elif type(idx) is range:
-        result = obj.__orig__segments(list(idx),
-                                      map=create_map(map))
+        result = obj.__orig__segments(list(idx), map=create_map(map))
     else:
         from ..base import create_map
+
         result = obj.__orig__segments(idx, map=create_map(map))
 
     if auto_reduce and len(result) == 1:
@@ -659,8 +776,7 @@ def __fixed__molecules__(obj, idx=None, auto_reduce=False, map=None):
     if idx is None:
         result = obj.__orig__molecules()
     elif type(idx) is range:
-        result = obj.__orig__molecules(list(idx),
-                                       map=create_map(map))
+        result = obj.__orig__molecules(list(idx), map=create_map(map))
     else:
         result = obj.__orig__molecules(idx, map=create_map(map))
 
@@ -715,6 +831,7 @@ def __fix_getitem(C):
     C.impropers = __fixed__impropers__
     C.improper = __fixed__improper__
 
+
 try:
     Residue.__len__ = Residue.nAtoms
     Chain.__len__ = Chain.nResidues
@@ -728,13 +845,25 @@ except AttributeError:
     CutGroup.__len__ = CutGroup.num_atoms
     Molecule.__len__ = Molecule.num_atoms
 
-for C in [Atom, CutGroup, Residue, Chain, Segment, Molecule,
-          Selector_Atom_, Selector_Residue_,
-          Selector_Chain_, Selector_Segment_,
-          Selector_CutGroup_,
-          SelectorMol, SelectorM_Atom_, SelectorM_Residue_,
-          SelectorM_Chain_, SelectorM_Segment_,
-          SelectorM_CutGroup_]:
+for C in [
+    Atom,
+    CutGroup,
+    Residue,
+    Chain,
+    Segment,
+    Molecule,
+    Selector_Atom_,
+    Selector_Residue_,
+    Selector_Chain_,
+    Selector_Segment_,
+    Selector_CutGroup_,
+    SelectorMol,
+    SelectorM_Atom_,
+    SelectorM_Residue_,
+    SelectorM_Chain_,
+    SelectorM_Segment_,
+    SelectorM_CutGroup_,
+]:
     __fix_getitem(C)
 
 
@@ -743,13 +872,14 @@ def _atom_coordinates(atom, map=None):
         return atom.property("coordinates")
 
     from ..base import create_map
+
     map = create_map(map)
 
     return atom.property(map["coordinates"])
 
 
-Atom.element = lambda x : x.property("element")
-Atom.lj = lambda x : x.property("LJ")
+Atom.element = lambda x: x.property("element")
+Atom.lj = lambda x: x.property("LJ")
 Atom.coordinates = _atom_coordinates
 Atom.coords = Atom.coordinates
 Atom.x = lambda atom, map=None: atom.coordinates(map=map).x()
@@ -774,7 +904,7 @@ def __atomcoords__str__(obj):
 
         parts.append("...")
 
-        for i in range(n-5, n):
+        for i in range(n - 5, n):
             parts.append(f"{i}: {obj[i]}")
 
     joined = "\n".join(parts)
@@ -789,13 +919,15 @@ AtomCoords.__repr__ = __atomcoords__str__
 def _add_evals(obj):
     from ..base import create_map
 
-    obj.mass = lambda x, map=None : x.evaluate().mass(map=create_map(map))
-    obj.charge = lambda x, map=None : x.evaluate().charge(map=create_map(map))
-    obj.coordinates = lambda x, map=None : x.evaluate().center_of_mass(map=create_map(map))
+    obj.mass = lambda x, map=None: x.evaluate().mass(map=create_map(map))
+    obj.charge = lambda x, map=None: x.evaluate().charge(map=create_map(map))
+    obj.coordinates = lambda x, map=None: x.evaluate().center_of_mass(
+        map=create_map(map)
+    )
     obj.coords = obj.coordinates
-    obj.x = lambda x, map=None : x.coordinates(map=map).x()
-    obj.y = lambda x, map=None : x.coordinates(map=map).y()
-    obj.z = lambda x, map=None : x.coordinates(map=map).z()
+    obj.x = lambda x, map=None: x.coordinates(map=map).x()
+    obj.y = lambda x, map=None: x.coordinates(map=map).y()
+    obj.z = lambda x, map=None: x.coordinates(map=map).z()
 
 
 def _get_property(x, key):
@@ -853,7 +985,7 @@ def _apply(objs, func, *args, **kwargs):
 
             for i, obj in enumerate(objs):
                 result.append(getattr(obj, func)(*args, **kwargs))
-                progress.update(task, completed=i+1)
+                progress.update(task, completed=i + 1)
 
     else:
         # we have been passed the function to call
@@ -862,7 +994,7 @@ def _apply(objs, func, *args, **kwargs):
 
             for i, obj in enumerate(objs):
                 result.append(func(obj, *args, **kwargs))
-                progress.update(task, completed=i+1)
+                progress.update(task, completed=i + 1)
 
     return result
 
@@ -901,9 +1033,11 @@ def _apply_reduce(objs, func, reduction_func=None, *args, **kwargs):
     """
     if reduction_func is None:
         from operator import add
+
         reduction_func = add
 
     from functools import reduce
+
     return reduce(reduction_func, objs.apply(func, *args, **kwargs))
 
 
@@ -925,9 +1059,15 @@ def _add_property_func(obj):
     obj.property = _get_property
 
 
-for C in [MoleculeView, SelectorMol, SelectorM_Atom_,
-          SelectorM_Residue_, SelectorM_Chain_,
-          SelectorM_CutGroup_, SelectorM_Segment_]:
+for C in [
+    MoleculeView,
+    SelectorMol,
+    SelectorM_Atom_,
+    SelectorM_Residue_,
+    SelectorM_Chain_,
+    SelectorM_CutGroup_,
+    SelectorM_Segment_,
+]:
     _add_evals(C)
     _add_property_func(C)
     _add_apply_func(C)
@@ -938,34 +1078,35 @@ for C in [Residue, Chain, Segment]:
 
 def _molecule(obj, id=None):
     """Return the molecule that contains this view. If 'id' is specified
-       then this will check that the ID matches this molecule before
-       returning it. This will raise an exception if the ID doesn't match.
+    then this will check that the ID matches this molecule before
+    returning it. This will raise an exception if the ID doesn't match.
 
-       Returns
-       -------
+    Returns
+    -------
 
-       sire.mol.Molecule: The molecule containing this view
+    sire.mol.Molecule: The molecule containing this view
     """
     if id is None:
         return obj.__orig__molecule()
     else:
         from . import SelectorMol
+
         return SelectorMol(obj).molecule(id)
 
 
 def _molecules(obj, id=None):
     """Return the molecule that contains this view as a list of molecules,
-       containing just a single molecule.
+    containing just a single molecule.
 
-       If 'id' is specified then this checks that this molecule matches
-       the ID before returning it. This will raise an exception if the
-       ID doesn't match.
+    If 'id' is specified then this checks that this molecule matches
+    the ID before returning it. This will raise an exception if the
+    ID doesn't match.
 
-       Returns
-       -------
+    Returns
+    -------
 
-       sire.mol.SelectorMol: A collection containing only a single molecule
-                             that contains this view.
+    sire.mol.SelectorMol: A collection containing only a single molecule
+                          that contains this view.
     """
     from . import SelectorMol
 
@@ -989,7 +1130,9 @@ def _get_atom_mass(x):
     else:
         return 0
 
+
 Atom.mass = _get_atom_mass
+
 
 def _get_atom_charge(x):
     if x.has_property("charge"):
@@ -999,21 +1142,19 @@ def _get_atom_charge(x):
     else:
         return 0
 
+
 Atom.charge = _get_atom_charge
 
-Molecule.connectivity = lambda x : x.property("connectivity")
+Molecule.connectivity = lambda x: x.property("connectivity")
 
 
-#### Here are some extra classes / functions defined as part of the
-#### public API
-
-from ._cursor import *
-from ._trajectory import *
+# Here are some extra classes / functions defined as part of the
+# public API
 
 
 def _cursor(view, map=None):
     """Return a Cursor that can be used to edit the properties
-       of this view
+    of this view
     """
     return Cursor(view, map=map)
 
@@ -1027,8 +1168,8 @@ Molecule.cursor = _cursor
 
 def _cursors(views, map=None):
     """Return the Cursors object that contains cursors for all
-       of the views in this collection. Note that the `parent`
-       cursor of this list will be the molecule
+    of the views in this collection. Note that the `parent`
+    cursor of this list will be the molecule
     """
     cursor = views.molecule().cursor(map=map)
     return cursor._from_views(views)
@@ -1039,11 +1180,10 @@ Selector_Residue_.cursor = _cursors
 Selector_Chain_.cursor = _cursors
 Selector_Segment_.cursor = _cursors
 
-from ._element import *
-
 
 def _trajectory(obj, map=None):
     from ._trajectory import TrajectoryIterator
+
     return TrajectoryIterator(obj, map=map)
 
 
@@ -1058,6 +1198,7 @@ SelectorMol.trajectory = _trajectory
 
 def _cursorsm(obj, map=None):
     from ._cursor import CursorsM
+
     return CursorsM(parent=obj, map=map)
 
 
@@ -1077,6 +1218,7 @@ def _to_molecules(obj):
         return obj.to_molecule_group().molecules()
     else:
         from ..legacy.Mol import Molecules
+
         m = Molecules(obj)
         return m
 
@@ -1103,12 +1245,15 @@ def _atom_energy(obj, obj1=None, map=None):
     # An individual atom has a zero energy
     if obj1 is None:
         from ..units import GeneralUnit
+
         return GeneralUnit(0)
     elif map is None:
         from ..mm import calculate_energy
+
         return calculate_energy(obj, _to_molecules(obj1))
     else:
         from ..mm import calculate_energy
+
         return calculate_energy(obj, _to_molecules(obj1), map=map)
 
 
@@ -1117,6 +1262,7 @@ def _total_energy(obj, obj1=None, map=None):
         mols = obj.to_molecule_group()
     else:
         from ..legacy.Mol import MoleculeGroup
+
         mols = MoleculeGroup("all")
         mols.add(obj)
 
@@ -1126,17 +1272,15 @@ def _total_energy(obj, obj1=None, map=None):
         if obj1 is None:
             return calculate_energy(mols.molecules())
         else:
-            return calculate_energy(mols.molecules(),
-                                    _to_molecules(obj1))
+            return calculate_energy(mols.molecules(), _to_molecules(obj1))
     elif obj1 is None:
         return calculate_energy(mols.molecules(), map=map)
     else:
-        return calculate_energy(mols.molecules(),
-                                _to_molecules(obj1), map=map)
+        return calculate_energy(mols.molecules(), _to_molecules(obj1), map=map)
 
 
 Atom.energy = _atom_energy
-Residue.energy =  _energy
+Residue.energy = _energy
 Chain.energy = _energy
 Segment.energy = _energy
 CutGroup.energy = _energy
@@ -1167,8 +1311,6 @@ SelectorM_Residue_.energies = _energies
 SelectorM_Chain_.energies = _energies
 SelectorM_Segment_.energies = _energies
 SelectorM_CutGroup_.energies = _energies
-
-from ._view import view as _viewfunc
 
 MoleculeView.view = _viewfunc
 SelectorMol.view = _viewfunc

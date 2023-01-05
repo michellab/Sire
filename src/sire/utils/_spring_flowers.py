@@ -1,4 +1,3 @@
-
 from dataclasses import dataclass as _dataclass
 from dataclasses import field as _field
 from typing import List as _List
@@ -122,10 +121,10 @@ class SpringFlowers:
 
     def get_frames(self, width: int = 80):
         """Return the frames used to animate a spinner in a console
-           of specified width
+        of specified width
 
-           This returns the list of frames plus the timeout between
-           the list
+        This returns the list of frames plus the timeout between
+        the list
         """
         if width in self.frames:
             return self.frames[width]

@@ -1,15 +1,23 @@
-
 from typing import Union as _Union
 from typing import List as _List
 
-__all__ = ["load", "save", "save_to_string", "expand",
-           "tutorial_url", "load_test_files", "supported_formats"]
+__all__ = [
+    "load",
+    "save",
+    "save_to_string",
+    "expand",
+    "tutorial_url",
+    "load_test_files",
+    "supported_formats",
+]
 
 
 class _tutorial_url:
     def __init__(self, value):
         self._value = value
-        self.__doc__ = "The base URL for all molecule files used in the tutorial."
+        self.__doc__ = (
+            "The base URL for all molecule files used in the tutorial."
+        )
 
     def __str__(self):
         return self._value
@@ -20,6 +28,7 @@ class _tutorial_url:
     def startswith(self, value):
         return self._value.startswith(value)
 
+
 tutorial_url = _tutorial_url("https://siremol.org/m")
 
 _range = range
@@ -27,7 +36,7 @@ _range = range
 
 def supported_formats():
     """Return a string that describes all of the molecular file formats
-       that are supported by Sire
+    that are supported by Sire
     """
     from .legacy.IO import MoleculeParser
 
@@ -68,8 +77,10 @@ def _get_gromacs_dir():
     if not os.path.exists(gromacs_tbz2):
         try:
             import urllib.request
-            urllib.request.urlretrieve(f"{tutorial_url}/gromacs.tar.bz2",
-                                       gromacs_tbz2)
+
+            urllib.request.urlretrieve(
+                f"{tutorial_url}/gromacs.tar.bz2", gromacs_tbz2
+            )
         except Exception:
             # we cannot download - just give up
             return None
@@ -79,6 +90,7 @@ def _get_gromacs_dir():
 
     try:
         import tarfile
+
         t = tarfile.open(gromacs_tbz2, "r|bz2")
         t.extractall(path=share_directory)
     except Exception:
@@ -115,8 +127,9 @@ def _resolve_path(path, directory, silent=False):
 
             import gzip
             import shutil
-            with gzip.open(path, 'rb') as f_in:
-                with open(unzipped, 'wb') as f_out:
+
+            with gzip.open(path, "rb") as f_in:
+                with open(unzipped, "wb") as f_out:
                     shutil.copyfileobj(f_in, f_out)
 
             return [os.path.abspath(unzipped)]
@@ -142,8 +155,9 @@ def _resolve_path(path, directory, silent=False):
 
             import bz2
             import shutil
-            with bz2.open(path, 'rb') as f_in:
-                with open(unzipped, 'wb') as f_out:
+
+            with bz2.open(path, "rb") as f_in:
+                with open(unzipped, "wb") as f_out:
                     shutil.copyfileobj(f_in, f_out)
 
             return [os.path.abspath(unzipped)]
@@ -160,11 +174,14 @@ def _resolve_path(path, directory, silent=False):
             if os.path.isfile(filename):
                 if not silent:
                     print(f"Using cached download of '{path}'...")
-                return _resolve_path(filename, directory=directory, silent=silent)
+                return _resolve_path(
+                    filename, directory=directory, silent=silent
+                )
             else:
                 raise IOError(
                     f"Cannot overwrite {filename} as it is an "
-                    "existing directory!")
+                    "existing directory!"
+                )
 
         if not silent:
             print(f"Downloading from '{path}'...")
@@ -173,10 +190,11 @@ def _resolve_path(path, directory, silent=False):
             # try the bz2 file first
             try:
                 import urllib.request
+
                 urllib.request.urlretrieve(f"{path}.bz2", f"{filename}.bz2")
                 have_downloaded_file = True
                 filename = f"{filename}.bz2"
-            except Exception as e:
+            except Exception:
                 have_downloaded_file = False
         else:
             have_downloaded_file = False
@@ -184,6 +202,7 @@ def _resolve_path(path, directory, silent=False):
         if not have_downloaded_file:
             try:
                 import urllib.request
+
                 urllib.request.urlretrieve(path, filename)
             except Exception as e:
                 raise IOError(f"Unable to download '{path}': {e}")
@@ -204,14 +223,20 @@ def _resolve_path(path, directory, silent=False):
         if is_code:
             code = path.lower()
             # https://files.rcsb.org/download/4hhb.pdb.gz
-            return _resolve_path(f"https://files.rcsb.org/download/{path}.pdb.gz",
-                                    directory=directory, silent=silent)
+            return _resolve_path(
+                f"https://files.rcsb.org/download/{path}.pdb.gz",
+                directory=directory,
+                silent=silent,
+            )
     elif path.startswith("alphafold:"):
         # alphafold code
         code = path[10:]
         # https://alphafold.ebi.ac.uk/files/AF-" + pdbid + "-F1-model_v1.pdb
-        return _resolve_path(f"https://alphafold.ebi.ac.uk/files/AF-{code}-F1-model_v3.pdb",
-                                    directory=directory, silent=silent)
+        return _resolve_path(
+            f"https://alphafold.ebi.ac.uk/files/AF-{code}-F1-model_v3.pdb",
+            directory=directory,
+            silent=silent,
+        )
 
     # this may be a globbed path
     import glob
@@ -231,27 +256,27 @@ def _resolve_path(path, directory, silent=False):
 def expand(base: str, path: _Union[str, _List[str]], *args, **kwargs):
     """Expand the set of paths with the supplied base.
 
-       Args:
-        base (str):
-            The base to be prepended to all paths
+    Args:
+     base (str):
+         The base to be prepended to all paths
 
-        path (str or list[str]):
-            The filename (or names) that will be prepended
-            with the base.
+     path (str or list[str]):
+         The filename (or names) that will be prepended
+         with the base.
 
-        suffix (str):
-            A suffix to attach to all files, e.g. ".bz2"
+     suffix (str):
+         A suffix to attach to all files, e.g. ".bz2"
 
-        Returns:
-            list[str]:
-            The list of expanded filenames or URLs
+     Returns:
+         list[str]:
+         The list of expanded filenames or URLs
 
-        Examples:
-            >>> expand("https://siremol.org/m", "urea.gro", "urea.top")
-            ["https://siremol.org/m/urea.gro", "https://siremol.org/n/urea.top"]
+     Examples:
+         >>> expand("https://siremol.org/m", "urea.gro", "urea.top")
+         ["https://siremol.org/m/urea.gro", "https://siremol.org/n/urea.top"]
 
-            >>> expand("input", ["ala.top", "ala.crd"])
-            ["input/ala.top", "input/ala.crd"]
+         >>> expand("input", ["ala.top", "ala.crd"])
+         ["input/ala.top", "input/ala.crd"]
     """
     if "suffix" in kwargs:
         suffix = kwargs["suffix"]
@@ -269,9 +294,13 @@ def expand(base: str, path: _Union[str, _List[str]], *args, **kwargs):
     expanded = []
 
     if base.startswith("http"):
-        join = lambda x, y: f"{x}/{y}"
+
+        def join(x, y):
+            return f"{x}/{y}"
+
     else:
         import os
+
         join = os.path.join
 
     for path in paths:
@@ -285,45 +314,45 @@ def expand(base: str, path: _Union[str, _List[str]], *args, **kwargs):
 
 def load(path: _Union[str, _List[str]], *args, show_warnings=False, **kwargs):
     """Load the molecular system at 'path'. This can be a filename
-       of a URL. If it is a URL, then the file will be downloaded
-       to the current directory and loaded from there.
+    of a URL. If it is a URL, then the file will be downloaded
+    to the current directory and loaded from there.
 
-       Args:
-        path (str or list[str]):
-            The filename (or names) or the URL or URLS of the molecular
-            system to load. This allows multiple paths to be input
-            as some molecular file formats split molecular information
-            across multiple files. Multiple paths can also be passed
-            as multiple arguments to this function.
+    Args:
+     path (str or list[str]):
+         The filename (or names) or the URL or URLS of the molecular
+         system to load. This allows multiple paths to be input
+         as some molecular file formats split molecular information
+         across multiple files. Multiple paths can also be passed
+         as multiple arguments to this function.
 
-        log (dict):
-            Optional dictionary that you can pass in that will be populated
-            with any error messages or warnings from the parsers as they
-            attempt to load in the molecular data. This can be helpful
-            in diagnosing why your file wasn't loaded.
+     log (dict):
+         Optional dictionary that you can pass in that will be populated
+         with any error messages or warnings from the parsers as they
+         attempt to load in the molecular data. This can be helpful
+         in diagnosing why your file wasn't loaded.
 
-        directory (str):
-            Optional directory which will be used when creating any
-            files (e.g. as a download from a URL or which unzipping files)
+     directory (str):
+         Optional directory which will be used when creating any
+         files (e.g. as a download from a URL or which unzipping files)
 
-       Returns:
-            sire.system.System:
-            The molecules that have been loaded are returned as
-            a sire.system.System
+    Returns:
+         sire.system.System:
+         The molecules that have been loaded are returned as
+         a sire.system.System
 
-       Examples:
-            >>> mols = load("caffeine.pdb")
+    Examples:
+         >>> mols = load("caffeine.pdb")
 
-            >>> mols = load(["ala.crd", "ala.top"])
+         >>> mols = load(["ala.crd", "ala.top"])
 
-            >>> mols = load("ala.crd", "ala.top")
+         >>> mols = load("ala.crd", "ala.top")
 
-            >>> mols = load("https://something")
+         >>> mols = load("https://something")
 
-            >>> log = []
-            >>> mols = load("caffeine.pdb", log=log)
-            Exception
-            (look at 'log' to find out what went wrong in detail)
+         >>> log = []
+         >>> mols = load("caffeine.pdb", log=log)
+         Exception
+         (look at 'log' to find out what went wrong in detail)
     """
     if type(path) is not list:
         paths = [path]
@@ -362,17 +391,14 @@ def load(path: _Union[str, _List[str]], *args, show_warnings=False, **kwargs):
     from .io import load_molecules
     from .base import create_map
 
-    map = {
-            "GROMACS_PATH": _get_gromacs_dir(),
-            "show_warnings": show_warnings
-    }
+    map = {"GROMACS_PATH": _get_gromacs_dir(), "show_warnings": show_warnings}
 
     return load_molecules(paths, map=create_map(map))
 
 
 def _to_legacy_system(molecules):
     """Internal function to convert the passed set of molecule views
-       into a sire.legacy.System.System
+    into a sire.legacy.System.System
     """
     from .legacy.System import System as LegacySystem
 
@@ -390,6 +416,7 @@ def _to_legacy_system(molecules):
         s.add(molecules.to_molecule_group())
     else:
         from .legacy.Mol import MoleculeGroup
+
         m = MoleculeGroup("all")
         m.add(molecules)
         s.add(m)
@@ -399,11 +426,11 @@ def _to_legacy_system(molecules):
 
 def save_to_string(molecules, format: str, log={}, map=None) -> _List[str]:
     """Save the passed molecules to an in-memory list of lines.
-       This will write the molecule(s) in the format specified
-       to memory, thereby avoiding writing any data to a text file
+    This will write the molecule(s) in the format specified
+    to memory, thereby avoiding writing any data to a text file
 
-       Note that you must pass in the format, and only a single
-       "file" can be written at a time.
+    Note that you must pass in the format, and only a single
+    "file" can be written at a time.
     """
     from .base import create_map
     from .legacy.IO import MoleculeParser
@@ -413,57 +440,65 @@ def save_to_string(molecules, format: str, log={}, map=None) -> _List[str]:
     return MoleculeParser.parse(molecules, format, map=create_map(map)).lines()
 
 
-def save(molecules, filename: str, format: _Union[str, _List[str]]=None,
-         log={}, map=None) -> _List[str]:
+def save(
+    molecules,
+    filename: str,
+    format: _Union[str, _List[str]] = None,
+    log={},
+    map=None,
+) -> _List[str]:
     """Save the passed molecules to a file called 'filename'. If the format
-       is not specified, then the format will be guessed from the
-       filename. If the format is specified, and is a list, then multiple
-       files will be written, one for each specified format.
+    is not specified, then the format will be guessed from the
+    filename. If the format is specified, and is a list, then multiple
+    files will be written, one for each specified format.
 
-       Args:
-        molecules (:class:`sire.system.System`, :class:`sire.mol.Molecule`, List[:class:`sire.mol.Molecule`] etc.)
-            The molecule (or molecules) that should be written to the file.
-            This can be anything that can be converted to a :class:`sire.system.System`,
-            i.e. a single :class:`~sire.mol.Molecule` (or :class:`~sire.mol.MoleculeView`), or a list of
-            Molecules (or MoleculeViews)
+    Args:
+     molecules :class:`sire.system.System`,
+               :class:`sire.mol.Molecule`,
+               List[:class:`sire.mol.Molecule`] etc.)
+         The molecule (or molecules) that should be written to the file.
+         This can be anything that can be converted to a
+         :class:`sire.system.System`, i.e. a single
+         :class:`~sire.mol.Molecule` (or :class:`~sire.mol.MoleculeView`),
+         or a list of Molecules (or MoleculeViews)
 
-        filename (str):
-            The name of the file to which to write the file. Extensions
-            will be automatically added if they are needed to match
-            the formats of the file (or files) that are written.
+     filename (str):
+         The name of the file to which to write the file. Extensions
+         will be automatically added if they are needed to match
+         the formats of the file (or files) that are written.
 
-        format (str or list(str)):
-            The format (or formats) that should be used to write the
-            file (or files). If the format isn't specified, then it
-            will be guessed from the extension used for `filename`.
-            If this doesn't have an extension, then it will be guessed
-            based on the formats used to load the molecule originally.
-            If it still isn't available, then PDB will be used.
+     format (str or list(str)):
+         The format (or formats) that should be used to write the
+         file (or files). If the format isn't specified, then it
+         will be guessed from the extension used for `filename`.
+         If this doesn't have an extension, then it will be guessed
+         based on the formats used to load the molecule originally.
+         If it still isn't available, then PDB will be used.
 
-        log (dict):
-            Optional dictionary that you can pass in that will be populated
-            with any error messages or warnings from the parsers as they
-            attempt to write the molecular data. This can be helpful
-            in diagnosing why your file wasn't saved.
+     log (dict):
+         Optional dictionary that you can pass in that will be populated
+         with any error messages or warnings from the parsers as they
+         attempt to write the molecular data. This can be helpful
+         in diagnosing why your file wasn't saved.
 
-       Returns:
-            list[str]:
-            The absolute paths/name(s) of the files that have been written.
+    Returns:
+         list[str]:
+         The absolute paths/name(s) of the files that have been written.
 
-       Examples:
-            >>> save(molecules, "molecules.pdb")
-            ["/path/to/molecules.pdb"]
+    Examples:
+         >>> save(molecules, "molecules.pdb")
+         ["/path/to/molecules.pdb"]
 
-            >>> save([mol1, mol2, mol3], "molecules.sdf")
-            ["/path/to/molecules.sdf"]
+         >>> save([mol1, mol2, mol3], "molecules.sdf")
+         ["/path/to/molecules.sdf"]
 
-            >>> save(mols, "ala", format=["top", "crd"])
-            ["/path/to/ala.top", "/path/to/ala.crd"]
+         >>> save(mols, "ala", format=["top", "crd"])
+         ["/path/to/ala.top", "/path/to/ala.crd"]
 
-            >>> log = {}
-            >>> save(mols, "broken.top", log=log)
-            Exception
-            (look at `log` to find in detail what went wrong)
+         >>> log = {}
+         >>> save(mols, "broken.top", log=log)
+         Exception
+         (look at `log` to find in detail what went wrong)
     """
     from .legacy.IO import MoleculeParser
     from .base import create_map
@@ -483,19 +518,19 @@ def save(molecules, filename: str, format: _Union[str, _List[str]]=None,
 
 def load_test_files(files: _Union[_List[str], str], *args):
     """Load the passed files that are part of the unit testing
-       and return the resulting molecules. This will cache the files
-       into a directory called "../cache" so that downloads can be shared
-       between tests. You should only need this function if you
-       are writing unit tests.
+    and return the resulting molecules. This will cache the files
+    into a directory called "../cache" so that downloads can be shared
+    between tests. You should only need this function if you
+    are writing unit tests.
 
-       Args:
-        files (str or list[str])
-            The list of files to load from the tutorial website. This
-            will automatically add on the tutorial URL and compression suffix
+    Args:
+     files (str or list[str])
+         The list of files to load from the tutorial website. This
+         will automatically add on the tutorial URL and compression suffix
 
-       Returns:
-        sire.system.System
-            The loaded molecules
+    Returns:
+     sire.system.System
+         The loaded molecules
     """
     if not type(files) is list:
         files = [files]
@@ -504,9 +539,10 @@ def load_test_files(files: _Union[_List[str], str], *args):
         files.append(arg)
 
     import os
+
     d = os.path.abspath(os.path.curdir)
 
-    if (d.endswith("tests")):
+    if d.endswith("tests"):
         # we are running in the tests directory, so cache downloads here
         cache_dir = os.path.join(d, "cache")
     else:

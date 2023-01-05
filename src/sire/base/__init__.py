@@ -1,23 +1,23 @@
-
-__all__ = ["create_map", "wrap"]
+__all__ = ["create_map", "wrap", "PropertyMap"]
 
 from ..legacy import Base as _Base
 
 from .. import use_new_api as _use_new_api
-_use_new_api()
 
-from ..legacy.Base import Property, PropertyMap, Properties, PropertyList, \
-                          BooleanProperty, NumberProperty, StringProperty
+from ..legacy.Base import PropertyMap
+
+_use_new_api()
 
 wrap = _Base.wrap
 
 
 def _fix_wrapped_property_base_type(CLASS):
     """Private function that adds in all of the operators so that,
-       as much as possible, the base type PropertyWrappers (e.g.
-       NumberProperty, StringProperty) behave like numbers or
-       strings, and can auto-convert to those types as needed.
+    as much as possible, the base type PropertyWrappers (e.g.
+    NumberProperty, StringProperty) behave like numbers or
+    strings, and can auto-convert to those types as needed.
     """
+
     def __value(v):
         try:
             v = v.value()
@@ -93,9 +93,9 @@ def _fix_wrapped_property_base_type(CLASS):
     CLASS.__str__ = __str__
 
 
-_fix_wrapped_property_base_type(BooleanProperty)
-_fix_wrapped_property_base_type(NumberProperty)
-_fix_wrapped_property_base_type(StringProperty)
+_fix_wrapped_property_base_type(_Base.BooleanProperty)
+_fix_wrapped_property_base_type(_Base.NumberProperty)
+_fix_wrapped_property_base_type(_Base.StringProperty)
 
 
 if not hasattr(PropertyMap, "__orig__set"):
@@ -105,12 +105,12 @@ if not hasattr(PropertyMap, "__orig__set"):
     def __propertymap_set(obj, key, value):
         try:
             obj.__orig__set(key, value)
-        except:
+        except Exception:
             pass
 
         try:
             obj.__orig__set(key, _Base.PropertyName(value))
-        except:
+        except Exception:
             pass
 
         obj.__orig__set(key, _Base.PropertyName(wrap(value)))
@@ -121,44 +121,44 @@ if not hasattr(PropertyMap, "__orig__set"):
 
 def create_map(values):
     """Construct a PropertyMap from the
-       passed values. A PropertyMap is a class that lets you either provide
-       extra options to some of the C++ functions, or to
-       map the default keys used to find properties to
-       your own keys
+    passed values. A PropertyMap is a class that lets you either provide
+    extra options to some of the C++ functions, or to
+    map the default keys used to find properties to
+    your own keys
 
-       You normally wouldn't use the class yourself.
-       Instead, objects of this class will be created automatically
-       from dictionaries, e.g.
+    You normally wouldn't use the class yourself.
+    Instead, objects of this class will be created automatically
+    from dictionaries, e.g.
 
-       >>> mol.energy(map={"cutoff": 5*angstrom})
+    >>> mol.energy(map={"cutoff": 5*angstrom})
 
-       would automatically create a PropertyMap, and is
-       equivalent to writing
+    would automatically create a PropertyMap, and is
+    equivalent to writing
 
-       >>> mol.energy(map=create_map({"cutoff": 5*angstrom}))
+    >>> mol.energy(map=create_map({"cutoff": 5*angstrom}))
 
-       In the above case you are providing an extra "cutoff"
-       option, and are passing the value "5*angstrom".
+    In the above case you are providing an extra "cutoff"
+    option, and are passing the value "5*angstrom".
 
-       You can also use the map to change the keys used to
-       find properties, e.g.
+    You can also use the map to change the keys used to
+    find properties, e.g.
 
-       >>> mol.energy(map={"coordinates": "my_coords"})
+    >>> mol.energy(map={"coordinates": "my_coords"})
 
-       would map the default "coordinates" property to your
-       "my_coords" property. This means that the coordinates
-       for the energy would be found at "my_coords" rather
-       than "coordinates".
+    would map the default "coordinates" property to your
+    "my_coords" property. This means that the coordinates
+    for the energy would be found at "my_coords" rather
+    than "coordinates".
 
-       You can map as many properties, and provide as many
-       extra options as you want.
+    You can map as many properties, and provide as many
+    extra options as you want.
     """
     if values is None:
         return PropertyMap()
 
     try:
         return PropertyMap(values)
-    except:
+    except Exception:
         pass
 
     wrapped_values = {}

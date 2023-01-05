@@ -1,60 +1,59 @@
-
-__all__ = ["create_quaternion",
-           "Matrix",
-           "pi",
-           "Sphere",
-           "Torsion",
-           "Triangle",
-           "Vector"
-          ]
+__all__ = [
+    "create_quaternion",
+    "Matrix",
+    "pi",
+    "Sphere",
+    "Torsion",
+    "Triangle",
+    "Vector",
+]
 
 from ..legacy import Maths as _Maths
-
-from .. import use_new_api as _use_new_api
-_use_new_api()
-
 from ..legacy.Maths import Matrix, Quaternion, Triangle, Torsion, pi
 
 from ._vector import Vector
 from ._sphere import Sphere
 
+from .. import use_new_api as _use_new_api
 
-def create_quaternion(angle=None, axis=None,
-                      matrix=None, quaternion=None):
+_use_new_api()
+
+
+def create_quaternion(angle=None, axis=None, matrix=None, quaternion=None):
     """Create a quaternion from the passed angle and axis
-       of the passed rotation matrix. If a rotation
-       matrix is passed then this will ignore the
-       passed angle and axis. If a quaternion is passed
-       then this will ignore the matrix, angle and axis
-       arguments.
+    of the passed rotation matrix. If a rotation
+    matrix is passed then this will ignore the
+    passed angle and axis. If a quaternion is passed
+    then this will ignore the matrix, angle and axis
+    arguments.
 
-        angle: (float or angle)
-            The angle to rotate by - this is interpreted as
-            degrees if you pass in a float. Otherwise use
-            sire.units.degrees or sire.units.radians to specify
-            the angle unit. This is superseded by the
-            matrix and quaternion arguments.
+     angle: (float or angle)
+         The angle to rotate by - this is interpreted as
+         degrees if you pass in a float. Otherwise use
+         sire.units.degrees or sire.units.radians to specify
+         the angle unit. This is superseded by the
+         matrix and quaternion arguments.
 
-        axis: sire.maths.Vector (or anything that can convert to a Vector)
-            The vector about which to rotate. If this is not
-            specified, and no other rotation specification is
-            used, then the rotation is about the z axis.
-            This is superseded by the matrix and
-            quaternion arguments.
+     axis: sire.maths.Vector (or anything that can convert to a Vector)
+         The vector about which to rotate. If this is not
+         specified, and no other rotation specification is
+         used, then the rotation is about the z axis.
+         This is superseded by the matrix and
+         quaternion arguments.
 
-        quaternion: sire.maths.Quaternion
-            The Quaternion description of the rotation. Note that,
-            if you pass this, then the angle, axis and matrix
-            arguments will be ignored.
+     quaternion: sire.maths.Quaternion
+         The Quaternion description of the rotation. Note that,
+         if you pass this, then the angle, axis and matrix
+         arguments will be ignored.
 
-        matrix: sire.maths.Matrix
-            The 3x3 rotation matrix that describes the rotation.
-            Note that, if you pass this, then the angle and axis
-            arguments will be ignored. This is superseded by
-            the quaternion argument.
+     matrix: sire.maths.Matrix
+         The 3x3 rotation matrix that describes the rotation.
+         Note that, if you pass this, then the angle and axis
+         arguments will be ignored. This is superseded by
+         the quaternion argument.
 
-        Returns: sire.maths.Quaternion
-            The quaternion that represents the rotation
+     Returns: sire.maths.Quaternion
+         The quaternion that represents the rotation
     """
     if quaternion is None:
         if type(angle) is Quaternion:
@@ -71,7 +70,8 @@ def create_quaternion(angle=None, axis=None,
             if angle is None:
                 raise ValueError(
                     "You must specify either the angle, rotation matrix "
-                    "or quaternion used to rotate the molecule.")
+                    "or quaternion used to rotate the molecule."
+                )
 
             from ..units import degrees
 
@@ -99,9 +99,11 @@ def create_quaternion(angle=None, axis=None,
         else:
             if angle is not None or axis is not None:
                 from ..utils import Console
+
                 Console.warning(
                     "The angle and/or axis of rotation will be ignored "
-                    "because you have passed in a rotation matrix.")
+                    "because you have passed in a rotation matrix."
+                )
 
             if type(matrix) is not Matrix:
                 raise TypeError(
@@ -114,15 +116,19 @@ def create_quaternion(angle=None, axis=None,
     else:
         if matrix is not None:
             from ..utils import Console
+
             Console.warning(
                 "The rotation matrix will be ignored "
-                "because you have passed in a quaternion.")
+                "because you have passed in a quaternion."
+            )
 
         if angle is not None or axis is not None:
             from ..utils import Console
+
             Console.warning(
                 "The angle and/or axis of rotation will be ignored "
-                "because you have passed in a quaternion.")
+                "because you have passed in a quaternion."
+            )
 
         if type(quaternion) is not Quaternion:
             raise TypeError(

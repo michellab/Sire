@@ -1,23 +1,36 @@
-
-__all__ = ["Angle",
-           "Bond",
-           "calculate_energy",
-           "create_forcefield",
-           "Dihedral",
-           "Improper",
-           "SelectorAngle",
-           "SelectorBond",
-           "SelectorDihedral",
-           "SelectorImproper",
-           "SelectorMAngle",
-           "SelectorMBond",
-           "SelectorMDihedral",
-           "SelectorMImproper"
-           ]
+__all__ = [
+    "Angle",
+    "Bond",
+    "calculate_energy",
+    "create_forcefield",
+    "Dihedral",
+    "Improper",
+    "SelectorAngle",
+    "SelectorBond",
+    "SelectorDihedral",
+    "SelectorImproper",
+    "SelectorMAngle",
+    "SelectorMBond",
+    "SelectorMDihedral",
+    "SelectorMImproper",
+]
 
 from ..legacy import MM as _MM
 
+from ..mol import (
+    __fix_getitem,
+    _add_evals,
+    _add_property_func,
+    _add_apply_func,
+    _cursor,
+    _cursors,
+    _cursorsm,
+    _trajectory,
+    _viewfunc,
+)
+
 from .. import use_new_api as _use_new_api
+
 _use_new_api()
 
 
@@ -36,6 +49,7 @@ def calculate_energy(*args, **kwargs):
     for key, value in kwargs.items():
         if key == "map":
             from ..base import create_map
+
             new_kwargs[key] = create_map(value)
         else:
             try:
@@ -65,6 +79,7 @@ def create_forcefield(*args, map=None, **kwargs):
             new_kwargs[key] = value
 
     from ..base import create_map
+
     map = create_map(map)
 
     new_kwargs["map"] = map
@@ -108,19 +123,24 @@ try:
 except AttributeError:
     Improper.__len__ = Improper.num_atoms
 
-from ..mol import __fix_getitem, _add_evals, _add_property_func, \
-    _add_apply_func
-
-for C in [Bond, SelectorBond, SelectorMBond,
-          Angle, SelectorAngle, SelectorMAngle,
-          Dihedral, SelectorDihedral, SelectorMDihedral,
-          Improper, SelectorImproper, SelectorMImproper]:
+for C in [
+    Bond,
+    SelectorBond,
+    SelectorMBond,
+    Angle,
+    SelectorAngle,
+    SelectorMAngle,
+    Dihedral,
+    SelectorDihedral,
+    SelectorMDihedral,
+    Improper,
+    SelectorImproper,
+    SelectorMImproper,
+]:
     __fix_getitem(C)
     _add_evals(C)
     _add_property_func(C)
     _add_apply_func(C)
-
-from ..mol import _cursor, _cursors, _cursorsm, _trajectory, _viewfunc
 
 Bond.cursor = _cursor
 SelectorBond.cursor = _cursors
