@@ -106,6 +106,7 @@ namespace SireBase
     template class PackedArray2D<SireMol::Force3D>;
     template class PackedArray2D<SireUnits::Dimension::Volume>;
     template class PackedArray2D<SireUnits::Dimension::Length>;
+    template class PackedArray2D<SireBase::PropertyPtr>;
 }
 
 namespace SireMol
@@ -128,6 +129,8 @@ namespace SireMol
     template class AtomProperty<SireUnits::Dimension::Volume>;
 
     template class AtomProperty<SireUnits::Dimension::Length>;
+
+    template class AtomProperty<SireBase::PropertyPtr>;
 }
 
 static const RegisterMetaType<AtomStringProperty> r_atomstring;
@@ -143,3 +146,4 @@ static const RegisterMetaType<AtomVelocities> r_atomvelocities;
 static const RegisterMetaType<AtomElements> r_atomelements;
 static const RegisterMetaType<AtomPolarisabilities> r_atompols;
 static const RegisterMetaType<AtomRadii> r_atomradii;
+static const RegisterMetaType<AtomPropertyProperty> r_atomproprop;

@@ -1,16 +1,11 @@
 
+# We keep this here as this is a test that
+# the legacy API still works when mixed_api
+# mode is enabled
 import sire as sr
 sr.use_mixed_api()
 
 import sire.legacy.Mol
-
-import pytest
-
-@pytest.fixture(scope="session")
-def ala_mols():
-    import sire as sr
-    return sr.load_test_files("ala.top", "ala.crd")
-
 
 def test_selector_wrap(ala_mols):
     mols = ala_mols

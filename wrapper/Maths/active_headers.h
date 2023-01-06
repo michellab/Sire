@@ -30,6 +30,7 @@
 #include "rational.h"
 #include "rotate.h"
 #include "sphere.h"
+#include "sphereproperty.h"
 #include "torsion.h"
 #include "triangle.h"
 #include "trigmatrix.h"

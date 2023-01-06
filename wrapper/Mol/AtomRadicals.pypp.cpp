@@ -98,6 +98,20 @@ void register_AtomRadicals_class(){
         { //::SireMol::AtomProperty< SireMol::Radical >::at
         
             typedef SireMol::AtomProperty< SireMol::Radical > exported_class_t;
+            typedef ::SireMol::Radical const & ( ::SireMol::AtomProperty< SireMol::Radical >::*at_function_type)( int ) const;
+            at_function_type at_function_value( &::SireMol::AtomProperty< SireMol::Radical >::at );
+            
+            AtomRadicals_exposer.def( 
+                "at"
+                , at_function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMol::Radical >::at
+        
+            typedef SireMol::AtomProperty< SireMol::Radical > exported_class_t;
             typedef ::SireMol::Radical const & ( ::SireMol::AtomProperty< SireMol::Radical >::*at_function_type)( ::SireMol::CGAtomIdx const & ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< SireMol::Radical >::at );
             
@@ -216,6 +230,20 @@ void register_AtomRadicals_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgidx") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMol::Radical >::get
+        
+            typedef SireMol::AtomProperty< SireMol::Radical > exported_class_t;
+            typedef ::SireMol::Radical const & ( ::SireMol::AtomProperty< SireMol::Radical >::*get_function_type)( int ) const;
+            get_function_type get_function_value( &::SireMol::AtomProperty< SireMol::Radical >::get );
+            
+            AtomRadicals_exposer.def( 
+                "get"
+                , get_function_value
+                , ( bp::arg("i") )
                 , bp::return_value_policy< bp::copy_const_reference >()
                 , "" );
         
@@ -404,6 +432,20 @@ void register_AtomRadicals_class(){
         { //::SireMol::AtomProperty< SireMol::Radical >::operator[]
         
             typedef SireMol::AtomProperty< SireMol::Radical > exported_class_t;
+            typedef ::SireMol::Radical const & ( ::SireMol::AtomProperty< SireMol::Radical >::*__getitem___function_type)( int ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireMol::Radical >::operator[] );
+            
+            AtomRadicals_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMol::Radical >::operator[]
+        
+            typedef SireMol::AtomProperty< SireMol::Radical > exported_class_t;
             typedef ::SireMol::Radical const & ( ::SireMol::AtomProperty< SireMol::Radical >::*__getitem___function_type)( ::SireMol::CGAtomIdx const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireMol::Radical >::operator[] );
             
@@ -412,6 +454,32 @@ void register_AtomRadicals_class(){
                 , __getitem___function_value
                 , ( bp::arg("cgatomidx") )
                 , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMol::Radical >::operator[]
+        
+            typedef SireMol::AtomProperty< SireMol::Radical > exported_class_t;
+            typedef ::QList< SireMol::Radical > ( ::SireMol::AtomProperty< SireMol::Radical >::*__getitem___function_type)( ::QList< long long > const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireMol::Radical >::operator[] );
+            
+            AtomRadicals_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("idxs") )
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMol::Radical >::operator[]
+        
+            typedef SireMol::AtomProperty< SireMol::Radical > exported_class_t;
+            typedef ::QList< SireMol::Radical > ( ::SireMol::AtomProperty< SireMol::Radical >::*__getitem___function_type)( ::SireBase::Slice const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireMol::Radical >::operator[] );
+            
+            AtomRadicals_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("slice") )
                 , "" );
         
         }
@@ -452,6 +520,33 @@ void register_AtomRadicals_class(){
             AtomRadicals_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMol::Radical >::toList
+        
+            typedef SireMol::AtomProperty< SireMol::Radical > exported_class_t;
+            typedef ::QList< SireMol::Radical > ( ::SireMol::AtomProperty< SireMol::Radical >::*toList_function_type)(  ) const;
+            toList_function_type toList_function_value( &::SireMol::AtomProperty< SireMol::Radical >::toList );
+            
+            AtomRadicals_exposer.def( 
+                "toList"
+                , toList_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMol::Radical >::toList
+        
+            typedef SireMol::AtomProperty< SireMol::Radical > exported_class_t;
+            typedef ::QList< SireMol::Radical > ( ::SireMol::AtomProperty< SireMol::Radical >::*toList_function_type)( ::SireMol::AtomSelection const & ) const;
+            toList_function_type toList_function_value( &::SireMol::AtomProperty< SireMol::Radical >::toList );
+            
+            AtomRadicals_exposer.def( 
+                "toList"
+                , toList_function_value
+                , ( bp::arg("selection") )
                 , bp::release_gil_policy()
                 , "" );
         

@@ -17,10 +17,12 @@ include_directories(${TBB_INCLUDE_DIR})
 set ( SIREMM_HEADERS
       amberparams.h
       anglerestraint.h
+      angle.h
       atomfunctions.h
       atomljs.h
       atompairs.hpp
       bond.h
+      calculate_energy.h
       clj14group.h
       cljatoms.h
       cljboxes.h
@@ -39,6 +41,7 @@ set ( SIREMM_HEADERS
       cljshiftfunction.h
       cljworkspace.h
       coulombpotential.h
+      dihedral.h
       dihedralrestraint.h
       distancerestraint.h
       errors.h
@@ -46,6 +49,7 @@ set ( SIREMM_HEADERS
       gridff.h
       gridff2.h
       gromacsparams.h
+      improper.h
       intercljff.h
       intercoulombff.h
       interff.h
@@ -53,6 +57,7 @@ set ( SIREMM_HEADERS
       interljff.h
       internalcomponent.h
       internalff.h
+      internalgroupff.h
       internalparameters.h
       internalperturbation.h
       intersoftcljff.h
@@ -73,8 +78,14 @@ set ( SIREMM_HEADERS
       restraint.h
       restraintcomponent.h
       restraintff.h
+      selectorangle.h
       selectorbond.h
+      selectordihedral.h
+      selectorimproper.h
+      selectormangle.h
       selectormbond.h
+      selectormdihedral.h
+      selectormimproper.h
       softcljcomponent.h
       softcljpotential.h
       switchingfunction.h
@@ -93,10 +104,12 @@ set ( SIREMM_SOURCES
       register_siremm.cpp
 
       amberparams.cpp
+      angle.cpp
       anglerestraint.cpp
       atomfunctions.cpp
       atomljs.cpp
       bond.cpp
+      calculate_energy.cpp
       clj14group.cpp
       cljatoms.cpp
       cljboxes.cpp
@@ -115,6 +128,7 @@ set ( SIREMM_SOURCES
       cljshiftfunction.cpp
       cljworkspace.cpp
       coulombpotential.cpp
+      dihedral.cpp
       dihedralrestraint.cpp
       distancerestraint.cpp
       errors.cpp
@@ -122,6 +136,7 @@ set ( SIREMM_SOURCES
       gridff.cpp
       gridff2.cpp
       gromacsparams.cpp
+      improper.cpp
       intercljff.cpp
       intercoulombff.cpp
       interff.cpp
@@ -129,6 +144,7 @@ set ( SIREMM_SOURCES
       interljff.cpp
       internalcomponent.cpp
       internalff.cpp
+      internalgroupff.cpp
       internalparameters.cpp
       internalperturbation.cpp
       intersoftcljff.cpp
@@ -148,8 +164,14 @@ set ( SIREMM_SOURCES
       restraint.cpp
       restraintcomponent.cpp
       restraintff.cpp
+      selectorangle.cpp
       selectorbond.cpp
+      selectordihedral.cpp
+      selectorimproper.cpp
+      selectormangle.cpp
       selectormbond.cpp
+      selectormdihedral.cpp
+      selectormimproper.cpp
       softcljcomponent.cpp
       softcljpotential.cpp
       switchingfunction.cpp

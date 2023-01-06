@@ -32,6 +32,8 @@
 #include "moleculedata.h"
 #include "moleculeinfodata.h"
 
+#include "SireID/index.h"
+
 #include "SireBase/property.h"
 
 #include "SireMaths/vector.h"
@@ -116,6 +118,19 @@ bool BondID::operator==(const BondID &other) const
 bool BondID::operator!=(const BondID &other) const
 {
     return atm0 != other.atm0 or atm1 != other.atm1;
+}
+
+const AtomID& BondID::operator[](int i) const
+{
+    i = Index(i).map(2);
+
+    switch(i)
+    {
+    case 0:
+        return atm0.base();
+    default:
+        return atm1.base();
+    }
 }
 
 /** Return the mirror of this BondID - i.e. if this is

@@ -32,8 +32,12 @@ set ( SIREIO_HEADERS
       biosimspace.h
       charmmpsf.h
       cube.h
+      dcd.h
       errors.h
+      filetrajectory.h
       flexibilitylibrary.h
+      fortranfile.h
+      getcoordsarray.h
       gro87.h
       grotop.h
       iobase.h
@@ -64,8 +68,12 @@ set ( SIREIO_SOURCES
       biosimspace.cpp
       charmmpsf.cpp
       cube.cpp
+      dcd.cpp
       errors.cpp
+      filetrajectory.cpp
       flexibilitylibrary.cpp
+      fortranfile.cpp
+      getcoordsarray.cpp
       gro87.cpp
       grotop.cpp
       iobase.cpp

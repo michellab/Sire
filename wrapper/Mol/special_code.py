@@ -258,7 +258,6 @@ def fix_Mover(c):
     c.decls("change").call_policies = call_policies.return_self()
     c.decls("set").call_policies = call_policies.return_self()
     c.decls("setAll").call_policies = call_policies.return_self()
-    c.decls("alignTo").call_policies = call_policies.return_self()
     c.decls("align").call_policies = call_policies.return_self()
 
     #also include all of the header files included in mover.cpp
@@ -393,6 +392,7 @@ special_code = { "SireMol::Atom" : fix_Atom,
                  "AtomFloatProperty" : fix_MolViewProperty,
                  "AtomVariantProperty" : fix_MolViewProperty,
                  "AtomPropertyList" : fix_MolViewProperty,
+                 "AtomPropertyProperty" : fix_MolViewProperty,
                  "AtomDoubleArrayProperty" : fix_MolViewProperty,
                  "AtomIntegerArrayProperty" : fix_MolViewProperty,
                  "AtomStringArrayProperty" : fix_MolViewProperty,
@@ -400,22 +400,27 @@ special_code = { "SireMol::Atom" : fix_Atom,
                  "BeadIntProperty" : fix_MolViewProperty,
                  "BeadFloatProperty" : fix_MolViewProperty,
                  "BeadVariantProperty" : fix_MolViewProperty,
+                 "BeadPropertyProperty" : fix_MolViewProperty,
                  "CGStringProperty" : fix_MolViewProperty,
                  "CGIntProperty" : fix_MolViewProperty,
                  "CGFloatProperty" : fix_MolViewProperty,
                  "CGVariantProperty" : fix_MolViewProperty,
+                 "CGPropertyProperty" : fix_MolViewProperty,
                  "ResStringProperty" : fix_MolViewProperty,
                  "ResIntProperty" : fix_MolViewProperty,
                  "ResFloatProperty" : fix_MolViewProperty,
+                 "ResPropertyProperty" : fix_MolViewProperty,
                  "ResVariantProperty" : fix_MolViewProperty,
                  "ChainStringProperty" : fix_MolViewProperty,
                  "ChainIntProperty" : fix_MolViewProperty,
                  "ChainFloatProperty" : fix_MolViewProperty,
                  "ChainVariantProperty" : fix_MolViewProperty,
+                 "ChainPropertyProperty" : fix_MolViewProperty,
                  "SegStringProperty" : fix_MolViewProperty,
                  "SegIntProperty" : fix_MolViewProperty,
                  "SegFloatProperty" : fix_MolViewProperty,
                  "SegVariantProperty" : fix_MolViewProperty,
+                 "SegPropertyProperty" : fix_MolViewProperty,
 
                  "AtomBeads" : fix_MolViewProperty,
                  "AtomCoords" : fix_AtomCoords,
@@ -456,7 +461,13 @@ implicitly_convertible = [ ("SireMol::AtomID", "SireMol::AtomIdentifier"),
                            ("SireMol::MoleculeView", "SireMol::MoleculeData"),
                            ("SireMol::MoleculeView", "SireMol::PartialMolecule"),
                            ("SireMol::MoleculeInfoData", "SireMol::MoleculeInfo"),
-                           ("SireMol::MoleculeInfo", "SireMol::MoleculeInfoData") ]
+                           ("SireMol::MoleculeInfo", "SireMol::MoleculeInfoData"),
+                           ("SireMol::Selector<SireMol::Atom>", "SireMol::SelectorM<SireMol::Atom>"),
+                           ("SireMol::Selector<SireMol::Residue>", "SireMol::SelectorM<SireMol::Residue>"),
+                           ("SireMol::Selector<SireMol::CutGroup>", "SireMol::SelectorM<SireMol::CutGroup>"),
+                           ("SireMol::Selector<SireMol::Chain>", "SireMol::SelectorM<SireMol::Chain>"),
+                           ("SireMol::Selector<SireMol::Segment>", "SireMol::SelectorM<SireMol::Segment>"),
+                         ]
 
 def fixMB(mb):
     mb.add_declaration_code("#include \"SireMol/moleculedata.h\"")
@@ -465,3 +476,5 @@ def fixMB(mb):
     mb.add_declaration_code("#include \"SireMol/mover.hpp\"")
     mb.add_declaration_code("#include \"SireMol/mgidentifier.h\"")
     mb.add_declaration_code("#include \"SireMol/moleculeinfo.h\"")
+    mb.add_declaration_code("#include \"SireMol/selector.hpp\"")
+    mb.add_declaration_code("#include \"SireMol/selectorm.hpp\"")

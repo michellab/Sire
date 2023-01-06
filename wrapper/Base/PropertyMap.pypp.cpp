@@ -46,6 +46,19 @@ void register_PropertyMap_class(){
                 , "Return whether or not this map is default - if it is,\nthen it doesnt specify any properties" );
         
         }
+        { //::SireBase::PropertyMap::merge
+        
+            typedef ::SireBase::PropertyMap ( ::SireBase::PropertyMap::*merge_function_type)( ::SireBase::PropertyMap const & ) const;
+            merge_function_type merge_function_value( &::SireBase::PropertyMap::merge );
+            
+            PropertyMap_exposer.def( 
+                "merge"
+                , merge_function_value
+                , ( bp::arg("other") )
+                , bp::release_gil_policy()
+                , "Return a PropertyMap that is the combination of this and other.\n  Keys set in other take precedence over keys in this.\n" );
+        
+        }
         PropertyMap_exposer.def( bp::self != bp::self );
         PropertyMap_exposer.def( bp::self + bp::self );
         { //::SireBase::PropertyMap::operator=
@@ -148,6 +161,18 @@ void register_PropertyMap_class(){
                 , ( bp::arg("name") )
                 , bp::release_gil_policy()
                 , "Return whether or not this map specifies the source or value\nof the property called name" );
+        
+        }
+        { //::SireBase::PropertyMap::toDict
+        
+            typedef ::QHash< QString, SireBase::PropertyName > const ( ::SireBase::PropertyMap::*toDict_function_type)(  ) const;
+            toDict_function_type toDict_function_value( &::SireBase::PropertyMap::toDict );
+            
+            PropertyMap_exposer.def( 
+                "toDict"
+                , toDict_function_value
+                , bp::release_gil_policy()
+                , "Return the raw underlying dictionary of the map" );
         
         }
         { //::SireBase::PropertyMap::toString

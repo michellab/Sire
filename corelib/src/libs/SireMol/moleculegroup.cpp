@@ -305,7 +305,7 @@ static const RegisterMetaType<MoleculeGroup> r_MoleculeGroup;
 
 /** Serialise a MoleculeGroup to a binary datastream */
 QDataStream &operator<<(QDataStream &ds,
-                                       const MoleculeGroup &molgroup)
+                        const MoleculeGroup &molgroup)
 {
     if (molgroup.needsAccepting())
     {
@@ -325,7 +325,7 @@ QDataStream &operator<<(QDataStream &ds,
 
 /** Deserialise a MoleculeGroup from a binary datastream */
 QDataStream &operator>>(QDataStream &ds,
-                                       MoleculeGroup &molgroup)
+                        MoleculeGroup &molgroup)
 {
     VersionID v = readHeader(ds, r_MoleculeGroup);
 
@@ -2551,4 +2551,77 @@ const char* MoleculeGroup::typeName()
 MoleculeGroup* MoleculeGroup::clone() const
 {
     return new MoleculeGroup(*this);
+}
+
+int MoleculeGroup::nFrames() const
+{
+    return this->nFrames(PropertyMap());
+}
+
+int MoleculeGroup::nFrames(const SireBase::PropertyMap &map) const
+{
+    if (this->isEmpty())
+        return 0;
+    else
+        return d->molecules.nFrames(map);
+}
+
+void MoleculeGroup::loadFrame(int frame)
+{
+    this->loadFrame(frame, PropertyMap());
+}
+
+void MoleculeGroup::saveFrame(int frame)
+{
+    this->saveFrame(frame, PropertyMap());
+}
+
+void MoleculeGroup::saveFrame()
+{
+    this->saveFrame(PropertyMap());
+}
+
+void MoleculeGroup::deleteFrame(int frame)
+{
+    this->deleteFrame(frame, PropertyMap());
+}
+
+void MoleculeGroup::loadFrame(int frame, const SireBase::PropertyMap &map)
+{
+    if (not this->isEmpty())
+    {
+        this->accept();
+        d->molecules.loadFrame(frame, map);
+        d->incrementMinor();
+    }
+}
+
+void MoleculeGroup::saveFrame(int frame, const SireBase::PropertyMap &map)
+{
+    if (not this->isEmpty())
+    {
+        this->accept();
+        d->molecules.saveFrame(frame, map);
+        d->incrementMinor();
+    }
+}
+
+void MoleculeGroup::saveFrame(const SireBase::PropertyMap &map)
+{
+    if (not this->isEmpty())
+    {
+        this->accept();
+        d->molecules.saveFrame(map);
+        d->incrementMinor();
+    }
+}
+
+void MoleculeGroup::deleteFrame(int frame, const SireBase::PropertyMap &map)
+{
+    if (not this->isEmpty())
+    {
+        this->accept();
+        d->molecules.deleteFrame(frame, map);
+        d->incrementMinor();
+    }
 }

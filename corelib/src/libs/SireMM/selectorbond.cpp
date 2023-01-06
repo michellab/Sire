@@ -59,6 +59,8 @@ using namespace SireError;
 using namespace SireUnits;
 using namespace SireUnits::Dimension;
 
+using SireMM::detail::IDPair;
+
 static const RegisterMetaType<SelectorBond> r_sbond;
 
 SIREMM_EXPORT QDataStream& operator<<(QDataStream &ds, const SelectorBond &sbond)
@@ -116,29 +118,149 @@ SelectorBond::SelectorBond(const MoleculeView &mol,
     }
 }
 
-SelectorBond::SelectorBond(const MoleculeView &mol,
-                           const QList<BondID> &bonds)
-             : ConcreteProperty<SelectorBond, MoleculeView>(mol)
+SelectorBond::SelectorBond(const Bond &bond)
+             : ConcreteProperty<SelectorBond, MoleculeView>(bond)
 {
-    const auto s = mol.selection();
-
-    for (const auto &bond : bonds)
+    if (not bond.isEmpty())
     {
-        BondID b(mol.data().info().atomIdx(bond.atom0()),
-                 mol.data().info().atomIdx(bond.atom1()));
+        auto atom0 = this->data().info().atomIdx(bond.ID().atom0());
+        auto atom1 = this->data().info().atomIdx(bond.ID().atom1());
 
-        if (s.selected(b.atom0()) and s.selected(b.atom1()))
+        if (atom0 > atom1)
+            qSwap(atom0, atom1);
+
+        if (atom0 == atom1)
         {
-            bnds.append(b);
+            // cannot add bonds to the same atom
+            this->operator=(SelectorBond());
+        }
+        else
+        {
+            this->bnds.append(BondID(atom0, atom1));
         }
     }
 }
 
 SelectorBond::SelectorBond(const MoleculeData &moldata,
                            const SireBase::PropertyMap &map)
-     : ConcreteProperty<SelectorBond, MoleculeView>()
+             : ConcreteProperty<SelectorBond, MoleculeView>()
 {
     this->operator=(SelectorBond(Molecule(moldata), map));
+}
+
+inline
+QSet<IDPair> _to_int_set(const QList<BondID> &vals,
+                         const MoleculeInfoData &molinfo)
+{
+    QSet<IDPair> s;
+    s.reserve(vals.count());
+
+    for (const auto &val : vals)
+    {
+        s.insert(IDPair(molinfo.atomIdx(val[0]).value(),
+                        molinfo.atomIdx(val[1]).value()));
+    }
+
+    return s;
+}
+
+inline
+QList<BondID> _from_int_set(const QSet<IDPair> &vals)
+{
+    QVector<IDPair> v;
+    v.reserve(vals.count());
+
+    for (const auto &val : vals)
+    {
+        v.append(val);
+    }
+
+    std::sort(v.begin(), v.end());
+
+    QList<BondID> l;
+    l.reserve(v.count());
+
+    for (const auto &val : v)
+    {
+        l.append(BondID(AtomIdx(val.atom0),
+                        AtomIdx(val.atom1)));
+    }
+
+    return l;
+}
+
+inline
+QList<AtomIdx> _filter(const QList<AtomIdx> &atoms, const AtomSelection &selection)
+{
+    QList<AtomIdx> ret;
+    ret.reserve(atoms.count());
+
+    for (const auto &atom : atoms)
+    {
+        if (selection.selected(atom))
+        {
+            ret.append(atom);
+        }
+    }
+
+    return ret;
+}
+
+inline
+QSet<IDPair> _filter(const QSet<IDPair> &bonds,
+                     const QVector<quint32> &atoms,
+                     int position)
+{
+    QSet<IDPair> result;
+
+    result.reserve(bonds.count());
+
+    for (const auto &bond : bonds)
+    {
+        const auto atomidx = bond[position];
+
+        for (const auto &atom : atoms)
+        {
+            if (atomidx == atom)
+            {
+                result.insert(bond);
+                break;
+            }
+        }
+    }
+
+    return result;
+}
+
+inline
+QVector<quint32> _to_int(const Selector<Atom> &atoms)
+{
+    QVector<quint32> ret;
+
+    const int n = atoms.count();
+
+    ret.reserve(n);
+
+    for (int i=0; i<n; ++i)
+    {
+        ret.append(atoms.index(i));
+    }
+
+    return ret;
+}
+
+inline
+QVector<quint32> _to_int(const QList<AtomIdx> &atoms)
+{
+    QVector<quint32> ret;
+    ret.reserve(atoms.count());
+
+    for (const auto &atom : atoms)
+    {
+        ret.append(atom.value());
+    }
+
+    return ret;
 }
 
 SelectorBond::SelectorBond(const MoleculeView &mol,
@@ -150,102 +272,106 @@ SelectorBond::SelectorBond(const MoleculeView &mol,
 
     if (mol.data().hasProperty(map["connectivity"]))
     {
+        if (not mol.selectedAll())
+        {
+            const auto selection = mol.selection();
+            atoms0 = _filter(atoms0, selection);
+            atoms1 = _filter(atoms1, selection);
+        }
+
+        auto int_atoms0 = _to_int(atoms0);
+        auto int_atoms1 = _to_int(atoms1);
+
         auto c = mol.data().property(map["connectivity"]).asA<Connectivity>();
 
-        auto ce = c.edit();
-        ce.disconnectAll();
+        auto bonds = _to_int_set(c.getBonds(), this->data().info());
 
-        QList<BondID> bonds;
+        auto bonds01 = _filter(bonds, int_atoms0, 0);
+        bonds01 = _filter(bonds01, int_atoms1, 1);
 
-        for (const auto &atom0 : atoms0)
+        auto bonds10 = _filter(bonds, int_atoms0, 1);
+        bonds10 = _filter(bonds10, int_atoms1, 0);
+
+        bnds = _from_int_set(bonds01 + bonds10);
+    }
+}
+
+SelectorBond::SelectorBond(const MoleculeView &mol,
+                           const QList<BondID> &bonds,
+                           const SireBase::PropertyMap &map)
+             : ConcreteProperty<SelectorBond, MoleculeView>(mol)
+{
+    if (bonds.count() == 1)
+    {
+        this->operator=(SelectorBond(mol, bonds[0], map));
+        return;
+    }
+    else if (mol.data().hasProperty(map["connectivity"]) and not bonds.isEmpty())
+    {
+        auto c = mol.data().property(map["connectivity"]).asA<Connectivity>();
+
+        auto all_bonds = _to_int_set(c.getBonds(), this->data().info());
+
+        QSet<IDPair> selected_bonds;
+        selected_bonds.reserve(all_bonds.count());
+
+        for (const auto &bond : bonds)
         {
-            for (const auto &atom1 : atoms1)
+            auto atoms0 = mol.data().info().map(bond.atom0());
+            auto atoms1 = mol.data().info().map(bond.atom1());
+
+            if (not mol.selectedAll())
             {
-                auto atomidx0 = atom0;
-                auto atomidx1 = atom1;
-
-                if (atomidx0 > atomidx1)
-                {
-                    qSwap(atomidx0, atomidx1);
-                }
-
-                if (atomidx0 != atomidx1 and c.areConnected(atomidx0, atomidx1)
-                        and not ce.areConnected(atomidx0, atomidx1))
-                {
-                    ce = ce.connect(atomidx0, atomidx1);
-                    bonds.append(BondID(atomidx0, atomidx1));
-                }
+                const auto selection = mol.selection();
+                atoms0 = _filter(atoms0, selection);
+                atoms1 = _filter(atoms1, selection);
             }
+
+            auto int_atoms0 = _to_int(atoms0);
+            auto int_atoms1 = _to_int(atoms1);
+
+            auto bonds01 = _filter(all_bonds, int_atoms0, 0);
+            bonds01 = _filter(bonds01, int_atoms1, 1);
+
+            auto bonds10 = _filter(all_bonds, int_atoms0, 1);
+            bonds10 = _filter(bonds10, int_atoms1, 0);
+
+            selected_bonds += bonds01;
+            selected_bonds += bonds10;
+
+            if (selected_bonds.count() == all_bonds.count())
+                break;
         }
 
-        if (mol.selectedAll())
-        {
-            bnds = bonds;
-        }
-        else
-        {
-            const auto s = mol.selection();
-
-            for (const auto &bond : bonds)
-            {
-                if (s.selected(bond.atom0()) and s.selected(bond.atom1()))
-                {
-                    bnds.append(bond);
-                }
-            }
-        }
+        bnds = _from_int_set(selected_bonds);
     }
 }
 
 SelectorBond::SelectorBond(const MoleculeView &mol,
                            const AtomID &atom, const PropertyMap &map)
-      : ConcreteProperty<SelectorBond, MoleculeView>(mol)
+              : ConcreteProperty<SelectorBond, MoleculeView>(mol)
 {
+    auto atoms = mol.data().info().map(atom);
+
     if (mol.data().hasProperty(map["connectivity"]))
     {
         auto c = mol.data().property(map["connectivity"]).asA<Connectivity>();
 
-        auto ce = c.edit();
-        ce.disconnectAll();
-
-        QList<BondID> bonds;
-
-        for (const auto &atomidx : mol.data().info().map(atom))
+        if (not mol.selectedAll())
         {
-            for (const auto &b : c.getBonds(atomidx))
-            {
-                auto atomidx0 = mol.data().info().atomIdx(b.atom0());
-                auto atomidx1 = mol.data().info().atomIdx(b.atom1());
-
-                if (atomidx0 > atomidx1)
-                {
-                    qSwap(atomidx0, atomidx1);
-                }
-
-                if (atomidx0 != atomidx1 and not ce.areConnected(atomidx0, atomidx1))
-                {
-                    ce = ce.connect(atomidx0, atomidx1);
-                    bonds.append(BondID(atomidx0, atomidx1));
-                }
-            }
+            const auto selection = mol.selection();
+            atoms = _filter(atoms, selection);
         }
 
-        if (mol.selectedAll())
-        {
-            bnds = bonds;
-        }
-        else
-        {
-            const auto s = mol.selection();
+        auto int_atoms = _to_int(atoms);
 
-            for (const auto &bond : bonds)
-            {
-                if (s.selected(bond.atom0()) and s.selected(bond.atom1()))
-                {
-                    bnds.append(bond);
-                }
-            }
-        }
+        auto bonds = _to_int_set(c.getBonds(), this->data().info());
+
+        auto bonds0 = _filter(bonds, int_atoms, 0);
+        auto bonds1 = _filter(bonds, int_atoms, 1);
+        auto bonds2 = _filter(bonds, int_atoms, 2);
+
+        bnds = _from_int_set(bonds0 + bonds1 + bonds2);
     }
 }
 
@@ -254,52 +380,7 @@ SelectorBond::SelectorBond(const MoleculeView &mol,
                            const PropertyMap &map)
              : ConcreteProperty<SelectorBond, MoleculeView>(mol)
 {
-    if (mol.data().hasProperty(map["connectivity"]))
-    {
-        auto c = mol.data().property(map["connectivity"]).asA<Connectivity>();
-
-        auto ce = c.edit().disconnectAll();
-
-        QList<BondID> bonds;
-
-        for (const auto &atomidx0 : mol.data().info().map(atom0))
-        {
-            for (const auto &atomidx1 : mol.data().info().map(atom1))
-            {
-                if (atomidx0 != atomidx1 and c.areConnected(atomidx0, atomidx1))
-                {
-                    if (not (ce.areConnected(atomidx0, atomidx1)))
-                    {
-                        if (atomidx0 <= atomidx1)
-                        {
-                            bonds.append(BondID(atomidx0, atomidx1));
-                        }
-                        else
-                        {
-                            bonds.append(BondID(atomidx1, atomidx0));
-                        }
-                    }
-                }
-            }
-        }
-
-        if (mol.selectedAll())
-        {
-            bnds = bonds;
-        }
-        else
-        {
-            const auto s = mol.selection();
-
-            for (const auto &bond : bonds)
-            {
-                if (s.selected(bond.atom0()) and s.selected(bond.atom1()))
-                {
-                    bnds.append(bond);
-                }
-            }
-        }
-    }
+    this->operator=(SelectorBond(mol, BondID(atom0, atom1), map));
 }
 
 SelectorBond::SelectorBond(const MoleculeData &mol,
@@ -321,36 +402,18 @@ SelectorBond::SelectorBond(const Selector<Atom> &atoms,
                            const PropertyMap &map)
              : ConcreteProperty<SelectorBond, MoleculeView>(atoms)
 {
-    if (atoms.data().hasProperty(map["connectivity"]))
+    if (this->data().hasProperty(map["connectivity"]))
     {
-        auto c = atoms.data().property(map["connectivity"]).asA<Connectivity>();
+        auto c = this->data().property(map["connectivity"]).asA<Connectivity>();
 
-        auto ce = c.edit();
-        ce.disconnectAll();
+        auto int_atoms = _to_int(atoms);
 
-        QList<BondID> bonds;
+        auto bonds = _to_int_set(c.getBonds(), this->data().info());
 
-        for (int i=0; i<atoms.count(); ++i)
-        {
-            for (const auto &b : c.getBonds(atoms(i).index()))
-            {
-                auto atomidx0 = atoms.data().info().atomIdx(b.atom0());
-                auto atomidx1 = atoms.data().info().atomIdx(b.atom1());
+        auto bonds0 = _filter(bonds, int_atoms, 0);
+        auto bonds1 = _filter(bonds, int_atoms, 1);
 
-                if (atomidx0 > atomidx1)
-                {
-                    qSwap(atomidx0, atomidx1);
-                }
-
-                if (atomidx0 != atomidx1 and not ce.areConnected(atomidx0, atomidx1))
-                {
-                    ce = ce.connect(atomidx0, atomidx1);
-                    bonds.append(BondID(atomidx0, atomidx1));
-                }
-            }
-        }
-
-        bnds = bonds;
+        bnds = _from_int_set(bonds0 + bonds1);
     }
 }
 
@@ -361,43 +424,28 @@ SelectorBond::SelectorBond(const Selector<Atom> &atoms0,
 {
     if (not atoms0.isSameMolecule(atoms1))
         throw SireError::incompatible_error(QObject::tr(
-            "You can only create a bond from two atoms in the same molecule. "
+            "You can only create a bond from atoms in the same molecule. "
             "%1 and %2 are from different molecules (%3 and %4)")
                 .arg(atoms0.toString()).arg(atoms1.toString())
                 .arg(atoms0.molecule().toString())
                 .arg(atoms1.molecule().toString()), CODELOC);
 
-    if (atoms0.data().hasProperty(map["connectivity"]))
+    if (this->data().hasProperty(map["connectivity"]))
     {
-        auto c = atoms0.data().property(map["connectivity"]).asA<Connectivity>();
+        auto c = this->data().property(map["connectivity"]).asA<Connectivity>();
 
-        auto ce = c.edit();
-        ce.disconnectAll();
+        auto int_atoms0 = _to_int(atoms0);
+        auto int_atoms1 = _to_int(atoms1);
 
-        QList<BondID> bonds;
+        auto bonds = _to_int_set(c.getBonds(), this->data().info());
 
-        for (int i=0; i<atoms0.count(); ++i)
-        {
-            for (int j=0; j<atoms1.count(); ++j)
-            {
-                auto atomidx0 = atoms0(i).index();
-                auto atomidx1 = atoms1(j).index();
+        auto bonds01 = _filter(bonds, int_atoms0, 0);
+        bonds01 = _filter(bonds01, int_atoms1, 1);
 
-                if (atomidx0 > atomidx1)
-                {
-                    qSwap(atomidx0, atomidx1);
-                }
+        auto bonds10 = _filter(bonds, int_atoms0, 1);
+        bonds10 = _filter(bonds10, int_atoms1, 0);
 
-                if (atomidx0 != atomidx1 and c.areConnected(atomidx0, atomidx1)
-                        and not ce.areConnected(atomidx0, atomidx1))
-                {
-                    ce = ce.connect(atomidx0, atomidx1);
-                    bonds.append(BondID(atomidx0, atomidx1));
-                }
-            }
-        }
-
-        bnds = bonds;
+        bnds = _from_int_set(bonds01 + bonds10);
     }
 }
 
@@ -633,6 +681,11 @@ SelectorBond SelectorBond::operator()(const BondID &bond) const
     return ret;
 }
 
+bool SelectorBond::isSelector() const
+{
+    return true;
+}
+
 MolViewPtr SelectorBond::toSelector() const
 {
     return MolViewPtr(*this);
@@ -684,16 +737,11 @@ SelectorBond SelectorBond::intersection(const SelectorBond &other) const
 
     MoleculeView::assertSameMolecule(other);
 
-    SelectorBond ret(*this);
-    ret.bnds.clear();
+    auto ret_bnds = _to_int_set(this->bnds, this->data().info());
+    ret_bnds.intersect(_to_int_set(other.bnds, other.data().info()));
 
-    for (const auto &bond : this->bnds)
-    {
-        if (ret.bnds.contains(bond))
-        {
-            ret.bnds.append(bond);
-        }
-    }
+    SelectorBond ret(*this);
+    ret.bnds = _from_int_set(ret_bnds);
 
     return ret;
 }
@@ -702,16 +750,12 @@ SelectorBond SelectorBond::invert(const PropertyMap &map) const
 {
     auto s = SelectorBond(this->molecule(), map);
 
-    SelectorBond ret(*this);
-    ret.bnds.clear();
+    auto ret_bnds = _to_int_set(s.bnds, s.data().info());
 
-    for (const auto &bond : s.bnds)
-    {
-        if (not this->bnds.contains(bond))
-        {
-            ret.bnds.append(bond);
-        }
-    }
+    ret_bnds.subtract(_to_int_set(this->bnds, this->data().info()));
+
+    SelectorBond ret(*this);
+    ret.bnds = _from_int_set(ret_bnds);
 
     return ret;
 }
@@ -838,7 +882,7 @@ QList<PropertyPtr> SelectorBond::property(const PropertyName &key) const
             props.append(this->operator()(i).property(key));
             has_prop = true;
         }
-        catch(SireError::exception&)
+        catch(const SireError::exception&)
         {
             props.append(NullProperty());
         }
@@ -882,6 +926,16 @@ QList<Length> SelectorBond::lengths() const
     return this->lengths(PropertyMap());
 }
 
+QList<Length> SelectorBond::measures() const
+{
+    return this->lengths();
+}
+
+QList<Length> SelectorBond::measures(const PropertyMap &map) const
+{
+    return this->lengths(map);
+}
+
 QList<Expression> SelectorBond::potentials() const
 {
     return this->potentials(PropertyMap());
@@ -899,14 +953,14 @@ QList<Expression> SelectorBond::potentials(const PropertyMap &map) const
     return p;
 }
 
-QList<MolarEnergy> SelectorBond::energies() const
+QList<GeneralUnit> SelectorBond::energies() const
 {
     return this->energies(PropertyMap());
 }
 
-QList<MolarEnergy> SelectorBond::energies(const PropertyMap &map) const
+QList<GeneralUnit> SelectorBond::energies(const PropertyMap &map) const
 {
-    QList<MolarEnergy> nrgs;
+    QList<GeneralUnit> nrgs;
 
     for (int i=0; i<this->count(); ++i)
     {
@@ -916,14 +970,14 @@ QList<MolarEnergy> SelectorBond::energies(const PropertyMap &map) const
     return nrgs;
 }
 
-MolarEnergy SelectorBond::energy() const
+GeneralUnit SelectorBond::energy() const
 {
     return this->energy(PropertyMap());
 }
 
-MolarEnergy SelectorBond::energy(const PropertyMap &map) const
+GeneralUnit SelectorBond::energy(const PropertyMap &map) const
 {
-    MolarEnergy nrg(0);
+    GeneralUnit nrg(0);
 
     for (int i=0; i<this->count(); ++i)
     {

@@ -98,6 +98,20 @@ void register_AtomCharges_class(){
         { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::at
         
             typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > > exported_class_t;
+            typedef ::SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > const & ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::*at_function_type)( int ) const;
+            at_function_type at_function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::at );
+            
+            AtomCharges_exposer.def( 
+                "at"
+                , at_function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::at
+        
+            typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > > exported_class_t;
             typedef ::SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > const & ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::*at_function_type)( ::SireMol::CGAtomIdx const & ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::at );
             
@@ -216,6 +230,20 @@ void register_AtomCharges_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgidx") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::get
+        
+            typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > > exported_class_t;
+            typedef ::SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > const & ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::*get_function_type)( int ) const;
+            get_function_type get_function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::get );
+            
+            AtomCharges_exposer.def( 
+                "get"
+                , get_function_value
+                , ( bp::arg("i") )
                 , bp::return_value_policy< bp::copy_const_reference >()
                 , "" );
         
@@ -404,6 +432,20 @@ void register_AtomCharges_class(){
         { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::operator[]
         
             typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > > exported_class_t;
+            typedef ::SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > const & ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::*__getitem___function_type)( int ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::operator[] );
+            
+            AtomCharges_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::operator[]
+        
+            typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > > exported_class_t;
             typedef ::SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > const & ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::*__getitem___function_type)( ::SireMol::CGAtomIdx const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::operator[] );
             
@@ -412,6 +454,32 @@ void register_AtomCharges_class(){
                 , __getitem___function_value
                 , ( bp::arg("cgatomidx") )
                 , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::operator[]
+        
+            typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > > exported_class_t;
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > > ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::*__getitem___function_type)( ::QList< long long > const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::operator[] );
+            
+            AtomCharges_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("idxs") )
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::operator[]
+        
+            typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > > exported_class_t;
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > > ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::*__getitem___function_type)( ::SireBase::Slice const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::operator[] );
+            
+            AtomCharges_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("slice") )
                 , "" );
         
         }
@@ -452,6 +520,33 @@ void register_AtomCharges_class(){
             AtomCharges_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::toList
+        
+            typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > > exported_class_t;
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > > ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::*toList_function_type)(  ) const;
+            toList_function_type toList_function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::toList );
+            
+            AtomCharges_exposer.def( 
+                "toList"
+                , toList_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::toList
+        
+            typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > > exported_class_t;
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > > ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::*toList_function_type)( ::SireMol::AtomSelection const & ) const;
+            toList_function_type toList_function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > >::toList );
+            
+            AtomCharges_exposer.def( 
+                "toList"
+                , toList_function_value
+                , ( bp::arg("selection") )
                 , bp::release_gil_policy()
                 , "" );
         

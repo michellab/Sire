@@ -148,6 +148,7 @@ public:
     Evaluator evaluate() const;
     AtomEditor edit() const;
     Selector<Atom> selector() const;
+    Selector<Atom> invert() const;
 
     bool isWithinResidue() const;
     bool isWithinChain() const;

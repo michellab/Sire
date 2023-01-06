@@ -64,6 +64,13 @@ const QVariant& get_Metadata_SireMol_SegVariantProperty_function2(const SireMol:
                                    const QString &key, const QString &metakey){
                                         return atom.metadata< QVariant >(key, metakey); }
 
+const SireBase::PropertyPtr& get_Metadata_SireMol_SegPropertyProperty_function1(const SireMol::Segment &atom,
+                                   const QString &metakey){ return atom.metadata< SireBase::PropertyPtr >(metakey); }
+
+const SireBase::PropertyPtr& get_Metadata_SireMol_SegPropertyProperty_function2(const SireMol::Segment &atom,
+                                   const QString &key, const QString &metakey){
+                                        return atom.metadata< SireBase::PropertyPtr >(key, metakey); }
+
 SireMol::Segment __copy__(const SireMol::Segment &other){ return SireMol::Segment(other); }
 
 #include "Qt/qdatastream.hpp"
@@ -245,6 +252,18 @@ void register_Segment_class(){
                 , ( bp::arg("atomid") )
                 , bp::release_gil_policy()
                 , "Return whether or not this segment contains some of\nthe atoms identified by the ID atomid" );
+        
+        }
+        { //::SireMol::Segment::invert
+        
+            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Segment::*invert_function_type)(  ) const;
+            invert_function_type invert_function_value( &::SireMol::Segment::invert );
+            
+            Segment_exposer.def( 
+                "invert"
+                , invert_function_value
+                , bp::release_gil_policy()
+                , "Return a selector that has everything except this view" );
         
         }
         { //::SireMol::Segment::isEmpty
@@ -483,6 +502,9 @@ void register_Segment_class(){
         Segment_exposer.def( "_get_property_SireMol_SegVariantProperty", &SireMol::Segment::property< QVariant >, bp::return_value_policy<bp::copy_const_reference>());
         Segment_exposer.def( "_get_metadata_SireMol_SegVariantProperty", get_Metadata_SireMol_SegVariantProperty_function1, bp::return_value_policy<bp::copy_const_reference>());
         Segment_exposer.def( "_get_metadata_SireMol_SegVariantProperty", &get_Metadata_SireMol_SegVariantProperty_function2, bp::return_value_policy<bp::copy_const_reference>());
+        Segment_exposer.def( "_get_property_SireMol_SegPropertyProperty", &SireMol::Segment::property< SireBase::PropertyPtr >, bp::return_value_policy<bp::copy_const_reference>());
+        Segment_exposer.def( "_get_metadata_SireMol_SegPropertyProperty", get_Metadata_SireMol_SegPropertyProperty_function1, bp::return_value_policy<bp::copy_const_reference>());
+        Segment_exposer.def( "_get_metadata_SireMol_SegPropertyProperty", &get_Metadata_SireMol_SegPropertyProperty_function2, bp::return_value_policy<bp::copy_const_reference>());
         Segment_exposer.def( "__copy__", &__copy__);
         Segment_exposer.def( "__deepcopy__", &__copy__);
         Segment_exposer.def( "clone", &__copy__);

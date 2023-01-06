@@ -1,36 +1,49 @@
-"""
-.. currentmodule:: sire
+from . import config
 
-This is the sire module.
+import os as _os
 
-Functions
-=========
+from ._pythonize import use_mixed_api, use_new_api, use_old_api
+from ._load import (
+    load,
+    save,
+    save_to_string,
+    expand,
+    tutorial_url,
+    load_test_files,
+    supported_formats,
+)
 
-.. autosummary::
-    :toctree: generated/
+from ._thumbsup import thumbs_up, get_thumbs_up_info, disable_thumbs_up
+from ._measure import measure
+from ._colname import colname, colnames
 
-    load
-    save
-    atomid
-    chainid
-    molid
-    resid
-    segid
-    thumbs_up
-    disable_thumbs_up
-    get_thumbs_up_info
-
-"""
-
-__all__ = [ "load", "save",
-            "atomid", "resid", "chainid",
-            "segid", "molid", "thumbs_up",
-            "get_thumbs_up_info", "disable_thumbs_up" ]
+__all__ = [
+    "atomid",
+    "chainid",
+    "colname",
+    "colnames",
+    "disable_thumbs_up",
+    "expand",
+    "get_thumbs_up_info",
+    "load",
+    "load_test_files",
+    "measure",
+    "molid",
+    "save",
+    "save_to_string",
+    "segid",
+    "supported_formats",
+    "thumbs_up",
+    "tutorial_url",
+    "use_mixed_api",
+    "use_new_api",
+    "use_old_api",
+]
 
 
 def _fix_openmm_path():
     """We need to fix the OpenMM path on Windows, because the DLL
-       is not where we would expect it to be
+    is not where we would expect it to be
     """
     import sys
 
@@ -51,7 +64,7 @@ def _fix_openmm_path():
 
     for file in openmm_files:
         binfile = os.path.join(bindir, os.path.basename(file))
-        
+
         if not os.path.exists(binfile):
             # We do need to add bindir to the PATH
             need_path = True
@@ -71,9 +84,13 @@ def _fix_openmm_path():
                     if not os.path.exists(binfile):
                         # copy the file into the right place
                         import shutil
+
                         shutil.copy(file, binfile)
             except Exception:
-                print("Could not resolve OpenMM library location. This may cause issues later.")
+                print(
+                    "Could not resolve OpenMM library location. "
+                    "This may cause issues later."
+                )
 
         # also add it manually here
         try:
@@ -86,8 +103,12 @@ def _fix_openmm_path():
 _fix_openmm_path()
 
 
-def molid(num: int = None, name: str = None, idx: int = None,
-          case_sensitive: bool = True):
+def molid(
+    num: int = None,
+    name: str = None,
+    idx: int = None,
+    case_sensitive: bool = True,
+):
     """Construct an identifer for a Molecule from the passed
        name, number and index.
 
@@ -117,9 +138,11 @@ def molid(num: int = None, name: str = None, idx: int = None,
     if name is not None:
         if case_sensitive:
             from .id import CaseSensitive
+
             cs = CaseSensitive
         else:
             from .id import CaseInsensitive
+
             cs = CaseInsensitive
 
         ID = MolName(name, cs)
@@ -142,8 +165,9 @@ def molid(num: int = None, name: str = None, idx: int = None,
         return ID
 
 
-def atomid(num: int = None, name: str = None, idx: int = None,
-           case_sensitive=True):
+def atomid(
+    num: int = None, name: str = None, idx: int = None, case_sensitive=True
+):
     """Construct an identifer for an Atom from the passed
        name, number and index.
 
@@ -173,9 +197,11 @@ def atomid(num: int = None, name: str = None, idx: int = None,
     if name is not None:
         if case_sensitive:
             from .id import CaseSensitive
+
             cs = CaseSensitive
         else:
             from .id import CaseInsensitive
+
             cs = CaseInsensitive
 
         ID = AtomName(name, cs)
@@ -198,8 +224,9 @@ def atomid(num: int = None, name: str = None, idx: int = None,
         return ID
 
 
-def resid(num: int = None, name: str = None, idx: int = None,
-          case_sensitive=True):
+def resid(
+    num: int = None, name: str = None, idx: int = None, case_sensitive=True
+):
     """Construct an identifer for a Residue from the passed
        name, number and index.
 
@@ -229,9 +256,11 @@ def resid(num: int = None, name: str = None, idx: int = None,
     if name is not None:
         if case_sensitive:
             from .id import CaseSensitive
+
             cs = CaseSensitive
         else:
             from .id import CaseInsensitive
+
             cs = CaseInsensitive
 
         ID = ResName(name, cs)
@@ -254,8 +283,7 @@ def resid(num: int = None, name: str = None, idx: int = None,
         return ID
 
 
-def chainid(idx: int = None, name: str = None,
-            case_sensitive:bool = True):
+def chainid(idx: int = None, name: str = None, case_sensitive: bool = True):
     """Construct an identifer for a Chain from the passed
        name and index.
 
@@ -284,9 +312,11 @@ def chainid(idx: int = None, name: str = None,
     if name is not None:
         if case_sensitive:
             from .id import CaseSensitive
+
             cs = CaseSensitive
         else:
             from .id import CaseInsensitive
+
             cs = CaseInsensitive
 
         ID = ChainName(name, cs)
@@ -303,8 +333,7 @@ def chainid(idx: int = None, name: str = None,
         return ID
 
 
-def segid(idx: int = None, name: str = None,
-          case_sensitive: bool = True):
+def segid(idx: int = None, name: str = None, case_sensitive: bool = True):
     """Construct an identifer for a Segment from the passed
        name and index.
 
@@ -333,9 +362,11 @@ def segid(idx: int = None, name: str = None,
     if name is not None:
         if case_sensitive:
             from .id import CaseSensitive
+
             cs = CaseSensitive
         else:
             from .id import CaseInsensitive
+
             cs = CaseInsensitive
 
         ID = SegName(name, cs)
@@ -374,16 +405,20 @@ def bondid(atom0, atom1, case_sensitive: bool = True):
     def _convert(id):
         if type(id) is int:
             from .mol import AtomIdx
+
             return AtomIdx(id)
         elif type(id) is str:
             if case_sensitive:
                 from .id import CaseSensitive
+
                 cs = CaseSensitive
             else:
                 from .id import CaseInsensitive
+
                 cs = CaseInsensitive
 
             from .mol import AtomName
+
             return AtomName(id, cs)
         else:
             from .mol import AtomID
@@ -394,10 +429,168 @@ def bondid(atom0, atom1, case_sensitive: bool = True):
                 return atomid(id)
 
     from .mol import BondID
+
     return BondID(_convert(atom0), _convert(atom1))
 
 
-from . import config
+def angleid(atom0, atom1, atom2, case_sensitive: bool = True):
+    """Construct an identifier for a Angle from the passed
+       identifiers for the three atoms.
+
+       The atom identifiers can be:
+
+       * integers - in this case they are treated as Atom indexes
+       * strings - in this case they are treated as Atom names
+       * AtomIDs - these are AtomIDs created via, e.g. the atomid function.
+
+    Args:
+        atom0 (int, str, AtomID): The identifier for the first atom.
+        atom1 (int, str, AtomID): The identifier for the second atom.
+        atom2 (int, str, AtomID): The identifier for the third atom.
+        case_sensitive: Whether or not the name is case sensitive
+
+    Returns:
+        AngleID: The returned angle identifier
+    """
+
+    def _convert(id):
+        if type(id) is int:
+            from .mol import AtomIdx
+
+            return AtomIdx(id)
+        elif type(id) is str:
+            if case_sensitive:
+                from .id import CaseSensitive
+
+                cs = CaseSensitive
+            else:
+                from .id import CaseInsensitive
+
+                cs = CaseInsensitive
+
+            from .mol import AtomName
+
+            return AtomName(id, cs)
+        else:
+            from .mol import AtomID
+
+            if AtomID in type(id).mro():
+                return id
+            else:
+                return atomid(id)
+
+    from .mol import AngleID
+
+    return AngleID(_convert(atom0), _convert(atom1), _convert(atom2))
+
+
+def dihedralid(atom0, atom1, atom2, atom3, case_sensitive: bool = True):
+    """Construct an identifier for a Dihedral from the passed
+       identifiers for the four atoms.
+
+       The atom identifiers can be:
+
+       * integers - in this case they are treated as Atom indexes
+       * strings - in this case they are treated as Atom names
+       * AtomIDs - these are AtomIDs created via, e.g. the atomid function.
+
+    Args:
+        atom0 (int, str, AtomID): The identifier for the first atom.
+        atom1 (int, str, AtomID): The identifier for the second atom.
+        atom2 (int, str, AtomID): The identifier for the third atom.
+        atom3 (int, str, AtomID): The identifier for the fourth atom.
+        case_sensitive: Whether or not the name is case sensitive
+
+    Returns:
+        DihedralID: The returned dihedral identifier
+    """
+
+    def _convert(id):
+        if type(id) is int:
+            from .mol import AtomIdx
+
+            return AtomIdx(id)
+        elif type(id) is str:
+            if case_sensitive:
+                from .id import CaseSensitive
+
+                cs = CaseSensitive
+            else:
+                from .id import CaseInsensitive
+
+                cs = CaseInsensitive
+
+            from .mol import AtomName
+
+            return AtomName(id, cs)
+        else:
+            from .mol import AtomID
+
+            if AtomID in type(id).mro():
+                return id
+            else:
+                return atomid(id)
+
+    from .mol import DihedralID
+
+    return DihedralID(
+        _convert(atom0), _convert(atom1), _convert(atom2), _convert(atom3)
+    )
+
+
+def improperid(atom0, atom1, atom2, atom3, case_sensitive: bool = True):
+    """Construct an identifier for an Improper from the passed
+       identifiers for the four atoms.
+
+       The atom identifiers can be:
+
+       * integers - in this case they are treated as Atom indexes
+       * strings - in this case they are treated as Atom names
+       * AtomIDs - these are AtomIDs created via, e.g. the atomid function.
+
+    Args:
+        atom0 (int, str, AtomID): The identifier for the first atom.
+        atom1 (int, str, AtomID): The identifier for the second atom.
+        atom2 (int, str, AtomID): The identifier for the third atom.
+        atom3 (int, str, AtomID): The identifier for the fourth atom.
+        case_sensitive: Whether or not the name is case sensitive
+
+    Returns:
+        ImproperID: The returned improper identifier
+    """
+
+    def _convert(id):
+        if type(id) is int:
+            from .mol import AtomIdx
+
+            return AtomIdx(id)
+        elif type(id) is str:
+            if case_sensitive:
+                from .id import CaseSensitive
+
+                cs = CaseSensitive
+            else:
+                from .id import CaseInsensitive
+
+                cs = CaseInsensitive
+
+            from .mol import AtomName
+
+            return AtomName(id, cs)
+        else:
+            from .mol import AtomID
+
+            if AtomID in type(id).mro():
+                return id
+            else:
+                return atomid(id)
+
+    from .mol import ImproperID
+
+    return ImproperID(
+        _convert(atom0), _convert(atom1), _convert(atom2), _convert(atom3)
+    )
+
 
 __version__ = config.__version__
 
@@ -407,21 +600,23 @@ __revisionid__ = config.sire_repository_version[0:7]
 
 _can_lazy_import = False
 
-try:
-    import lazy_import as _lazy_import
-    _lazy_import.logging.disable(_lazy_import.logging.DEBUG)
+if "SIRE_NO_LAZY_IMPORT" not in _os.environ:
+    try:
+        import lazy_import as _lazy_import
 
-    # ignore warnings, as a lot are printed from the frozenlib
-    import warnings
-    warnings.filterwarnings('ignore')
-    _can_lazy_import = True
+        _lazy_import.logging.disable(_lazy_import.logging.DEBUG)
 
-except Exception as e:
-    print("Lazy import disabled")
-    print(e)
-    _can_lazy_import = False
+        # ignore warnings, as a lot are printed from the frozenlib
+        import warnings
 
-#_can_lazy_import = False
+        warnings.filterwarnings("ignore")
+        _can_lazy_import = True
+
+    except Exception as e:
+        print("Lazy import disabled")
+        print(e)
+        _can_lazy_import = False
+
 
 # Lazy import the modules for speed, and also to prevent pythonizing them
 # if the users wants to run in legacy mode
@@ -443,26 +638,29 @@ if _can_lazy_import:
     squire = _lazy_import.lazy_module("sire.squire")
     stream = _lazy_import.lazy_module("sire.stream")
     units = _lazy_import.lazy_module("sire.units")
+    utils = _lazy_import.lazy_module("sire.utils")
     vol = _lazy_import.lazy_module("sire.vol")
 
+
 def _version_string():
-    """Return a nicely formatted string that describes the current Sire version"""
-    from .base import get_release_version, get_repository_branch, \
-        get_repository_version_is_clean
+    """
+    Return a nicely formatted string that describes
+    the current Sire version
+    """
+    from .base import (
+        get_release_version,
+        get_repository_branch,
+        get_repository_version_is_clean,
+    )
 
     from .config import sire_repository_version
 
-    return """Sire %s [%s|%s, %s]""" % \
-              (get_release_version(),
-               get_repository_branch(),
-               sire_repository_version[0:7],
-               ["unclean", "clean"][get_repository_version_is_clean()])
+    return """Sire %s [%s|%s, %s]""" % (
+        get_release_version(),
+        get_repository_branch(),
+        sire_repository_version[0:7],
+        ["unclean", "clean"][get_repository_version_is_clean()],
+    )
+
 
 config.version_string = _version_string
-
-### Here are the functions and other data that form the public API
-### of Sire
-
-from ._pythonize import *
-from ._load import *
-from ._thumbsup import *

@@ -31,6 +31,7 @@
 #include <boost/python.hpp>
 #include <QString>
 #include <QRegExp>
+#include <QDebug>
 #include <wchar.h>
 
 #include "Helpers/str.hpp"
@@ -73,6 +74,8 @@ PyObject* QString__str__(QString const& s)
     if (str_object == 0)
     {
         Py_DECREF(str_object);
+        qDebug() << CODELOC;
+        PyErr_Print();
         boost::python::throw_error_already_set();
     }
 
@@ -98,7 +101,11 @@ void QString_from_python_str_or_unicode( PyObject* obj_ptr,
         unicode_object = PyUnicode_FromEncodedObject(obj_ptr, "utf-8", "strict"); // new reference
 
         if (unicode_object == 0)
+        {
+            qDebug() << CODELOC;
+            PyErr_Print();
             boost::python::throw_error_already_set();
+        }
     }
     else
     {
@@ -113,7 +120,11 @@ void QString_from_python_str_or_unicode( PyObject* obj_ptr,
     Py_DECREF(unicode_object);
 
     if (utf8 == 0)
+    {
+        qDebug() << CODELOC;
+        PyErr_Print();
         boost::python::throw_error_already_set();
+    }
 
     //get the raw buffer from the string
     char *utf8_string;
@@ -123,6 +134,8 @@ void QString_from_python_str_or_unicode( PyObject* obj_ptr,
     if (ok != 0)
     {
         Py_DECREF(utf8);
+        qDebug() << CODELOC;
+        PyErr_Print();
         boost::python::throw_error_already_set();
     }
 

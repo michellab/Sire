@@ -12,6 +12,8 @@ namespace bp = boost::python;
 
 #include "SireBase/errors.h"
 
+#include "SireBase/generalunitproperty.h"
+
 #include "SireBase/lengthproperty.h"
 
 #include "SireBase/refcountdata.h"

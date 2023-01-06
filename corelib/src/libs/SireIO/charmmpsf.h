@@ -272,8 +272,8 @@ public:
     QString formatDescription() const;
     QStringList formatSuffix() const;
 
-    bool isLead() const;
-    bool canFollow() const;
+    bool isTopology() const;
+    bool isFrame() const;
 
     int nMolecules() const;
     int nAtoms() const;

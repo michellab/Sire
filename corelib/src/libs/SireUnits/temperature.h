@@ -114,7 +114,7 @@ public:
 
     QString toString() const
     {
-        return QString("%1 %2").arg(this->convertFromInternal()).arg(this->unitString());
+        return QString("%1°%2").arg(this->convertFromInternal()).arg(this->unitString());
     }
 
     /** Convert this into a temperature object */

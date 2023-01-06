@@ -45,9 +45,9 @@ SIRE_BEGIN_HEADER
 namespace SireIO
 {
 
-/** This class provides information about a data variable in 
+/** This class provides information about a data variable in
     a NetCDF file
-    
+
     @author Christopher Woods
 */
 class SIREIO_EXPORT NetCDFDataInfo
@@ -57,25 +57,25 @@ friend class NetCDFFile;
 
 public:
     NetCDFDataInfo();
-    
+
     NetCDFDataInfo(const NetCDFDataInfo &other);
-    
+
     ~NetCDFDataInfo();
-    
+
     int ID() const;
     QString name() const;
     QString type() const;
-    
+
     int typeSize() const;
     int dataSize() const;
-    
+
     QStringList dimensions() const;
     QList<int> dimensionSizes() const;
-    
+
     int nValues() const;
-    
+
     int nAttributes() const;
-    
+
     QStringList attributeNames() const;
 
     QVariant attribute(const QString &name) const;
@@ -83,13 +83,13 @@ public:
 
     QHash<QString,QVariant> attributes() const;
     QHash<QString,QString> attributeTypes() const;
-    
+
     QString toString() const;
 
     bool isNull() const;
-    
+
     void assertNValuesEquals(int nvalues) const;
-    
+
 protected:
     NetCDFDataInfo(int idnum, QString name, int xtyp,
                    QStringList dim_names, QList<int> dim_sizes,
@@ -103,20 +103,20 @@ protected:
 
     /** The name of the variable */
     QString nme;
-    
+
     /** The names of each of the dimensions of the variable */
     QStringList dim_names;
-    
+
     /** The size of each of the dimensions */
     QList<int> dim_sizes;
-    
+
     /** The names of all attributes associated with the variable */
     QStringList att_names;
     /** The types of all of the attributes */
     QList<int> att_types;
     /** The values of all of the attributes */
     QList<QVariant> att_values;
-    
+
     /** The ID number of the variable in the data file */
     int idnum;
 
@@ -169,7 +169,7 @@ protected:
 
 public:
     NetCDFData();
-    
+
     #ifndef SIRE_SKIP_INLINE_FUNCTIONS
     /** Construct a piece of NetCDF data called 'name', with the passed 'values',
         using the specified dimensions and dimension sizes, and optionally
@@ -189,13 +189,13 @@ public:
         {
             this->assertNValuesEquals(values.count());
         }
-    
+
         memdata = QByteArray();
         memdata.resize( values.count() * sizeof(T) );
-        
+
         char *data = memdata.data();
         const char *orig = reinterpret_cast<const char*>(values.data());
-        
+
         for (int i=0; i<memdata.count(); ++i)
         {
             data[i] = orig[i];
@@ -204,28 +204,28 @@ public:
     #endif
 
     NetCDFData(const NetCDFData &other);
-    
+
     ~NetCDFData();
 
     QVector<QVariant> toArray() const;
 
     QVector<float> toFloatArray() const;
     QVector<double> toDoubleArray() const;
-    
+
     QVector<qint32> toInt32Array() const;
     QVector<qint64> toInt64Array() const;
 
 protected:
     NetCDFData(const NetCDFDataInfo &info);
-    
+
     void setData(const QByteArray &data);
-    
+
 private:
     /** Raw memory containing the data */
     QByteArray memdata;
 };
 
-/** This class provides an internal interface to NetCDF files 
+/** This class provides an internal interface to NetCDF files
 
     @author Christopher Woods
 */
@@ -235,23 +235,27 @@ public:
     NetCDFFile();
 
     NetCDFFile(const QString &filename);
-    
+
     ~NetCDFFile();
-    
+
     static QString write(const QString &filename,
                          const QHash<QString,QString> &globals,
                          const QHash<QString,NetCDFData> &data,
                          bool overwrite_file=true,
                          bool use_64bit_offset=true,
                          bool use_netcdf4=false);
-    
+
+    static QMutex* globalMutex();
+
     QString getStringAttribute(const QString &name) const;
-    
+
     QHash<QString,int> getDimensions() const;
-    
+
     QHash<QString,NetCDFDataInfo> getVariablesInfo() const;
-    
+
     NetCDFData read(const NetCDFDataInfo &variable) const;
+
+    void close();
 
 private:
     NetCDFFile(const QString &filename, bool overwrite_file,
@@ -267,9 +271,10 @@ private:
 
     /** Handle to the NetCDF file */
     int hndl;
-    
-    /** Mutex to serialise all file IO operations */
-    QMutex mutex;
+
+    /** Global mutex used to ensure that all NetCDF operations
+     *  are completely serialised */
+    static QMutex mutex;
 };
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS

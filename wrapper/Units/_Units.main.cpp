@@ -27,6 +27,8 @@ namespace bp = boost::python;
 
 #include "sireunits_dimensions.h"
 
+#include "generalunit.h"
+
 #include "_Units_global_variables.pyman.hpp"
 
 BOOST_PYTHON_MODULE(_Units){
@@ -46,7 +48,7 @@ BOOST_PYTHON_MODULE(_Units){
 
     bp::implicitly_convertible< SireUnits::Dimension::TempBase, SireUnits::Dimension::Temperature >();
 
-    bp::implicitly_convertible< SireUnits::Dimension::TempBase, double >();
+    bp::implicitly_convertible< double, SireUnits::Dimension::GeneralUnit >();
 
     register_SireUnits_dimensions();
 

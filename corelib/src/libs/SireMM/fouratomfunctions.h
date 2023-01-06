@@ -123,6 +123,26 @@ public:
     bool operator==(const IDQuad &other) const;
     bool operator!=(const IDQuad &other) const;
 
+    bool operator<(const IDQuad &other) const;
+    bool operator<=(const IDQuad &other) const;
+    bool operator>(const IDQuad &other) const;
+    bool operator>=(const IDQuad &other) const;
+
+    quint32 operator[](int i) const
+    {
+        switch(i)
+        {
+        case 0:
+            return atom0;
+        case 1:
+            return atom1;
+        case 2:
+            return atom2;
+        default:
+            return atom3;
+        }
+    }
+
     quint32 atom0;
     quint32 atom1;
     quint32 atom2;

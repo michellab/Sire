@@ -51,6 +51,8 @@ namespace bp = boost::python;
 
 #include "SireMol/select.h"
 
+#include "SireMol/trajectory.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -462,7 +464,7 @@ void register_GroMolType_class(){
                 "setAtoms"
                 , setAtoms_function_value
                 , ( bp::arg("atoms"), bp::arg("is_lambda1")=(bool)(false) )
-                , "" );
+                , "Set the atoms to the passed vector" );
         
         }
         { //::SireIO::GroMolType::setNExcludedAtoms

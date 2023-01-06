@@ -1,0 +1,61 @@
+
+/** Remove all underlines from hyperlinks */
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+a:active {
+    text-decoration: none;
+}
+
+.highlight {
+    border-radius: 10px;
+}
+
+.bottom-of-page {
+    display: none;
+}
+
+.related-pages {
+    margin-bottom: 1em;
+}
+
+.version_container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.version_box {
+    flex-grow: 4;
+}
+
+.version_box select {
+    width: 100%;
+    height: 100%;
+    height: 2em;
+    appearance: none;
+    text-align: left;
+    border-radius: 5px;
+    border: none;
+    background-color: var(--color-background-primary);
+    font-size: small;
+}
+
+.version_label {
+    text-align: left;
+    padding-right: 1em;
+    height: 100%;
+    margin: auto;
+    font-size: small;
+    color: var(--color-content-foreground);
+}

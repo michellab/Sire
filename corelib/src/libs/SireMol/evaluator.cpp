@@ -236,7 +236,7 @@ AABox Evaluator::aaBox(const PropertyMap &map) const
     const AtomCoords &coords = prop.asA<AtomCoords>();
 
     const CoordGroup *coords_array = coords.constData();
-    int ncg = coords.count();
+    int ncg = coords.nCutGroups();
 
     //now get the minimum and maximum coordinates...
     Vector mincoords( std::numeric_limits<double>::max() );
@@ -305,6 +305,34 @@ Vector Evaluator::center(const PropertyMap &map) const
 Sphere Evaluator::boundingSphere(const PropertyMap &map) const
 {
     return this->aaBox(map).boundingSphere();
+}
+
+/** Return the radius of the sphere that encloses all of the atoms
+ *  in this view, assuming it is centered on the center of geometry */
+Length Evaluator::radius(const PropertyMap &map) const
+{
+    return this->boundingSphere(map).radius() * angstrom;
+}
+
+/** Return the radius of the sphere that encloses all of the atoms
+ *  assuming that it is centered at 'center' */
+Length Evaluator::radius(const Vector &center,
+                         const PropertyMap &map) const
+{
+    if (selected_atoms.selectedNone())
+        return Length(0);
+
+    double max_dist = 0.0;
+
+    for (const auto &coords : this->atoms().property<Vector>(map["coordinates"]))
+    {
+        auto dist = Vector::distance(coords, center);
+
+        if (dist > max_dist)
+            max_dist = dist;
+    }
+
+    return max_dist * angstrom;
 }
 
 SIRE_ALWAYS_INLINE double getMass(const MolarMass &mass)
@@ -409,187 +437,6 @@ static Vector getCOM(const AtomCoords &coords, const AtomProperty<T> &masses,
 
     return com / mass;
 }
-
-static void addToInertia(const Vector &d, double m, Matrix &inertia)
-{
-    double *inertia_array = inertia.data();
-
-    inertia_array[0] += m * (d.y()*d.y() + d.z()*d.z());
-    inertia_array[4] += m * (d.x()*d.x() + d.z()*d.z());
-    inertia_array[8] += m * (d.x()*d.x() + d.y()*d.y());
-
-    inertia_array[1] -= m * d.x() * d.y();
-    inertia_array[2] -= m * d.x() * d.z();
-    inertia_array[5] -= m * d.y() * d.z();
-}
-
-// JM 08/14 buggy
-//static void getPrincipalAxes(Matrix &inertia, Vector principal_moments)
-//{
-//    double *inertia_array = inertia.data();
-//
-//    //remove near-zero elements
-//    for (int i=0; i<9; ++i)
-//    {
-//        if (inertia_array[i] < 1e-6 and inertia_array[i] > -1e-6)
-//            inertia_array[i] = 0;
-//    }
-//
-//    //symmetric matrix
-//    //
-//    //   0 1 2
-//    //   3 4 5
-//    //   6 7 8
-//    //
-//    inertia_array[3] = inertia_array[1];
-//    inertia_array[6] = inertia_array[2];
-//   inertia_array[7] = inertia_array[5];
-//
-//    std::pair<Vector,Matrix> eigs = inertia.diagonalise();
-//
-//    principal_moments = eigs.first;
-//    inertia = eigs.second;
-//
-//    //if one or more of the eigenvalues is zero then we may have a problem
-//    //because the wrong eigenvector direction may be chosen - in this case,
-//    //we will build this eigenvector using a cross product to ensure that
-//    //the right-hand-rule definition of our axes is maintained
-//    //
-//    // Also, even if we have three eigenvalues, we still need to make sure
-//    // that a right-hand-rule set is chosen, rather than the left-hand set
-//    bool zero_x = std::abs(principal_moments[0]) < 1e-6;
-//    bool zero_y = std::abs(principal_moments[1]) < 1e-6;
-//    bool zero_z = std::abs(principal_moments[2]) < 1e-6;
-//
-//    if (zero_x){ principal_moments.setX(0); }
-//    if (zero_y){ principal_moments.setY(0); }
-//    if (zero_z){ principal_moments.setZ(0); }
-//
-//    int n_zeroes = int(zero_x) + int(zero_y) + int(zero_z);
-//
-//    if (n_zeroes == 3)
-//    {
-//        //no axes!
-//        inertia = Matrix(1);
-//    }
-//    else if (n_zeroes == 2)
-//    {
-//        //just one well-defined axis - I don't know how to handle this...
-//        throw SireError::incomplete_code( QObject::tr(
-//                "The code to get principal axes for molecules with only a single "
-//                "eigenvalue has yet to be written... (%1 and %2)")
-//                    .arg(principal_moments.toString(),
-//                         inertia.toString()), CODELOC );
-//    }
-//    else if (n_zeroes == 1)
-//    {
-//        Vector r0 = inertia.row0();
-//        Vector r1 = inertia.row1();
-//        Vector r2 = inertia.row2();
-//
-//        if (zero_x)
-//            r0 = Vector::cross(r1,r2);
-//        else if (zero_y)
-//            r1 = Vector::cross(r2,r0);
-//        else if (zero_z)
-//            r2 = Vector::cross(r0,r1);
-//
-//        inertia = Matrix(r0, r1, r2);
-//    }
-//    else
-//    {
-//        Vector r0 = inertia.row0();
-//        Vector r1 = inertia.row1();
-//
-//        inertia = Matrix( r0, r1, Vector::cross(r0,r1) );
-//    }
-//}
-
-/** Internal function used to get the principal axes of the selected atoms */
-//template<class T>
-//static AxisSet getPrincipalAxes(const AtomCoords &coords,
-//                                const AtomProperty<T> &masses,
-//                                const AtomSelection &selected_atoms,
-//                                Vector &principal_moments)
-//{
-//    if (selected_atoms.selectedNone())
-//        return AxisSet();
-//
-//    Vector com = ::getCOM(coords, masses, selected_atoms);
-//
-//   Matrix inertia(0);
-//
-//    if (selected_atoms.selectedAll())
-//    {
-//        const Vector *coords_array = coords.array().constCoordsData();
-//        const T *masses_array = masses.array().constValueData();
-//
-//        const int nats = coords.nAtoms();
-//
-//        for (int i=0; i<nats; ++i)
-//        {
-//            ::addToInertia(coords_array[i]-com, ::getMass(masses_array[i]), inertia);
-//        }
-//    }
-//    else if (selected_atoms.selectedAllCutGroups())
-//    {
-//        for (CGIdx i(0); i<coords.nCutGroups(); ++i)
-//        {
-//            const Vector *coords_array = coords.constData(i);
-//            const T *masses_array = masses.constData(i);
-//
-//            if (selected_atoms.selectedAll(i))
-//            {
-//                const int nats = coords.nAtoms(i);
-//
-//                for (int j=0; j<nats; ++j)
-//                {
-//                    ::addToInertia(coords_array[j]-com, ::getMass(masses_array[j]),
-//                                   inertia);
-//                }
-//            }
-//            else
-//            {
-//                foreach (Index j, selected_atoms.selectedAtoms(i))
-//                {
-//                    ::addToInertia(coords_array[j]-com, ::getMass(masses_array[j]),
-//                                   inertia);
-//                }
-//            }
-//        }
-//    }
-//    else
-//    {
-//        foreach (CGIdx i, selected_atoms.selectedCutGroups())
-//        {
-//            const Vector *coords_array = coords.constData(i);
-//           const T *masses_array = masses.constData(i);
-//
-//            if (selected_atoms.selectedAll(i))
-//            {
-//                const int nats = coords.nAtoms(i);
-//
-//                for (int j=0; j<nats; ++j)
-//                {
-//                    ::addToInertia(coords_array[j]-com, ::getMass(masses_array[j]),
-//                                   inertia);
-//                }
-//            }
-//            else
-//            {
-//                foreach (Index j, selected_atoms.selectedAtoms(i))
-//                {
-//                    ::addToInertia(coords_array[j]-com, ::getMass(masses_array[j]),
-//                                   inertia);
-//                }
-//            }
-//        }
-//   }
-//
-//    ::getPrincipalAxes(inertia, principal_moments);
-//
-//    return AxisSet(inertia, com);
-//}
 
 /** Internal function used to calculate the total mass of the selected atoms */
 template<class T>
@@ -978,82 +825,6 @@ Vector Evaluator::centerOfMass(const PropertyMap &map) const
 
         return ::getCOM(coords, elements, selected_atoms);
     }
-}
-
-/** Return the principal axes of this view - this uses
-    the "coordinates", and "mass" or "element" properties
-    to find the moment of inertia tensor for this view, and
-    then diagonalises that to obtain the principal axes. These
-    axes are constructed to follow the right-hand-rule.
-    This returns the principal moments of inertia in
-    'principal_moments' */
-AxisSet Evaluator::principalAxes(Vector &principal_moments,
-                                 const PropertyMap &map) const
-{
-    const PropertyName coords_property = map["coordinates"];
-    const PropertyName mass_property = map["mass"];
-
-    const AtomCoords &coords = d->property(map["coordinates"])
-                                    .asA<AtomCoords>();
-
-    if (d->hasProperty(mass_property))
-    {
-        const AtomMasses &masses = d->property(mass_property).asA<AtomMasses>();
-
-        // JM 08/14 buggy in current code
-#ifdef _MSC_VER
-        #pragma WARNING(BUGGY IN CURRENT CODE)
-#else
-        #warning BUGGY IN CURRENT CODE
-#endif
-        throw SireError::program_bug( QObject::tr("CODE IS BROKEN"), CODELOC );
-        //return ::getPrincipalAxes(coords, masses, selected_atoms,
-        //                          principal_moments);
-    }
-    else
-    {
-        const AtomElements &elements = d->property(map["element"]).asA<AtomElements>();
-
-        // JM 08/14 buggy in current code
-#ifdef _MSC_VER
-        #pragma WARNING(BUGGY IN CURRENT CODE)
-#else
-        #warning BUGGY IN CURRENT CODE
-#endif
-        throw SireError::program_bug( QObject::tr("CODE IS BROKEN"), CODELOC );
-        //return ::getPrincipalAxes(coords, elements, selected_atoms,
-        //                          principal_moments);
-    }
-
-}
-
-/** Return the principal axes of this view - this uses
-    the "coordinates", and "mass" or "element" properties
-    to find the moment of inertia tensor for this view, and
-    then diagonalises that to obtain the principal axes. These
-    axes are constructed to follow the right-hand-rule.
-*/
-AxisSet Evaluator::principalAxes(const PropertyMap &map) const
-{
-    Vector principal_moments;
-    return this->principalAxes(principal_moments,map);
-}
-
-AxisSet Evaluator::alignmentAxes(const MoleculeView &other,
-                                 const AtomMatcher &matcher,
-                                 const PropertyMap &map) const
-{
-    throw SireError::incomplete_code(CODELOC);
-    return AxisSet();
-}
-
-AxisSet Evaluator::alignmentAxes(const MoleculeView &other,
-                                 const AtomMatcher &matcher,
-                                 const PropertyMap &map0,
-                                 const PropertyMap &map1) const
-{
-    throw SireError::incomplete_code(CODELOC);
-    return AxisSet();
 }
 
 static CGAtomIdx selectOnly(const AtomID &atom, const MoleculeInfoData &molinfo,

@@ -51,6 +51,8 @@ namespace bp = boost::python;
 
 #include "SireMol/select.h"
 
+#include "SireMol/trajectory.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -190,18 +192,6 @@ void register_GroTop_class(){
                 , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("func") )
                 , bp::release_gil_policy()
                 , "Return the bond potential data for the passed pair of atoms. This returns\na list of all associated parameters" );
-        
-        }
-        { //::SireIO::GroTop::canFollow
-        
-            typedef bool ( ::SireIO::GroTop::*canFollow_function_type)(  ) const;
-            canFollow_function_type canFollow_function_value( &::SireIO::GroTop::canFollow );
-            
-            GroTop_exposer.def( 
-                "canFollow"
-                , canFollow_function_value
-                , bp::release_gil_policy()
-                , "Return whether or not this parser can follow another lead parser, and add\ndata to an existing molecular system. The GroTop parser cannot follow." );
         
         }
         { //::SireIO::GroTop::combiningRules
@@ -401,16 +391,16 @@ void register_GroTop_class(){
                 , "Return the list of names of files that were included when reading or\nwriting this file. The files are relative. If absolute_paths\nis true then the full absolute paths for the files will be\nused" );
         
         }
-        { //::SireIO::GroTop::isLead
+        { //::SireIO::GroTop::isTopology
         
-            typedef bool ( ::SireIO::GroTop::*isLead_function_type)(  ) const;
-            isLead_function_type isLead_function_value( &::SireIO::GroTop::isLead );
+            typedef bool ( ::SireIO::GroTop::*isTopology_function_type)(  ) const;
+            isTopology_function_type isTopology_function_value( &::SireIO::GroTop::isTopology );
             
             GroTop_exposer.def( 
-                "isLead"
-                , isLead_function_value
+                "isTopology"
+                , isTopology_function_value
                 , bp::release_gil_policy()
-                , "Return whether or not this is a lead parser. The lead parser is responsible\nfor starting the process of turning the parsed file into the System. There\nmust be one and one-only lead parser in a set of parsers creating a System" );
+                , "" );
         
         }
         { //::SireIO::GroTop::moleculeType
@@ -436,6 +426,18 @@ void register_GroTop_class(){
                 , moleculeTypes_function_value
                 , bp::release_gil_policy()
                 , "Return all of the moleculetypes that have been loaded from this file" );
+        
+        }
+        { //::SireIO::GroTop::nAtoms
+        
+            typedef int ( ::SireIO::GroTop::*nAtoms_function_type)(  ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireIO::GroTop::nAtoms );
+            
+            GroTop_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireIO::GroTop::nonBondedFunctionType

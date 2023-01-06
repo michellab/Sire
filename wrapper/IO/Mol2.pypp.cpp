@@ -29,6 +29,8 @@ namespace bp = boost::python;
 
 #include "SireMol/moleditor.h"
 
+#include "SireMol/trajectory.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -59,18 +61,6 @@ void register_Mol2_class(){
         Mol2_exposer.def( bp::init< QStringList const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("lines"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to read in the data from the passed text lines. The\npassed property map can be used to pass extra parameters to control\nthe parsing") );
         Mol2_exposer.def( bp::init< SireSystem::System const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("system"), bp::arg("map")=SireBase::PropertyMap() ), "Construct this parser by extracting all necessary information from the\npassed SireSystem::System, looking for the properties that are specified\nin the passed property map") );
         Mol2_exposer.def( bp::init< SireIO::Mol2 const & >(( bp::arg("other") ), "Copy constructor") );
-        { //::SireIO::Mol2::canFollow
-        
-            typedef bool ( ::SireIO::Mol2::*canFollow_function_type)(  ) const;
-            canFollow_function_type canFollow_function_value( &::SireIO::Mol2::canFollow );
-            
-            Mol2_exposer.def( 
-                "canFollow"
-                , canFollow_function_value
-                , bp::release_gil_policy()
-                , "" );
-        
-        }
         { //::SireIO::Mol2::construct
         
             typedef ::SireIO::MoleculeParserPtr ( ::SireIO::Mol2::*construct_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
@@ -146,14 +136,39 @@ void register_Mol2_class(){
                 , "Return the suffixes that these files are normally associated with" );
         
         }
-        { //::SireIO::Mol2::isLead
+        { //::SireIO::Mol2::getFrame
         
-            typedef bool ( ::SireIO::Mol2::*isLead_function_type)(  ) const;
-            isLead_function_type isLead_function_value( &::SireIO::Mol2::isLead );
+            typedef ::SireMol::Frame ( ::SireIO::Mol2::*getFrame_function_type)( int ) const;
+            getFrame_function_type getFrame_function_value( &::SireIO::Mol2::getFrame );
             
             Mol2_exposer.def( 
-                "isLead"
-                , isLead_function_value
+                "getFrame"
+                , getFrame_function_value
+                , ( bp::arg("i") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireIO::Mol2::isFrame
+        
+            typedef bool ( ::SireIO::Mol2::*isFrame_function_type)(  ) const;
+            isFrame_function_type isFrame_function_value( &::SireIO::Mol2::isFrame );
+            
+            Mol2_exposer.def( 
+                "isFrame"
+                , isFrame_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireIO::Mol2::isTopology
+        
+            typedef bool ( ::SireIO::Mol2::*isTopology_function_type)(  ) const;
+            isTopology_function_type isTopology_function_value( &::SireIO::Mol2::isTopology );
+            
+            Mol2_exposer.def( 
+                "isTopology"
+                , isTopology_function_value
                 , bp::release_gil_policy()
                 , "" );
         
@@ -206,6 +221,18 @@ void register_Mol2_class(){
                 , nBonds_function_value
                 , bp::release_gil_policy()
                 , "Return the total number of bonds in all molecules." );
+        
+        }
+        { //::SireIO::Mol2::nFrames
+        
+            typedef int ( ::SireIO::Mol2::*nFrames_function_type)(  ) const;
+            nFrames_function_type nFrames_function_value( &::SireIO::Mol2::nFrames );
+            
+            Mol2_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireIO::Mol2::nMolAtoms

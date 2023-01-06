@@ -39,6 +39,7 @@
 #include "SireMol/evaluator.h"
 
 #include "SireUnits/dimensions.h"
+#include "SireUnits/generalunit.h"
 
 SIRE_BEGIN_HEADER
 
@@ -57,6 +58,8 @@ class Expression;
 
 namespace SireMM
 {
+
+class SelectorBond;
 
 /** This class provides a molecule view to a bond */
 class SIREMM_EXPORT Bond
@@ -107,6 +110,9 @@ public:
     bool isEmpty() const;
     bool selectedAll() const;
 
+    SelectorBond selector() const;
+    SelectorBond invert() const;
+
     SireMol::AtomSelection selection() const;
 
     bool hasProperty(const SireBase::PropertyName &key) const;
@@ -130,11 +136,14 @@ public:
     SireUnits::Dimension::Length length() const;
     SireUnits::Dimension::Length length(const SireBase::PropertyMap &map) const;
 
+    SireUnits::Dimension::Length measure() const;
+    SireUnits::Dimension::Length measure(const SireBase::PropertyMap &map) const;
+
     SireCAS::Expression potential() const;
     SireCAS::Expression potential(const SireBase::PropertyMap &map) const;
 
-    SireUnits::Dimension::MolarEnergy energy() const;
-    SireUnits::Dimension::MolarEnergy energy(
+    SireUnits::Dimension::GeneralUnit energy() const;
+    SireUnits::Dimension::GeneralUnit energy(
                             const SireBase::PropertyMap &map) const;
 
 protected:

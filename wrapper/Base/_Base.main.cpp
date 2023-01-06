@@ -31,6 +31,10 @@
 
 #include "FlopsMark.pypp.hpp"
 
+#include "GeneralUnitArrayProperty.pypp.hpp"
+
+#include "GeneralUnitProperty.pypp.hpp"
+
 #include "Incremint.pypp.hpp"
 
 #include "IntegerArrayProperty.pypp.hpp"
@@ -181,6 +185,10 @@ BOOST_PYTHON_MODULE(_Base){
     register_DoubleArrayProperty_class();
 
     register_FlopsMark_class();
+
+    register_GeneralUnitArrayProperty_class();
+
+    register_GeneralUnitProperty_class();
 
     register_Incremint_class();
 

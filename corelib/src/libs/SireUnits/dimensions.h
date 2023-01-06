@@ -43,6 +43,7 @@ namespace SireUnits
 namespace Dimension
 {
 class Unit;
+class GeneralUnit;
 }
 }
 
@@ -104,7 +105,7 @@ public:
 protected:
     Unit(double scale_factor) : sclfac(scale_factor)
     {}
-    
+
     Unit(const TempBase &temperature);
 
     void setScale(double scale_factor)
@@ -116,7 +117,8 @@ private:
     double sclfac;
 };
 
-SIREUNITS_EXPORT QString getUnitString(double value, int M, int L, int T, int C, int t, int Q, int A);
+SIREUNITS_EXPORT QPair<double, QString> getUnitString(
+                            int M, int L, int T, int C, int t, int Q, int A);
 
 /** Construct a physical unit with the specified
     Mass, Length, Time, Charge, temperature,
@@ -139,9 +141,11 @@ public:
     explicit PhysUnit(const TempBase &temperature) : Unit(temperature)
     {
         //this must be a Temperature!
-        //BOOST_STATIC_ASSERT( t == 1 and M == 0 and L == 0 and 
+        //BOOST_STATIC_ASSERT( t == 1 and M == 0 and L == 0 and
         //                     T == 0 and C == 0 and Q == 0 and A == 0);
     }
+
+    PhysUnit(const GeneralUnit &other);
 
     PhysUnit(const PhysUnit<M,L,T,C,t,Q,A> &other)
                : Unit(other)
@@ -154,18 +158,21 @@ public:
     {
         return QMetaType::typeName( qMetaTypeId< PhysUnit<M,L,T,C,t,Q,A> >() );
     }
-    
+
     const char* what() const
     {
         return PhysUnit<M,L,T,C,t,Q,A>::typeName();
     }
 
-    PhysUnit<M,L,T,C,t,Q,A>
+    PhysUnit<M,L,T,C,t,Q,A>&
     operator=(const PhysUnit<M,L,T,C,t,Q,A> &other)
     {
         Unit::setScale(other.scaleFactor());
         return *this;
     }
+
+    PhysUnit<M,L,T,C,t,Q,A>&
+    operator=(const GeneralUnit &other);
 
     bool operator==(const PhysUnit<M,L,T,C,t,Q,A> &other) const
     {
@@ -281,47 +288,59 @@ public:
     {
         return units.convertFromInternal(*this);
     }
-    
+
     double to(const PhysUnit<M,L,T,C,t,Q,A> &units) const
     {
         return this->in(units);
     }
 
+    QString unitString() const
+    {
+        return SireUnits::Dimension::getUnitString(M, L, T, C, t, Q, A).second;
+    }
+
     QString toString() const
     {
-        return SireUnits::Dimension::getUnitString(this->scaleFactor(), M,L,T,C,t,Q,A);
+        auto u = SireUnits::Dimension::getUnitString(M, L, T, C, t, Q, A);
+
+        double v = value() / u.first;
+
+        if (u.second.startsWith("°"))
+            return QString("%1%2").arg(v).arg(u.second);
+        else
+            return QString("%1 %2").arg(v).arg(u.second);
     }
 
     static int MASS()
     {
         return M;
     }
-    
+
     static int LENGTH()
     {
         return L;
     }
-    
+
     static int TIME()
     {
         return T;
     }
-    
+
     static int CHARGE()
     {
         return C;
     }
-    
+
     static int TEMPERATURE()
     {
         return t;
     }
-    
+
     static int QUANTITY()
     {
         return Q;
     }
-    
+
     static int ANGLE()
     {
         return A;

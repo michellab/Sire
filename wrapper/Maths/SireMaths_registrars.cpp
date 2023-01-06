@@ -21,6 +21,7 @@
 #include "quaternion.h"
 #include "rangenerator.h"
 #include "sphere.h"
+#include "sphereproperty.h"
 #include "torsion.h"
 #include "triangle.h"
 #include "trigmatrix.h"
@@ -54,6 +55,8 @@ void register_SireMaths_objects()
     ObjectRegistry::registerConverterFor< SireMaths::Quaternion >();
     ObjectRegistry::registerConverterFor< SireMaths::RanGenerator >();
     ObjectRegistry::registerConverterFor< SireMaths::Sphere >();
+    ObjectRegistry::registerConverterFor< SireMaths::SphereProperty >();
+    ObjectRegistry::registerConverterFor< SireMaths::SphereArrayProperty >();
     ObjectRegistry::registerConverterFor< SireMaths::Torsion >();
     ObjectRegistry::registerConverterFor< SireMaths::Triangle >();
     ObjectRegistry::registerConverterFor< SireMaths::TrigMatrix >();

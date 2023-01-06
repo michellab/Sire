@@ -44,6 +44,7 @@ target_link_libraries (Base
                        SirePython
                        SIRE_SireBase
                        SIRE_SireCAS
+                       SIRE_SireUnits
                        ${Boost_LIBRARIES}
                       )
 

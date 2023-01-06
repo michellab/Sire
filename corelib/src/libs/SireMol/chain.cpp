@@ -313,6 +313,12 @@ Selector<Chain> Chain::selector() const
     return Selector<Chain>(*this);
 }
 
+/** Return a selector that has everything except this view */
+Selector<Chain> Chain::invert() const
+{
+    return this->selector().invert();
+}
+
 /** Return whether or not this chain contains the atom
     at index 'atomidx' */
 bool Chain::contains(AtomIdx atomidx) const

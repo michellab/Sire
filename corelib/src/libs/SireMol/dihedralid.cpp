@@ -32,6 +32,8 @@
 #include "moleculedata.h"
 #include "moleculeinfodata.h"
 
+#include "SireID/index.h"
+
 #include "SireBase/property.h"
 
 #include "SireMaths/vector.h"
@@ -54,12 +56,12 @@ QDataStream &operator<<(QDataStream &ds,
                                        const DihedralID &dihedralid)
 {
     writeHeader(ds, r_dihedralid, 1);
-    
+
     SharedDataStream sds(ds);
-    
-    sds << dihedralid.atm0 << dihedralid.atm1 
+
+    sds << dihedralid.atm0 << dihedralid.atm1
         << dihedralid.atm2 << dihedralid.atm3;
-         
+
     return ds;
 }
 
@@ -68,17 +70,17 @@ QDataStream &operator>>(QDataStream &ds,
                                        DihedralID &dihedralid)
 {
     VersionID v = readHeader(ds, r_dihedralid);
-    
+
     if (v == 1)
     {
         SharedDataStream sds(ds);
-        
-        sds >> dihedralid.atm0 >> dihedralid.atm1 
+
+        sds >> dihedralid.atm0 >> dihedralid.atm1
             >> dihedralid.atm2 >> dihedralid.atm3;
     }
     else
         throw version_error(v, "1", r_dihedralid, CODELOC);
-        
+
     return ds;
 }
 
@@ -111,7 +113,7 @@ DihedralID& DihedralID::operator=(const DihedralID &other)
     atm1 = other.atm1;
     atm2 = other.atm2;
     atm3 = other.atm3;
-    
+
     return *this;
 }
 
@@ -129,20 +131,37 @@ bool DihedralID::operator!=(const DihedralID &other) const
            atm2 != other.atm2 or atm3 != other.atm3;
 }
 
-/** Return the mirror of this DihedralID - i.e. if this is 
-    DihedralID(atom0, atom1, atom2, atom3), this returns 
+const AtomID& DihedralID::operator[](int i) const
+{
+    i = Index(i).map(4);
+
+    switch(i)
+    {
+    case 0:
+        return atm0.base();
+    case 1:
+        return atm1.base();
+    case 2:
+        return atm2.base();
+    default:
+        return atm3.base();
+    }
+}
+
+/** Return the mirror of this DihedralID - i.e. if this is
+    DihedralID(atom0, atom1, atom2, atom3), this returns
     DihedralID(atom3, atom2, atom1, atom0).
-    
+
     This is useful if you know that DihedralID(atom0,atom1,atom2,atom3) equals
     DihedralID(atom3,atom2,atom1,atom0), e.g. you can now write;
-    
+
     if (not (dihedrals.contains(dihedral) or dihedrals.contains(dihedral.mirror())) )
     {
         dihedrals.insert(dihedral);
     }
-    
+
     or
-    
+
     if (dihedral == other_dihedral or dihedral.mirror() == other.dihedral())
     {
         //this is the same dihedral
@@ -156,7 +175,7 @@ DihedralID DihedralID::mirror() const
 /** Return a hash for this ID */
 uint DihedralID::hash() const
 {
-    return ( (atm0.hash()*atm1.hash()) << 16) | 
+    return ( (atm0.hash()*atm1.hash()) << 16) |
            ( (atm2.hash()*atm3.hash()) & 0x0000FFFF);
 }
 
@@ -179,22 +198,22 @@ bool DihedralID::isNull() const
 bool DihedralID::operator==(const SireID::ID &other) const
 {
     const DihedralID *other_dihedral = dynamic_cast<const DihedralID*>(&other);
-    
+
     return other_dihedral and this->operator==(*other_dihedral);
 }
 
-/** Return the indicies of the four atoms in this dihedral - this returns 
-    them in the order 
+/** Return the indicies of the four atoms in this dihedral - this returns
+    them in the order
     tuple(dihedral.atom0(),dihedral.atom1(),dihedral.atom2(),dihedral.atom3())
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
 */
-tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx> 
+tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx>
 DihedralID::map(const MoleculeInfoData &molinfo) const
 {
-    return tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx>( 
+    return tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx>(
                         molinfo.atomIdx(atm0), molinfo.atomIdx(atm1),
                         molinfo.atomIdx(atm2), molinfo.atomIdx(atm3) );
 }
@@ -203,18 +222,18 @@ DihedralID::map(const MoleculeInfoData &molinfo) const
     two molecules whose data is in 'mol0info' (containing dihedral.atom0()),
     'mol1info' (containing dihedral.atom1()), 'mol2info' (containing
     dihedral.atom2()) and 'mol3info' (containing dihedral.atom3())
-    
+
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
 */
 tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx>
-DihedralID::map(const MoleculeInfoData &mol0info, 
+DihedralID::map(const MoleculeInfoData &mol0info,
                 const MoleculeInfoData &mol1info,
-                const MoleculeInfoData &mol2info, 
+                const MoleculeInfoData &mol2info,
                 const MoleculeInfoData &mol3info) const
 {
-    return tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx>( 
+    return tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx>(
                         mol0info.atomIdx(atm0), mol1info.atomIdx(atm1),
                         mol2info.atomIdx(atm2), mol3info.atomIdx(atm3) );
 }
@@ -222,19 +241,19 @@ DihedralID::map(const MoleculeInfoData &mol0info,
 /** Return the geometric torsion formed by the four atoms
     of this dihedral in the molecule whose data is in 'moldata',
     using 'map' to find the coordinates property.
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
-*/                      
+*/
 Torsion DihedralID::torsion(const MoleculeData &moldata,
                             const PropertyMap &map) const
 {
     const AtomCoords &coords = moldata.property(map["coordinates"])
                                       .asA<AtomCoords>();
-                                    
+
     return Torsion( coords.at( moldata.info().cgAtomIdx(atm0) ),
                     coords.at( moldata.info().cgAtomIdx(atm1) ),
                     coords.at( moldata.info().cgAtomIdx(atm2) ),
@@ -249,13 +268,13 @@ Torsion DihedralID::torsion(const MoleculeData &moldata,
     'map1' to find the coordinates property of mol1,
     'map2' to find the coordinates property of mol2 and
     'map3' to find the coordinates property of mol3.
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
-*/                      
+*/
 Torsion DihedralID::torsion(const MoleculeData &mol0data,
                             const PropertyMap &map0,
                             const MoleculeData &mol1data,
@@ -279,20 +298,20 @@ Torsion DihedralID::torsion(const MoleculeData &mol0data,
                     coords2.at( mol2data.info().cgAtomIdx(atm2) ),
                     coords3.at( mol3data.info().cgAtomIdx(atm3) ) );
 }
-                  
+
 /** Return the geometric torsion formed by the four atoms,
     atom0() in the molecule whose data is in 'mol0data',
     atom1() from 'mol1data', atom2() from 'mol2data', and
     atom3() from 'mol3data',
-    using 'map' to find the coordinates property of 
+    using 'map' to find the coordinates property of
     the molecules
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
     \throw SireMol::duplicate_atom
     \throw SireError::invalid_index
-*/                      
+*/
 Torsion DihedralID::torsion(const MoleculeData &mol0data,
                             const MoleculeData &mol1data,
                             const MoleculeData &mol2data,
@@ -304,10 +323,10 @@ Torsion DihedralID::torsion(const MoleculeData &mol0data,
                          mol2data, map,
                          mol3data, map);
 }
-     
+
 /** Return the size of this dihedral in the molecule whose data
     is in 'moldata', using 'map' to find the coordinates property
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
@@ -320,16 +339,16 @@ Angle DihedralID::size(const MoleculeData &moldata,
     return this->torsion(moldata,map).angle();
 }
 
-/** Return the size of the dihedral between atom0() in the 
-    molecule whose data is in 'mol0data', atom1() in the 
-    molecule whose data is in 'mol1data', atom2() in 
+/** Return the size of the dihedral between atom0() in the
+    molecule whose data is in 'mol0data', atom1() in the
+    molecule whose data is in 'mol1data', atom2() in
     the molecule whose data is in 'mol2data', and
     atom3() in the molecule whose data is in 'mol3data', using 'map0'
     to the find the coordinates property of 'mol0',
     'map1' to find the coordinates property of 'mol1',
     'map2' to find the coordinates property of 'mol2' and
     'map3' to find the coordinates property of 'mol3'
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
@@ -345,20 +364,20 @@ Angle DihedralID::size(const MoleculeData &mol0data,
                        const MoleculeData &mol3data,
                        const PropertyMap &map3) const
 {
-    return this->torsion(mol0data, map0, 
+    return this->torsion(mol0data, map0,
                          mol1data, map1,
                          mol2data, map2,
                          mol3data, map3).angle();
 }
 
-/** Return the size of the dihedral between atom0() in the 
-    molecule whose data is in 'mol0data', atom1() in the 
-    molecule whose data is in 'mol1data', atom2() in 
+/** Return the size of the dihedral between atom0() in the
+    molecule whose data is in 'mol0data', atom1() in the
+    molecule whose data is in 'mol1data', atom2() in
     the molecule whose data is in 'mol2data', and
-    atom3() in the molecule whose data is in 'mol3data', 
-    using 'map' to find the coordinates property of the 
+    atom3() in the molecule whose data is in 'mol3data',
+    using 'map' to find the coordinates property of the
     molecules
-    
+
     \throw SireBase::missing_property
     \throw SireError::invalid_cast
     \throw SireMol::missing_atom
@@ -371,7 +390,7 @@ Angle DihedralID::size(const MoleculeData &mol0data,
                        const MoleculeData &mol3data,
                        const PropertyMap &map) const
 {
-    return this->torsion(mol0data, mol1data, 
+    return this->torsion(mol0data, mol1data,
                          mol2data, mol3data, map).angle();
 }
 

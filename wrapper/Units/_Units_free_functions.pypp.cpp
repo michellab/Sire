@@ -17,23 +17,7 @@ namespace bp = boost::python;
 
 #include "dimensions.h"
 
-#include <QDebug>
-
-#include <QMap>
-
-#include <QPair>
-
-#include <QString>
-
-#include <QStringList>
-
-#include <boost/shared_ptr.hpp>
-
-#include "convert.h"
-
-#include "convert.h"
-
-#include "dimensions.h"
+#include "generalunit.h"
 
 #include <QDebug>
 
@@ -52,154 +36,162 @@ namespace bp = boost::python;
 #include "convert.h"
 
 #include "dimensions.h"
-
-#include <QDebug>
-
-#include <QMap>
-
-#include <QPair>
-
-#include <QString>
-
-#include <QStringList>
-
-#include <boost/shared_ptr.hpp>
-
-#include "convert.h"
-
-#include "convert.h"
-
-#include "dimensions.h"
-
-#include <QDebug>
-
-#include <QMap>
-
-#include <QPair>
-
-#include <QString>
-
-#include <QStringList>
-
-#include <boost/shared_ptr.hpp>
-
-#include "convert.h"
-
-#include "convert.h"
-
-#include "dimensions.h"
-
-#include <QDebug>
-
-#include <QMap>
-
-#include <QPair>
-
-#include <QString>
-
-#include <QStringList>
-
-#include <boost/shared_ptr.hpp>
-
-#include "convert.h"
-
-#include "convert.h"
-
-#include "dimensions.h"
-
-#include <QDebug>
-
-#include <QMap>
-
-#include <QPair>
-
-#include <QString>
-
-#include <QStringList>
-
-#include <boost/shared_ptr.hpp>
-
-#include "convert.h"
-
-#include "convert.h"
-
-#include "dimensions.h"
-
-#include <QDebug>
-
-#include <QMap>
-
-#include <QPair>
-
-#include <QString>
-
-#include <QStringList>
-
-#include <boost/shared_ptr.hpp>
-
-#include "convert.h"
-
-#include "convert.h"
-
-#include "dimensions.h"
-
-#include <QDebug>
-
-#include <QMap>
-
-#include <QPair>
-
-#include <QString>
-
-#include <QStringList>
-
-#include <boost/shared_ptr.hpp>
-
-#include "convert.h"
-
-#include "convert.h"
-
-#include "dimensions.h"
-
-#include <QDebug>
-
-#include <QMap>
-
-#include <QPair>
-
-#include <QString>
-
-#include <QStringList>
-
-#include <boost/shared_ptr.hpp>
-
-#include "convert.h"
 
 #include "generalunit.h"
 
-#include "SireBase/lengthproperty.h"
+#include <QDebug>
 
-#include "SireBase/timeproperty.h"
+#include <QMap>
 
-#include "SireBase/variantproperty.h"
+#include <QPair>
 
-#include "SireError/errors.h"
-
-#include "SireUnits/dimensions.h"
-
-#include "SireUnits/temperature.h"
-
-#include "generalunit.h"
-
-#include <Python.h>
-
-#include <QHash>
-
-#include <QMutex>
+#include <QString>
 
 #include <QStringList>
 
-#include <boost/python.hpp>
+#include <boost/shared_ptr.hpp>
+
+#include "convert.h"
+
+#include "convert.h"
+
+#include "dimensions.h"
+
+#include "generalunit.h"
+
+#include <QDebug>
+
+#include <QMap>
+
+#include <QPair>
+
+#include <QString>
+
+#include <QStringList>
+
+#include <boost/shared_ptr.hpp>
+
+#include "convert.h"
+
+#include "convert.h"
+
+#include "dimensions.h"
+
+#include "generalunit.h"
+
+#include <QDebug>
+
+#include <QMap>
+
+#include <QPair>
+
+#include <QString>
+
+#include <QStringList>
+
+#include <boost/shared_ptr.hpp>
+
+#include "convert.h"
+
+#include "convert.h"
+
+#include "dimensions.h"
+
+#include "generalunit.h"
+
+#include <QDebug>
+
+#include <QMap>
+
+#include <QPair>
+
+#include <QString>
+
+#include <QStringList>
+
+#include <boost/shared_ptr.hpp>
+
+#include "convert.h"
+
+#include "convert.h"
+
+#include "dimensions.h"
+
+#include "generalunit.h"
+
+#include <QDebug>
+
+#include <QMap>
+
+#include <QPair>
+
+#include <QString>
+
+#include <QStringList>
+
+#include <boost/shared_ptr.hpp>
+
+#include "convert.h"
+
+#include "convert.h"
+
+#include "dimensions.h"
+
+#include "generalunit.h"
+
+#include <QDebug>
+
+#include <QMap>
+
+#include <QPair>
+
+#include <QString>
+
+#include <QStringList>
+
+#include <boost/shared_ptr.hpp>
+
+#include "convert.h"
+
+#include "convert.h"
+
+#include "dimensions.h"
+
+#include "generalunit.h"
+
+#include <QDebug>
+
+#include <QMap>
+
+#include <QPair>
+
+#include <QString>
+
+#include <QStringList>
+
+#include <boost/shared_ptr.hpp>
+
+#include "convert.h"
+
+#include "convert.h"
+
+#include "dimensions.h"
+
+#include "generalunit.h"
+
+#include <QDebug>
+
+#include <QMap>
+
+#include <QPair>
+
+#include <QString>
+
+#include <QStringList>
+
+#include <boost/shared_ptr.hpp>
+
+#include "convert.h"
 
 void register_free_functions(){
 
@@ -329,19 +321,6 @@ void register_free_functions(){
             "convertTo"
             , convertTo_function_value
             , ( bp::arg("val"), bp::arg("to_units") )
-            , "" );
-    
-    }
-
-    { //::SireUnits::Dimension::wrap
-    
-        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::SireUnits::Dimension::GeneralUnit const & );
-        wrap_function_type wrap_function_value( &::SireUnits::Dimension::wrap );
-        
-        bp::def( 
-            "wrap"
-            , wrap_function_value
-            , ( bp::arg("unit") )
             , "" );
     
     }

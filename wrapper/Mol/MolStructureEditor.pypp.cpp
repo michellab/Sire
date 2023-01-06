@@ -80,7 +80,7 @@ void register_MolStructureEditor_class(){
                 , add_function_value
                 , ( bp::arg("atom") )
                 , bp::release_gil_policy()
-                , "Add an atom with number number to this molecule and\nreturn an editor for this atom" );
+                , "Add an atom called name to this molecule and return an\neditor for this atom" );
         
         }
         { //::SireMol::MolStructureEditor::add

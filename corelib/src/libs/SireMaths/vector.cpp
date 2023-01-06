@@ -86,6 +86,30 @@ Vector::Vector( const tuple<double,double,double> &pos )
     sc[2] = pos.get<2>();
 }
 
+/** Construct from a single, repeated length */
+Vector::Vector(Length pos)
+{
+    sc[0] = pos.to(angstrom);
+    sc[1] = sc[0];
+    sc[2] = sc[0];
+}
+
+/** Construct from lengths */
+Vector::Vector(Length xpos, Length ypos, Length zpos)
+{
+    sc[0] = xpos.to(angstrom);
+    sc[1] = ypos.to(angstrom);
+    sc[2] = zpos.to(angstrom);
+}
+
+/** Construct from a tuple of three lengths */
+Vector::Vector( const tuple<Length, Length, Length> &pos )
+{
+    sc[0] = pos.get<0>().to(angstrom);
+    sc[1] = pos.get<1>().to(angstrom);
+    sc[2] = pos.get<2>().to(angstrom);
+}
+
 /** Construct from an NVector */
 Vector::Vector(const NVector &v)
 {
@@ -93,9 +117,9 @@ Vector::Vector(const NVector &v)
         throw SireError::incompatible_error( QObject::tr(
                 "Cannot create a 3D vector from a NVector of size %1.")
                     .arg(v.count()), CODELOC );
-    
+
     const double *d = v.constData();
-                                                    
+
     sc[0] = d[0];
     sc[1] = d[1];
     sc[2] = d[2];
@@ -107,7 +131,7 @@ Vector::Vector(const Vector& other)
     quickCopy<double>(sc, other.sc, 4);
 }
 
-/** Construct from a QString 
+/** Construct from a QString
 
     \throw SireError::invalid_arg
 */
@@ -181,7 +205,7 @@ double Vector::getitem(int i) const
 /** Return whether or not this is a zero length vector */
 bool Vector::isZero() const
 {
-    return SireMaths::isZero(sc[0]) and SireMaths::isZero(sc[1]) 
+    return SireMaths::isZero(sc[0]) and SireMaths::isZero(sc[1])
                 and SireMaths::isZero(sc[2]);
 }
 
@@ -236,7 +260,7 @@ Vector Vector::min(const Vector &other) const
     return v;
 }
 
-/** Construct a Vector from the QString representation returned by 'toString()' 
+/** Construct a Vector from the QString representation returned by 'toString()'
 
     \throw SireError::invalid_arg
 */
@@ -251,7 +275,7 @@ Vector Vector::fromString(const QString &str)
                 "Cannot find anything that looks like a vector in the string "
                 "\"%1\"").arg(str), CODELOC );
     }
-        
+
     return Vector(vecregexp.cap(1).toFloat(),
                   vecregexp.cap(2).toFloat(),
                   vecregexp.cap(3).toFloat());
@@ -261,6 +285,31 @@ Vector Vector::fromString(const QString &str)
 QString Vector::toString() const
 {
     return QObject::tr("( %1, %2, %3 )").arg(sc[0]).arg(sc[1]).arg(sc[2]);
+}
+
+void Vector::set(Length x, Length y, Length z)
+{
+    this->set(x.to(angstrom), y.to(angstrom), z.to(angstrom));
+}
+
+void Vector::setX(Length x)
+{
+    this->setX(x.to(angstrom));
+}
+
+void Vector::setY(Length y)
+{
+    this->setY(y.to(angstrom));
+}
+
+void Vector::setZ(Length z)
+{
+    this->setZ(z.to(angstrom));
+}
+
+void Vector::set(int i, Length v)
+{
+    this->set(i, v.to(angstrom));
 }
 
 /** Return the components via rgb (limited between 0 and 1) */
@@ -290,7 +339,7 @@ void Vector::set(double x, double y, double z)
 }
 
 /** Set individual values of the vector */
-void Vector::set(int i, const double &v)
+void Vector::set(int i, double v)
 {
     sc[i] = v;
 }
@@ -466,7 +515,13 @@ Angle Vector::dihedral(const Vector &v0, const Vector &v1, const Vector &v2, con
     else
         return ang;
 }
-    
+
+Vector Vector::generate(Length dst, const Vector &v1, const Angle &ang, const Vector &v2,
+                        const Angle &dih, const Vector &v3)
+{
+    return Vector::generate(dst.to(angstrom), v1, ang, v2, dih, v3);
+}
+
 /** Generate a vector, v0, that has distance 'dst' v0-v1, angle 'ang' v0-v1-v2,
     and dihedral 'dih' v0-v1-v2-v3 */
 Vector Vector::generate(double dst, const Vector &v1, const Angle &ang, const Vector &v2,
@@ -522,7 +577,7 @@ Vector Vector::generate(double dst, const Vector &v1, const Angle &ang, const Ve
       return Vector(nx,ny,nz);
 }
 
- /** Return the cross product of v0 and v1 
+ /** Return the cross product of v0 and v1
      N.B. This function returns the normalised cross product.
  */
 Vector Vector::cross(const Vector &v0, const Vector &v1)
@@ -533,7 +588,7 @@ Vector Vector::cross(const Vector &v0, const Vector &v1)
 
     Vector vec(nx,ny,nz);
     double length = std::sqrt(nx*nx + ny*ny + nz*nz);
-    
+
     if (SireMaths::isZero(length))
     {
         //these two vectors are parallel - we need to choose just
@@ -566,7 +621,7 @@ Vector Vector::cross(const Vector &v0, const Vector &v1)
         double invlength = double(1)/length;
         Vector normal( vec.x()*invlength, vec.y()*invlength, vec.z()*invlength );
         double checklength = normal.x()*normal.x() + normal.y()*normal.y() + normal.z()*normal.z();
-        
+
         if (checklength > 1.1 or checklength < 0.9)
         {
             //something went wrong with normalisation
@@ -602,7 +657,7 @@ Vector Vector::cross(const Vector &v0, const Vector &v1)
             qDebug() << "Fixed cross product of vectors" << v0.toString() << ":" << v1.toString();
             qDebug() << "equals" << normal.toString();
         }
-        
+
         return normal;
     }
 }
@@ -625,7 +680,7 @@ double Vector::manhattanLength() const
 }
 
 /** Return the metric tensor of a vector, i.e.
-          
+
     | y*y + z*z,    -x*y    -x*z      |
     |    -y*x,   x*x + z*z  -y*z      |
     |    -z*x       -z*y    x*x + y*y |

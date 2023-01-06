@@ -70,6 +70,13 @@ const QVariant& get_Metadata_SireMol_BeadVariantProperty_function2(const SireMol
                                    const QString &key, const QString &metakey){
                                         return atom.metadata< QVariant >(key, metakey); }
 
+const SireBase::PropertyPtr& get_Metadata_SireMol_BeadPropertyProperty_function1(const SireMol::Bead &atom,
+                                   const QString &metakey){ return atom.metadata< SireBase::PropertyPtr >(metakey); }
+
+const SireBase::PropertyPtr& get_Metadata_SireMol_BeadPropertyProperty_function2(const SireMol::Bead &atom,
+                                   const QString &key, const QString &metakey){
+                                        return atom.metadata< SireBase::PropertyPtr >(key, metakey); }
+
 SireMol::Bead __copy__(const SireMol::Bead &other){ return SireMol::Bead(other); }
 
 #include "Qt/qdatastream.hpp"
@@ -488,6 +495,9 @@ void register_Bead_class(){
         Bead_exposer.def( "_get_property_SireMol_BeadVariantProperty", &SireMol::Bead::property< QVariant >, bp::return_value_policy<bp::copy_const_reference>());
         Bead_exposer.def( "_get_metadata_SireMol_BeadVariantProperty", get_Metadata_SireMol_BeadVariantProperty_function1, bp::return_value_policy<bp::copy_const_reference>());
         Bead_exposer.def( "_get_metadata_SireMol_BeadVariantProperty", &get_Metadata_SireMol_BeadVariantProperty_function2, bp::return_value_policy<bp::copy_const_reference>());
+        Bead_exposer.def( "_get_property_SireMol_BeadPropertyProperty", &SireMol::Bead::property< SireBase::PropertyPtr >, bp::return_value_policy<bp::copy_const_reference>());
+        Bead_exposer.def( "_get_metadata_SireMol_BeadPropertyProperty", get_Metadata_SireMol_BeadPropertyProperty_function1, bp::return_value_policy<bp::copy_const_reference>());
+        Bead_exposer.def( "_get_metadata_SireMol_BeadPropertyProperty", &get_Metadata_SireMol_BeadPropertyProperty_function2, bp::return_value_policy<bp::copy_const_reference>());
         Bead_exposer.def( "__copy__", &__copy__);
         Bead_exposer.def( "__deepcopy__", &__copy__);
         Bead_exposer.def( "clone", &__copy__);

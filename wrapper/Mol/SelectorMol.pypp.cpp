@@ -90,40 +90,37 @@ void register_SelectorMol_class(){
         }
         { //::SireMol::SelectorMol::atom
         
-            typedef ::SireMol::Atom ( ::SireMol::SelectorMol::*atom_function_type)( int ) const;
+            typedef ::SireMol::Atom ( ::SireMol::SelectorMol::*atom_function_type)( int,::SireBase::PropertyMap const & ) const;
             atom_function_type atom_function_value( &::SireMol::SelectorMol::atom );
             
             SelectorMol_exposer.def( 
                 "atom"
                 , atom_function_value
-                , ( bp::arg("i") )
-                , bp::release_gil_policy()
+                , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::atom
         
-            typedef ::SireMol::Atom ( ::SireMol::SelectorMol::*atom_function_type)( ::QString const & ) const;
+            typedef ::SireMol::Atom ( ::SireMol::SelectorMol::*atom_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
             atom_function_type atom_function_value( &::SireMol::SelectorMol::atom );
             
             SelectorMol_exposer.def( 
                 "atom"
                 , atom_function_value
-                , ( bp::arg("name") )
-                , bp::release_gil_policy()
+                , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::atom
         
-            typedef ::SireMol::Atom ( ::SireMol::SelectorMol::*atom_function_type)( ::SireMol::AtomID const & ) const;
+            typedef ::SireMol::Atom ( ::SireMol::SelectorMol::*atom_function_type)( ::SireMol::AtomID const &,::SireBase::PropertyMap const & ) const;
             atom_function_type atom_function_value( &::SireMol::SelectorMol::atom );
             
             SelectorMol_exposer.def( 
                 "atom"
                 , atom_function_value
-                , ( bp::arg("atomid") )
-                , bp::release_gil_policy()
+                , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
@@ -141,105 +138,97 @@ void register_SelectorMol_class(){
         }
         { //::SireMol::SelectorMol::atoms
         
-            typedef ::SireMol::SelectorM< SireMol::Atom > ( ::SireMol::SelectorMol::*atoms_function_type)( int ) const;
+            typedef ::SireMol::SelectorM< SireMol::Atom > ( ::SireMol::SelectorMol::*atoms_function_type)( int,::SireBase::PropertyMap const & ) const;
             atoms_function_type atoms_function_value( &::SireMol::SelectorMol::atoms );
             
             SelectorMol_exposer.def( 
                 "atoms"
                 , atoms_function_value
-                , ( bp::arg("i") )
-                , bp::release_gil_policy()
+                , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::atoms
         
-            typedef ::SireMol::SelectorM< SireMol::Atom > ( ::SireMol::SelectorMol::*atoms_function_type)( ::SireBase::Slice const & ) const;
+            typedef ::SireMol::SelectorM< SireMol::Atom > ( ::SireMol::SelectorMol::*atoms_function_type)( ::SireBase::Slice const &,::SireBase::PropertyMap const & ) const;
             atoms_function_type atoms_function_value( &::SireMol::SelectorMol::atoms );
             
             SelectorMol_exposer.def( 
                 "atoms"
                 , atoms_function_value
-                , ( bp::arg("slice") )
-                , bp::release_gil_policy()
+                , ( bp::arg("slice"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::atoms
         
-            typedef ::SireMol::SelectorM< SireMol::Atom > ( ::SireMol::SelectorMol::*atoms_function_type)( ::QList< long long > const & ) const;
+            typedef ::SireMol::SelectorM< SireMol::Atom > ( ::SireMol::SelectorMol::*atoms_function_type)( ::QList< long long > const &,::SireBase::PropertyMap const & ) const;
             atoms_function_type atoms_function_value( &::SireMol::SelectorMol::atoms );
             
             SelectorMol_exposer.def( 
                 "atoms"
                 , atoms_function_value
-                , ( bp::arg("idxs") )
-                , bp::release_gil_policy()
+                , ( bp::arg("idxs"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::atoms
         
-            typedef ::SireMol::SelectorM< SireMol::Atom > ( ::SireMol::SelectorMol::*atoms_function_type)( ::QString const & ) const;
+            typedef ::SireMol::SelectorM< SireMol::Atom > ( ::SireMol::SelectorMol::*atoms_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
             atoms_function_type atoms_function_value( &::SireMol::SelectorMol::atoms );
             
             SelectorMol_exposer.def( 
                 "atoms"
                 , atoms_function_value
-                , ( bp::arg("name") )
-                , bp::release_gil_policy()
+                , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::atoms
         
-            typedef ::SireMol::SelectorM< SireMol::Atom > ( ::SireMol::SelectorMol::*atoms_function_type)( ::SireMol::AtomID const & ) const;
+            typedef ::SireMol::SelectorM< SireMol::Atom > ( ::SireMol::SelectorMol::*atoms_function_type)( ::SireMol::AtomID const &,::SireBase::PropertyMap const & ) const;
             atoms_function_type atoms_function_value( &::SireMol::SelectorMol::atoms );
             
             SelectorMol_exposer.def( 
                 "atoms"
                 , atoms_function_value
-                , ( bp::arg("atomid") )
-                , bp::release_gil_policy()
+                , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::chain
         
-            typedef ::SireMol::Chain ( ::SireMol::SelectorMol::*chain_function_type)( int ) const;
+            typedef ::SireMol::Chain ( ::SireMol::SelectorMol::*chain_function_type)( int,::SireBase::PropertyMap const & ) const;
             chain_function_type chain_function_value( &::SireMol::SelectorMol::chain );
             
             SelectorMol_exposer.def( 
                 "chain"
                 , chain_function_value
-                , ( bp::arg("i") )
-                , bp::release_gil_policy()
+                , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::chain
         
-            typedef ::SireMol::Chain ( ::SireMol::SelectorMol::*chain_function_type)( ::QString const & ) const;
+            typedef ::SireMol::Chain ( ::SireMol::SelectorMol::*chain_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
             chain_function_type chain_function_value( &::SireMol::SelectorMol::chain );
             
             SelectorMol_exposer.def( 
                 "chain"
                 , chain_function_value
-                , ( bp::arg("name") )
-                , bp::release_gil_policy()
+                , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::chain
         
-            typedef ::SireMol::Chain ( ::SireMol::SelectorMol::*chain_function_type)( ::SireMol::ChainID const & ) const;
+            typedef ::SireMol::Chain ( ::SireMol::SelectorMol::*chain_function_type)( ::SireMol::ChainID const &,::SireBase::PropertyMap const & ) const;
             chain_function_type chain_function_value( &::SireMol::SelectorMol::chain );
             
             SelectorMol_exposer.def( 
                 "chain"
                 , chain_function_value
-                , ( bp::arg("chainid") )
-                , bp::release_gil_policy()
+                , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
@@ -257,66 +246,61 @@ void register_SelectorMol_class(){
         }
         { //::SireMol::SelectorMol::chains
         
-            typedef ::SireMol::SelectorM< SireMol::Chain > ( ::SireMol::SelectorMol::*chains_function_type)( int ) const;
+            typedef ::SireMol::SelectorM< SireMol::Chain > ( ::SireMol::SelectorMol::*chains_function_type)( int,::SireBase::PropertyMap const & ) const;
             chains_function_type chains_function_value( &::SireMol::SelectorMol::chains );
             
             SelectorMol_exposer.def( 
                 "chains"
                 , chains_function_value
-                , ( bp::arg("i") )
-                , bp::release_gil_policy()
+                , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::chains
         
-            typedef ::SireMol::SelectorM< SireMol::Chain > ( ::SireMol::SelectorMol::*chains_function_type)( ::SireBase::Slice const & ) const;
+            typedef ::SireMol::SelectorM< SireMol::Chain > ( ::SireMol::SelectorMol::*chains_function_type)( ::SireBase::Slice const &,::SireBase::PropertyMap const & ) const;
             chains_function_type chains_function_value( &::SireMol::SelectorMol::chains );
             
             SelectorMol_exposer.def( 
                 "chains"
                 , chains_function_value
-                , ( bp::arg("slice") )
-                , bp::release_gil_policy()
+                , ( bp::arg("slice"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::chains
         
-            typedef ::SireMol::SelectorM< SireMol::Chain > ( ::SireMol::SelectorMol::*chains_function_type)( ::QList< long long > const & ) const;
+            typedef ::SireMol::SelectorM< SireMol::Chain > ( ::SireMol::SelectorMol::*chains_function_type)( ::QList< long long > const &,::SireBase::PropertyMap const & ) const;
             chains_function_type chains_function_value( &::SireMol::SelectorMol::chains );
             
             SelectorMol_exposer.def( 
                 "chains"
                 , chains_function_value
-                , ( bp::arg("idxs") )
-                , bp::release_gil_policy()
+                , ( bp::arg("idxs"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::chains
         
-            typedef ::SireMol::SelectorM< SireMol::Chain > ( ::SireMol::SelectorMol::*chains_function_type)( ::QString const & ) const;
+            typedef ::SireMol::SelectorM< SireMol::Chain > ( ::SireMol::SelectorMol::*chains_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
             chains_function_type chains_function_value( &::SireMol::SelectorMol::chains );
             
             SelectorMol_exposer.def( 
                 "chains"
                 , chains_function_value
-                , ( bp::arg("name") )
-                , bp::release_gil_policy()
+                , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::chains
         
-            typedef ::SireMol::SelectorM< SireMol::Chain > ( ::SireMol::SelectorMol::*chains_function_type)( ::SireMol::ChainID const & ) const;
+            typedef ::SireMol::SelectorM< SireMol::Chain > ( ::SireMol::SelectorMol::*chains_function_type)( ::SireMol::ChainID const &,::SireBase::PropertyMap const & ) const;
             chains_function_type chains_function_value( &::SireMol::SelectorMol::chains );
             
             SelectorMol_exposer.def( 
                 "chains"
                 , chains_function_value
-                , ( bp::arg("chainid") )
-                , bp::release_gil_policy()
+                , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
@@ -347,40 +331,37 @@ void register_SelectorMol_class(){
         }
         { //::SireMol::SelectorMol::cutGroup
         
-            typedef ::SireMol::CutGroup ( ::SireMol::SelectorMol::*cutGroup_function_type)( int ) const;
+            typedef ::SireMol::CutGroup ( ::SireMol::SelectorMol::*cutGroup_function_type)( int,::SireBase::PropertyMap const & ) const;
             cutGroup_function_type cutGroup_function_value( &::SireMol::SelectorMol::cutGroup );
             
             SelectorMol_exposer.def( 
                 "cutGroup"
                 , cutGroup_function_value
-                , ( bp::arg("i") )
-                , bp::release_gil_policy()
+                , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::cutGroup
         
-            typedef ::SireMol::CutGroup ( ::SireMol::SelectorMol::*cutGroup_function_type)( ::QString const & ) const;
+            typedef ::SireMol::CutGroup ( ::SireMol::SelectorMol::*cutGroup_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
             cutGroup_function_type cutGroup_function_value( &::SireMol::SelectorMol::cutGroup );
             
             SelectorMol_exposer.def( 
                 "cutGroup"
                 , cutGroup_function_value
-                , ( bp::arg("name") )
-                , bp::release_gil_policy()
+                , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::cutGroup
         
-            typedef ::SireMol::CutGroup ( ::SireMol::SelectorMol::*cutGroup_function_type)( ::SireMol::CGID const & ) const;
+            typedef ::SireMol::CutGroup ( ::SireMol::SelectorMol::*cutGroup_function_type)( ::SireMol::CGID const &,::SireBase::PropertyMap const & ) const;
             cutGroup_function_type cutGroup_function_value( &::SireMol::SelectorMol::cutGroup );
             
             SelectorMol_exposer.def( 
                 "cutGroup"
                 , cutGroup_function_value
-                , ( bp::arg("cgid") )
-                , bp::release_gil_policy()
+                , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
@@ -398,65 +379,86 @@ void register_SelectorMol_class(){
         }
         { //::SireMol::SelectorMol::cutGroups
         
-            typedef ::SireMol::SelectorM< SireMol::CutGroup > ( ::SireMol::SelectorMol::*cutGroups_function_type)( int ) const;
+            typedef ::SireMol::SelectorM< SireMol::CutGroup > ( ::SireMol::SelectorMol::*cutGroups_function_type)( int,::SireBase::PropertyMap const & ) const;
             cutGroups_function_type cutGroups_function_value( &::SireMol::SelectorMol::cutGroups );
             
             SelectorMol_exposer.def( 
                 "cutGroups"
                 , cutGroups_function_value
-                , ( bp::arg("i") )
-                , bp::release_gil_policy()
+                , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::cutGroups
         
-            typedef ::SireMol::SelectorM< SireMol::CutGroup > ( ::SireMol::SelectorMol::*cutGroups_function_type)( ::SireBase::Slice const & ) const;
+            typedef ::SireMol::SelectorM< SireMol::CutGroup > ( ::SireMol::SelectorMol::*cutGroups_function_type)( ::SireBase::Slice const &,::SireBase::PropertyMap const & ) const;
             cutGroups_function_type cutGroups_function_value( &::SireMol::SelectorMol::cutGroups );
             
             SelectorMol_exposer.def( 
                 "cutGroups"
                 , cutGroups_function_value
-                , ( bp::arg("slice") )
-                , bp::release_gil_policy()
+                , ( bp::arg("slice"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::cutGroups
         
-            typedef ::SireMol::SelectorM< SireMol::CutGroup > ( ::SireMol::SelectorMol::*cutGroups_function_type)( ::QList< long long > const & ) const;
+            typedef ::SireMol::SelectorM< SireMol::CutGroup > ( ::SireMol::SelectorMol::*cutGroups_function_type)( ::QList< long long > const &,::SireBase::PropertyMap const & ) const;
             cutGroups_function_type cutGroups_function_value( &::SireMol::SelectorMol::cutGroups );
             
             SelectorMol_exposer.def( 
                 "cutGroups"
                 , cutGroups_function_value
-                , ( bp::arg("idxs") )
-                , bp::release_gil_policy()
+                , ( bp::arg("idxs"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::cutGroups
         
-            typedef ::SireMol::SelectorM< SireMol::CutGroup > ( ::SireMol::SelectorMol::*cutGroups_function_type)( ::QString const & ) const;
+            typedef ::SireMol::SelectorM< SireMol::CutGroup > ( ::SireMol::SelectorMol::*cutGroups_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
             cutGroups_function_type cutGroups_function_value( &::SireMol::SelectorMol::cutGroups );
             
             SelectorMol_exposer.def( 
                 "cutGroups"
                 , cutGroups_function_value
-                , ( bp::arg("name") )
-                , bp::release_gil_policy()
+                , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::cutGroups
         
-            typedef ::SireMol::SelectorM< SireMol::CutGroup > ( ::SireMol::SelectorMol::*cutGroups_function_type)( ::SireMol::CGID const & ) const;
+            typedef ::SireMol::SelectorM< SireMol::CutGroup > ( ::SireMol::SelectorMol::*cutGroups_function_type)( ::SireMol::CGID const &,::SireBase::PropertyMap const & ) const;
             cutGroups_function_type cutGroups_function_value( &::SireMol::SelectorMol::cutGroups );
             
             SelectorMol_exposer.def( 
                 "cutGroups"
                 , cutGroups_function_value
-                , ( bp::arg("cgid") )
+                , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
+        
+        }
+        { //::SireMol::SelectorMol::deleteFrame
+        
+            typedef void ( ::SireMol::SelectorMol::*deleteFrame_function_type)( int ) ;
+            deleteFrame_function_type deleteFrame_function_value( &::SireMol::SelectorMol::deleteFrame );
+            
+            SelectorMol_exposer.def( 
+                "deleteFrame"
+                , deleteFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorMol::deleteFrame
+        
+            typedef void ( ::SireMol::SelectorMol::*deleteFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            deleteFrame_function_type deleteFrame_function_value( &::SireMol::SelectorMol::deleteFrame );
+            
+            SelectorMol_exposer.def( 
+                "deleteFrame"
+                , deleteFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
                 , bp::release_gil_policy()
                 , "" );
         
@@ -497,6 +499,44 @@ void register_SelectorMol_class(){
                 , "" );
         
         }
+        { //::SireMol::SelectorMol::isSelector
+        
+            typedef bool ( ::SireMol::SelectorMol::*isSelector_function_type)(  ) const;
+            isSelector_function_type isSelector_function_value( &::SireMol::SelectorMol::isSelector );
+            
+            SelectorMol_exposer.def( 
+                "isSelector"
+                , isSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorMol::loadFrame
+        
+            typedef void ( ::SireMol::SelectorMol::*loadFrame_function_type)( int ) ;
+            loadFrame_function_type loadFrame_function_value( &::SireMol::SelectorMol::loadFrame );
+            
+            SelectorMol_exposer.def( 
+                "loadFrame"
+                , loadFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorMol::loadFrame
+        
+            typedef void ( ::SireMol::SelectorMol::*loadFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            loadFrame_function_type loadFrame_function_value( &::SireMol::SelectorMol::loadFrame );
+            
+            SelectorMol_exposer.def( 
+                "loadFrame"
+                , loadFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::SelectorMol::molNums
         
             typedef ::QVector< SireMol::MolNum > ( ::SireMol::SelectorMol::*molNums_function_type)(  ) const;
@@ -511,79 +551,73 @@ void register_SelectorMol_class(){
         }
         { //::SireMol::SelectorMol::molecule
         
-            typedef ::SireMol::Molecule ( ::SireMol::SelectorMol::*molecule_function_type)( int ) const;
+            typedef ::SireMol::Molecule ( ::SireMol::SelectorMol::*molecule_function_type)( int,::SireBase::PropertyMap const & ) const;
             molecule_function_type molecule_function_value( &::SireMol::SelectorMol::molecule );
             
             SelectorMol_exposer.def( 
                 "molecule"
                 , molecule_function_value
-                , ( bp::arg("i") )
-                , bp::release_gil_policy()
+                , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::molecule
         
-            typedef ::SireMol::Molecule ( ::SireMol::SelectorMol::*molecule_function_type)( ::QString const & ) const;
+            typedef ::SireMol::Molecule ( ::SireMol::SelectorMol::*molecule_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
             molecule_function_type molecule_function_value( &::SireMol::SelectorMol::molecule );
             
             SelectorMol_exposer.def( 
                 "molecule"
                 , molecule_function_value
-                , ( bp::arg("name") )
-                , bp::release_gil_policy()
+                , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::molecule
         
-            typedef ::SireMol::Molecule ( ::SireMol::SelectorMol::*molecule_function_type)( ::SireMol::MolIdx const & ) const;
+            typedef ::SireMol::Molecule ( ::SireMol::SelectorMol::*molecule_function_type)( ::SireMol::MolIdx const &,::SireBase::PropertyMap const & ) const;
             molecule_function_type molecule_function_value( &::SireMol::SelectorMol::molecule );
             
             SelectorMol_exposer.def( 
                 "molecule"
                 , molecule_function_value
-                , ( bp::arg("molidx") )
-                , bp::release_gil_policy()
+                , ( bp::arg("molidx"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::molecule
         
-            typedef ::SireMol::Molecule ( ::SireMol::SelectorMol::*molecule_function_type)( ::SireMol::MolName const & ) const;
+            typedef ::SireMol::Molecule ( ::SireMol::SelectorMol::*molecule_function_type)( ::SireMol::MolName const &,::SireBase::PropertyMap const & ) const;
             molecule_function_type molecule_function_value( &::SireMol::SelectorMol::molecule );
             
             SelectorMol_exposer.def( 
                 "molecule"
                 , molecule_function_value
-                , ( bp::arg("molname") )
-                , bp::release_gil_policy()
+                , ( bp::arg("molname"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::molecule
         
-            typedef ::SireMol::Molecule ( ::SireMol::SelectorMol::*molecule_function_type)( ::SireMol::MolNum const & ) const;
+            typedef ::SireMol::Molecule ( ::SireMol::SelectorMol::*molecule_function_type)( ::SireMol::MolNum const &,::SireBase::PropertyMap const & ) const;
             molecule_function_type molecule_function_value( &::SireMol::SelectorMol::molecule );
             
             SelectorMol_exposer.def( 
                 "molecule"
                 , molecule_function_value
-                , ( bp::arg("molnum") )
-                , bp::release_gil_policy()
+                , ( bp::arg("molnum"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::molecule
         
-            typedef ::SireMol::Molecule ( ::SireMol::SelectorMol::*molecule_function_type)( ::SireMol::MolID const & ) const;
+            typedef ::SireMol::Molecule ( ::SireMol::SelectorMol::*molecule_function_type)( ::SireMol::MolID const &,::SireBase::PropertyMap const & ) const;
             molecule_function_type molecule_function_value( &::SireMol::SelectorMol::molecule );
             
             SelectorMol_exposer.def( 
                 "molecule"
                 , molecule_function_value
-                , ( bp::arg("molid") )
-                , bp::release_gil_policy()
+                , ( bp::arg("molid"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
@@ -601,105 +635,97 @@ void register_SelectorMol_class(){
         }
         { //::SireMol::SelectorMol::molecules
         
-            typedef ::SireMol::SelectorMol ( ::SireMol::SelectorMol::*molecules_function_type)( int ) const;
+            typedef ::SireMol::SelectorMol ( ::SireMol::SelectorMol::*molecules_function_type)( int,::SireBase::PropertyMap const & ) const;
             molecules_function_type molecules_function_value( &::SireMol::SelectorMol::molecules );
             
             SelectorMol_exposer.def( 
                 "molecules"
                 , molecules_function_value
-                , ( bp::arg("i") )
-                , bp::release_gil_policy()
+                , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::molecules
         
-            typedef ::SireMol::SelectorMol ( ::SireMol::SelectorMol::*molecules_function_type)( ::SireBase::Slice const & ) const;
+            typedef ::SireMol::SelectorMol ( ::SireMol::SelectorMol::*molecules_function_type)( ::SireBase::Slice const &,::SireBase::PropertyMap const & ) const;
             molecules_function_type molecules_function_value( &::SireMol::SelectorMol::molecules );
             
             SelectorMol_exposer.def( 
                 "molecules"
                 , molecules_function_value
-                , ( bp::arg("slice") )
-                , bp::release_gil_policy()
+                , ( bp::arg("slice"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::molecules
         
-            typedef ::SireMol::SelectorMol ( ::SireMol::SelectorMol::*molecules_function_type)( ::QList< long long > const & ) const;
+            typedef ::SireMol::SelectorMol ( ::SireMol::SelectorMol::*molecules_function_type)( ::QList< long long > const &,::SireBase::PropertyMap const & ) const;
             molecules_function_type molecules_function_value( &::SireMol::SelectorMol::molecules );
             
             SelectorMol_exposer.def( 
                 "molecules"
                 , molecules_function_value
-                , ( bp::arg("idxs") )
-                , bp::release_gil_policy()
+                , ( bp::arg("idxs"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::molecules
         
-            typedef ::SireMol::SelectorMol ( ::SireMol::SelectorMol::*molecules_function_type)( ::QString const & ) const;
+            typedef ::SireMol::SelectorMol ( ::SireMol::SelectorMol::*molecules_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
             molecules_function_type molecules_function_value( &::SireMol::SelectorMol::molecules );
             
             SelectorMol_exposer.def( 
                 "molecules"
                 , molecules_function_value
-                , ( bp::arg("name") )
-                , bp::release_gil_policy()
+                , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::molecules
         
-            typedef ::SireMol::SelectorMol ( ::SireMol::SelectorMol::*molecules_function_type)( ::SireMol::MolIdx const & ) const;
+            typedef ::SireMol::SelectorMol ( ::SireMol::SelectorMol::*molecules_function_type)( ::SireMol::MolIdx const &,::SireBase::PropertyMap const & ) const;
             molecules_function_type molecules_function_value( &::SireMol::SelectorMol::molecules );
             
             SelectorMol_exposer.def( 
                 "molecules"
                 , molecules_function_value
-                , ( bp::arg("molidx") )
-                , bp::release_gil_policy()
+                , ( bp::arg("molidx"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::molecules
         
-            typedef ::SireMol::SelectorMol ( ::SireMol::SelectorMol::*molecules_function_type)( ::SireMol::MolName const & ) const;
+            typedef ::SireMol::SelectorMol ( ::SireMol::SelectorMol::*molecules_function_type)( ::SireMol::MolName const &,::SireBase::PropertyMap const & ) const;
             molecules_function_type molecules_function_value( &::SireMol::SelectorMol::molecules );
             
             SelectorMol_exposer.def( 
                 "molecules"
                 , molecules_function_value
-                , ( bp::arg("molname") )
-                , bp::release_gil_policy()
+                , ( bp::arg("molname"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::molecules
         
-            typedef ::SireMol::SelectorMol ( ::SireMol::SelectorMol::*molecules_function_type)( ::SireMol::MolNum const & ) const;
+            typedef ::SireMol::SelectorMol ( ::SireMol::SelectorMol::*molecules_function_type)( ::SireMol::MolNum const &,::SireBase::PropertyMap const & ) const;
             molecules_function_type molecules_function_value( &::SireMol::SelectorMol::molecules );
             
             SelectorMol_exposer.def( 
                 "molecules"
                 , molecules_function_value
-                , ( bp::arg("molnum") )
-                , bp::release_gil_policy()
+                , ( bp::arg("molnum"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::molecules
         
-            typedef ::SireMol::SelectorMol ( ::SireMol::SelectorMol::*molecules_function_type)( ::SireMol::MolID const & ) const;
+            typedef ::SireMol::SelectorMol ( ::SireMol::SelectorMol::*molecules_function_type)( ::SireMol::MolID const &,::SireBase::PropertyMap const & ) const;
             molecules_function_type molecules_function_value( &::SireMol::SelectorMol::molecules );
             
             SelectorMol_exposer.def( 
                 "molecules"
                 , molecules_function_value
-                , ( bp::arg("molid") )
-                , bp::release_gil_policy()
+                , ( bp::arg("molid"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
@@ -735,6 +761,31 @@ void register_SelectorMol_class(){
             SelectorMol_exposer.def( 
                 "nCutGroups"
                 , nCutGroups_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorMol::nFrames
+        
+            typedef int ( ::SireMol::SelectorMol::*nFrames_function_type)(  ) const;
+            nFrames_function_type nFrames_function_value( &::SireMol::SelectorMol::nFrames );
+            
+            SelectorMol_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorMol::nFrames
+        
+            typedef int ( ::SireMol::SelectorMol::*nFrames_function_type)( ::SireBase::PropertyMap const & ) const;
+            nFrames_function_type nFrames_function_value( &::SireMol::SelectorMol::nFrames );
+            
+            SelectorMol_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , ( bp::arg("map") )
                 , bp::release_gil_policy()
                 , "" );
         
@@ -912,40 +963,37 @@ void register_SelectorMol_class(){
         }
         { //::SireMol::SelectorMol::residue
         
-            typedef ::SireMol::Residue ( ::SireMol::SelectorMol::*residue_function_type)( int ) const;
+            typedef ::SireMol::Residue ( ::SireMol::SelectorMol::*residue_function_type)( int,::SireBase::PropertyMap const & ) const;
             residue_function_type residue_function_value( &::SireMol::SelectorMol::residue );
             
             SelectorMol_exposer.def( 
                 "residue"
                 , residue_function_value
-                , ( bp::arg("i") )
-                , bp::release_gil_policy()
+                , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::residue
         
-            typedef ::SireMol::Residue ( ::SireMol::SelectorMol::*residue_function_type)( ::QString const & ) const;
+            typedef ::SireMol::Residue ( ::SireMol::SelectorMol::*residue_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
             residue_function_type residue_function_value( &::SireMol::SelectorMol::residue );
             
             SelectorMol_exposer.def( 
                 "residue"
                 , residue_function_value
-                , ( bp::arg("name") )
-                , bp::release_gil_policy()
+                , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::residue
         
-            typedef ::SireMol::Residue ( ::SireMol::SelectorMol::*residue_function_type)( ::SireMol::ResID const & ) const;
+            typedef ::SireMol::Residue ( ::SireMol::SelectorMol::*residue_function_type)( ::SireMol::ResID const &,::SireBase::PropertyMap const & ) const;
             residue_function_type residue_function_value( &::SireMol::SelectorMol::residue );
             
             SelectorMol_exposer.def( 
                 "residue"
                 , residue_function_value
-                , ( bp::arg("resid") )
-                , bp::release_gil_policy()
+                , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
@@ -963,65 +1011,111 @@ void register_SelectorMol_class(){
         }
         { //::SireMol::SelectorMol::residues
         
-            typedef ::SireMol::SelectorM< SireMol::Residue > ( ::SireMol::SelectorMol::*residues_function_type)( int ) const;
+            typedef ::SireMol::SelectorM< SireMol::Residue > ( ::SireMol::SelectorMol::*residues_function_type)( int,::SireBase::PropertyMap const & ) const;
             residues_function_type residues_function_value( &::SireMol::SelectorMol::residues );
             
             SelectorMol_exposer.def( 
                 "residues"
                 , residues_function_value
-                , ( bp::arg("i") )
-                , bp::release_gil_policy()
+                , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::residues
         
-            typedef ::SireMol::SelectorM< SireMol::Residue > ( ::SireMol::SelectorMol::*residues_function_type)( ::SireBase::Slice const & ) const;
+            typedef ::SireMol::SelectorM< SireMol::Residue > ( ::SireMol::SelectorMol::*residues_function_type)( ::SireBase::Slice const &,::SireBase::PropertyMap const & ) const;
             residues_function_type residues_function_value( &::SireMol::SelectorMol::residues );
             
             SelectorMol_exposer.def( 
                 "residues"
                 , residues_function_value
-                , ( bp::arg("slice") )
-                , bp::release_gil_policy()
+                , ( bp::arg("slice"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::residues
         
-            typedef ::SireMol::SelectorM< SireMol::Residue > ( ::SireMol::SelectorMol::*residues_function_type)( ::QList< long long > const & ) const;
+            typedef ::SireMol::SelectorM< SireMol::Residue > ( ::SireMol::SelectorMol::*residues_function_type)( ::QList< long long > const &,::SireBase::PropertyMap const & ) const;
             residues_function_type residues_function_value( &::SireMol::SelectorMol::residues );
             
             SelectorMol_exposer.def( 
                 "residues"
                 , residues_function_value
-                , ( bp::arg("idxs") )
-                , bp::release_gil_policy()
+                , ( bp::arg("idxs"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::residues
         
-            typedef ::SireMol::SelectorM< SireMol::Residue > ( ::SireMol::SelectorMol::*residues_function_type)( ::QString const & ) const;
+            typedef ::SireMol::SelectorM< SireMol::Residue > ( ::SireMol::SelectorMol::*residues_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
             residues_function_type residues_function_value( &::SireMol::SelectorMol::residues );
             
             SelectorMol_exposer.def( 
                 "residues"
                 , residues_function_value
-                , ( bp::arg("name") )
-                , bp::release_gil_policy()
+                , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::residues
         
-            typedef ::SireMol::SelectorM< SireMol::Residue > ( ::SireMol::SelectorMol::*residues_function_type)( ::SireMol::ResID const & ) const;
+            typedef ::SireMol::SelectorM< SireMol::Residue > ( ::SireMol::SelectorMol::*residues_function_type)( ::SireMol::ResID const &,::SireBase::PropertyMap const & ) const;
             residues_function_type residues_function_value( &::SireMol::SelectorMol::residues );
             
             SelectorMol_exposer.def( 
                 "residues"
                 , residues_function_value
-                , ( bp::arg("resid") )
+                , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
+        
+        }
+        { //::SireMol::SelectorMol::saveFrame
+        
+            typedef void ( ::SireMol::SelectorMol::*saveFrame_function_type)( int ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::SelectorMol::saveFrame );
+            
+            SelectorMol_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorMol::saveFrame
+        
+            typedef void ( ::SireMol::SelectorMol::*saveFrame_function_type)(  ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::SelectorMol::saveFrame );
+            
+            SelectorMol_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorMol::saveFrame
+        
+            typedef void ( ::SireMol::SelectorMol::*saveFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::SelectorMol::saveFrame );
+            
+            SelectorMol_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorMol::saveFrame
+        
+            typedef void ( ::SireMol::SelectorMol::*saveFrame_function_type)( ::SireBase::PropertyMap const & ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::SelectorMol::saveFrame );
+            
+            SelectorMol_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("map") )
                 , bp::release_gil_policy()
                 , "" );
         
@@ -1039,42 +1133,52 @@ void register_SelectorMol_class(){
                 , "" );
         
         }
-        { //::SireMol::SelectorMol::segment
+        { //::SireMol::SelectorMol::search
         
-            typedef ::SireMol::Segment ( ::SireMol::SelectorMol::*segment_function_type)( int ) const;
-            segment_function_type segment_function_value( &::SireMol::SelectorMol::segment );
+            typedef ::SireMol::SelectResult ( ::SireMol::SelectorMol::*search_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
+            search_function_type search_function_value( &::SireMol::SelectorMol::search );
             
             SelectorMol_exposer.def( 
-                "segment"
-                , segment_function_value
-                , ( bp::arg("i") )
+                "search"
+                , search_function_value
+                , ( bp::arg("search_string"), bp::arg("map") )
                 , bp::release_gil_policy()
                 , "" );
         
         }
         { //::SireMol::SelectorMol::segment
         
-            typedef ::SireMol::Segment ( ::SireMol::SelectorMol::*segment_function_type)( ::QString const & ) const;
+            typedef ::SireMol::Segment ( ::SireMol::SelectorMol::*segment_function_type)( int,::SireBase::PropertyMap const & ) const;
             segment_function_type segment_function_value( &::SireMol::SelectorMol::segment );
             
             SelectorMol_exposer.def( 
                 "segment"
                 , segment_function_value
-                , ( bp::arg("name") )
-                , bp::release_gil_policy()
+                , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::segment
         
-            typedef ::SireMol::Segment ( ::SireMol::SelectorMol::*segment_function_type)( ::SireMol::SegID const & ) const;
+            typedef ::SireMol::Segment ( ::SireMol::SelectorMol::*segment_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
             segment_function_type segment_function_value( &::SireMol::SelectorMol::segment );
             
             SelectorMol_exposer.def( 
                 "segment"
                 , segment_function_value
-                , ( bp::arg("segid") )
-                , bp::release_gil_policy()
+                , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
+        
+        }
+        { //::SireMol::SelectorMol::segment
+        
+            typedef ::SireMol::Segment ( ::SireMol::SelectorMol::*segment_function_type)( ::SireMol::SegID const &,::SireBase::PropertyMap const & ) const;
+            segment_function_type segment_function_value( &::SireMol::SelectorMol::segment );
+            
+            SelectorMol_exposer.def( 
+                "segment"
+                , segment_function_value
+                , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
@@ -1092,66 +1196,61 @@ void register_SelectorMol_class(){
         }
         { //::SireMol::SelectorMol::segments
         
-            typedef ::SireMol::SelectorM< SireMol::Segment > ( ::SireMol::SelectorMol::*segments_function_type)( int ) const;
+            typedef ::SireMol::SelectorM< SireMol::Segment > ( ::SireMol::SelectorMol::*segments_function_type)( int,::SireBase::PropertyMap const & ) const;
             segments_function_type segments_function_value( &::SireMol::SelectorMol::segments );
             
             SelectorMol_exposer.def( 
                 "segments"
                 , segments_function_value
-                , ( bp::arg("i") )
-                , bp::release_gil_policy()
+                , ( bp::arg("i"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::segments
         
-            typedef ::SireMol::SelectorM< SireMol::Segment > ( ::SireMol::SelectorMol::*segments_function_type)( ::SireBase::Slice const & ) const;
+            typedef ::SireMol::SelectorM< SireMol::Segment > ( ::SireMol::SelectorMol::*segments_function_type)( ::SireBase::Slice const &,::SireBase::PropertyMap const & ) const;
             segments_function_type segments_function_value( &::SireMol::SelectorMol::segments );
             
             SelectorMol_exposer.def( 
                 "segments"
                 , segments_function_value
-                , ( bp::arg("slice") )
-                , bp::release_gil_policy()
+                , ( bp::arg("slice"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::segments
         
-            typedef ::SireMol::SelectorM< SireMol::Segment > ( ::SireMol::SelectorMol::*segments_function_type)( ::QList< long long > const & ) const;
+            typedef ::SireMol::SelectorM< SireMol::Segment > ( ::SireMol::SelectorMol::*segments_function_type)( ::QList< long long > const &,::SireBase::PropertyMap const & ) const;
             segments_function_type segments_function_value( &::SireMol::SelectorMol::segments );
             
             SelectorMol_exposer.def( 
                 "segments"
                 , segments_function_value
-                , ( bp::arg("idxs") )
-                , bp::release_gil_policy()
+                , ( bp::arg("idxs"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::segments
         
-            typedef ::SireMol::SelectorM< SireMol::Segment > ( ::SireMol::SelectorMol::*segments_function_type)( ::QString const & ) const;
+            typedef ::SireMol::SelectorM< SireMol::Segment > ( ::SireMol::SelectorMol::*segments_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
             segments_function_type segments_function_value( &::SireMol::SelectorMol::segments );
             
             SelectorMol_exposer.def( 
                 "segments"
                 , segments_function_value
-                , ( bp::arg("name") )
-                , bp::release_gil_policy()
+                , ( bp::arg("name"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
         { //::SireMol::SelectorMol::segments
         
-            typedef ::SireMol::SelectorM< SireMol::Segment > ( ::SireMol::SelectorMol::*segments_function_type)( ::SireMol::SegID const & ) const;
+            typedef ::SireMol::SelectorM< SireMol::Segment > ( ::SireMol::SelectorMol::*segments_function_type)( ::SireMol::SegID const &,::SireBase::PropertyMap const & ) const;
             segments_function_type segments_function_value( &::SireMol::SelectorMol::segments );
             
             SelectorMol_exposer.def( 
                 "segments"
                 , segments_function_value
-                , ( bp::arg("segid") )
-                , bp::release_gil_policy()
+                , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() )
                 , "" );
         
         }
@@ -1191,6 +1290,18 @@ void register_SelectorMol_class(){
                 , "" );
         
         }
+        { //::SireMol::SelectorMol::toMolecules
+        
+            typedef ::SireMol::Molecules ( ::SireMol::SelectorMol::*toMolecules_function_type)(  ) const;
+            toMolecules_function_type toMolecules_function_value( &::SireMol::SelectorMol::toMolecules );
+            
+            SelectorMol_exposer.def( 
+                "toMolecules"
+                , toMolecules_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::SelectorMol::toSelectResult
         
             typedef ::SireMol::SelectResult ( ::SireMol::SelectorMol::*toSelectResult_function_type)(  ) const;
@@ -1223,6 +1334,19 @@ void register_SelectorMol_class(){
             SelectorMol_exposer.def( 
                 "typeName"
                 , typeName_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::SelectorMol::update
+        
+            typedef void ( ::SireMol::SelectorMol::*update_function_type)( ::SireMol::Molecules const & ) ;
+            update_function_type update_function_value( &::SireMol::SelectorMol::update );
+            
+            SelectorMol_exposer.def( 
+                "update"
+                , update_function_value
+                , ( bp::arg("molecules") )
                 , bp::release_gil_policy()
                 , "" );
         

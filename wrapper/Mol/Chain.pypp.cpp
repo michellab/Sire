@@ -67,6 +67,13 @@ const QVariant& get_Metadata_SireMol_ChainVariantProperty_function2(const SireMo
                                    const QString &key, const QString &metakey){
                                         return atom.metadata< QVariant >(key, metakey); }
 
+const SireBase::PropertyPtr& get_Metadata_SireMol_ChainPropertyProperty_function1(const SireMol::Chain &atom,
+                                   const QString &metakey){ return atom.metadata< SireBase::PropertyPtr >(metakey); }
+
+const SireBase::PropertyPtr& get_Metadata_SireMol_ChainPropertyProperty_function2(const SireMol::Chain &atom,
+                                   const QString &key, const QString &metakey){
+                                        return atom.metadata< SireBase::PropertyPtr >(key, metakey); }
+
 SireMol::Chain __copy__(const SireMol::Chain &other){ return SireMol::Chain(other); }
 
 #include "Qt/qdatastream.hpp"
@@ -287,6 +294,18 @@ void register_Chain_class(){
                 , ( bp::arg("resid") )
                 , bp::release_gil_policy()
                 , "Return whether or not this chain contains some\nof the residues identified by the ID resid" );
+        
+        }
+        { //::SireMol::Chain::invert
+        
+            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Chain::*invert_function_type)(  ) const;
+            invert_function_type invert_function_value( &::SireMol::Chain::invert );
+            
+            Chain_exposer.def( 
+                "invert"
+                , invert_function_value
+                , bp::release_gil_policy()
+                , "Return a selector that has everything except this view" );
         
         }
         { //::SireMol::Chain::isEmpty
@@ -597,6 +616,9 @@ void register_Chain_class(){
         Chain_exposer.def( "_get_property_SireMol_ChainVariantProperty", &SireMol::Chain::property< QVariant >, bp::return_value_policy<bp::copy_const_reference>());
         Chain_exposer.def( "_get_metadata_SireMol_ChainVariantProperty", get_Metadata_SireMol_ChainVariantProperty_function1, bp::return_value_policy<bp::copy_const_reference>());
         Chain_exposer.def( "_get_metadata_SireMol_ChainVariantProperty", &get_Metadata_SireMol_ChainVariantProperty_function2, bp::return_value_policy<bp::copy_const_reference>());
+        Chain_exposer.def( "_get_property_SireMol_ChainPropertyProperty", &SireMol::Chain::property< SireBase::PropertyPtr >, bp::return_value_policy<bp::copy_const_reference>());
+        Chain_exposer.def( "_get_metadata_SireMol_ChainPropertyProperty", get_Metadata_SireMol_ChainPropertyProperty_function1, bp::return_value_policy<bp::copy_const_reference>());
+        Chain_exposer.def( "_get_metadata_SireMol_ChainPropertyProperty", &get_Metadata_SireMol_ChainPropertyProperty_function2, bp::return_value_policy<bp::copy_const_reference>());
         Chain_exposer.def( "__copy__", &__copy__);
         Chain_exposer.def( "__deepcopy__", &__copy__);
         Chain_exposer.def( "clone", &__copy__);

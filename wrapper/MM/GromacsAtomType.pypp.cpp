@@ -203,6 +203,19 @@ void register_GromacsAtomType_class(){
                 , "Return a string version of the particle type" );
         
         }
+        { //::SireMM::GromacsAtomType::setAtomType
+        
+            typedef void ( ::SireMM::GromacsAtomType::*setAtomType_function_type)( ::QString const & ) ;
+            setAtomType_function_type setAtomType_function_value( &::SireMM::GromacsAtomType::setAtomType );
+            
+            GromacsAtomType_exposer.def( 
+                "setAtomType"
+                , setAtomType_function_value
+                , ( bp::arg("atom_type") )
+                , bp::release_gil_policy()
+                , "Set the atom type to the passed value. This is useful if there are duplicate\natom types with different parameters, as is the case for molecules parameterised\nusing OpenFF, i.e. an atom of type h1 will, in general, be different to an\natom of type h1 in a different molecule.\n" );
+        
+        }
         { //::SireMM::GromacsAtomType::setElement
         
             typedef void ( ::SireMM::GromacsAtomType::*setElement_function_type)( ::SireMol::Element ) ;

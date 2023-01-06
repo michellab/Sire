@@ -27,6 +27,7 @@
 \*********************************************/
 
 #include <QMutex>
+#include <limits>
 
 #include "space.h"
 #include "cartesian.h"
@@ -86,6 +87,16 @@ Space::Space(const Space &other) : Property(other)
 Space::~Space()
 {}
 
+/** Return the maximum cutoff that can be used in this space
+    so that calculations obey the minimum image convention.
+    This is the largest possible double for non-periodic spaces,
+    and half the smallest box side for periodic spaces
+*/
+SireUnits::Dimension::Length Space::maximumCutoff() const
+{
+    return SireUnits::Dimension::Length(std::numeric_limits<double>::max());
+}
+
 /** Change the volume of this space by 'delta' */
 SpacePtr Space::changeVolume(SireUnits::Dimension::Volume delta) const
 {
@@ -100,7 +111,7 @@ Vector Space::getRandomPoint(const RanGenerator &generator) const
     return this->getRandomPoint(Vector(0,0,0), generator);
 }
 
-/** Return a random point within this space using the global 
+/** Return a random point within this space using the global
     random number generator and with the box centered at 'center' */
 Vector Space::getRandomPoint(const Vector &center) const
 {

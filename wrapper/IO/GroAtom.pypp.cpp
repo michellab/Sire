@@ -51,6 +51,8 @@ namespace bp = boost::python;
 
 #include "SireMol/select.h"
 
+#include "SireMol/trajectory.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -110,6 +112,18 @@ void register_GroAtom_class(){
                 , bondType_function_value
                 , bp::release_gil_policy()
                 , "Return the bond type of this atom. This is normally the same as the atom type" );
+        
+        }
+        { //::SireIO::GroAtom::chainName
+        
+            typedef ::SireMol::ChainName ( ::SireIO::GroAtom::*chainName_function_type)(  ) const;
+            chainName_function_type chainName_function_value( &::SireIO::GroAtom::chainName );
+            
+            GroAtom_exposer.def( 
+                "chainName"
+                , chainName_function_value
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireIO::GroAtom::charge
@@ -247,6 +261,19 @@ void register_GroAtom_class(){
                 , ( bp::arg("bondtype") )
                 , bp::release_gil_policy()
                 , "Set the bond type of this atom" );
+        
+        }
+        { //::SireIO::GroAtom::setChainName
+        
+            typedef void ( ::SireIO::GroAtom::*setChainName_function_type)( ::QString const & ) ;
+            setChainName_function_type setChainName_function_value( &::SireIO::GroAtom::setChainName );
+            
+            GroAtom_exposer.def( 
+                "setChainName"
+                , setChainName_function_value
+                , ( bp::arg("name") )
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireIO::GroAtom::setCharge

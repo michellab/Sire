@@ -68,6 +68,13 @@ const QVariant& get_Metadata_SireMol_CGVariantProperty_function2(const SireMol::
                                    const QString &key, const QString &metakey){
                                         return atom.metadata< QVariant >(key, metakey); }
 
+const SireBase::PropertyPtr& get_Metadata_SireMol_CGPropertyProperty_function1(const SireMol::CutGroup &atom,
+                                   const QString &metakey){ return atom.metadata< SireBase::PropertyPtr >(metakey); }
+
+const SireBase::PropertyPtr& get_Metadata_SireMol_CGPropertyProperty_function2(const SireMol::CutGroup &atom,
+                                   const QString &key, const QString &metakey){
+                                        return atom.metadata< SireBase::PropertyPtr >(key, metakey); }
+
 SireMol::CutGroup __copy__(const SireMol::CutGroup &other){ return SireMol::CutGroup(other); }
 
 #include "Qt/qdatastream.hpp"
@@ -249,6 +256,18 @@ void register_CutGroup_class(){
                 , ( bp::arg("atomid") )
                 , bp::release_gil_policy()
                 , "Return whether or not this CutGroup contains some of\nthe atoms that match the ID atomid" );
+        
+        }
+        { //::SireMol::CutGroup::invert
+        
+            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::CutGroup::*invert_function_type)(  ) const;
+            invert_function_type invert_function_value( &::SireMol::CutGroup::invert );
+            
+            CutGroup_exposer.def( 
+                "invert"
+                , invert_function_value
+                , bp::release_gil_policy()
+                , "Return a selector that has everything except this view" );
         
         }
         { //::SireMol::CutGroup::isEmpty
@@ -487,6 +506,9 @@ void register_CutGroup_class(){
         CutGroup_exposer.def( "_get_property_SireMol_CGVariantProperty", &SireMol::CutGroup::property< QVariant >, bp::return_value_policy<bp::copy_const_reference>());
         CutGroup_exposer.def( "_get_metadata_SireMol_CGVariantProperty", get_Metadata_SireMol_CGVariantProperty_function1, bp::return_value_policy<bp::copy_const_reference>());
         CutGroup_exposer.def( "_get_metadata_SireMol_CGVariantProperty", &get_Metadata_SireMol_CGVariantProperty_function2, bp::return_value_policy<bp::copy_const_reference>());
+        CutGroup_exposer.def( "_get_property_SireMol_CGPropertyProperty", &SireMol::CutGroup::property< SireBase::PropertyPtr >, bp::return_value_policy<bp::copy_const_reference>());
+        CutGroup_exposer.def( "_get_metadata_SireMol_CGPropertyProperty", get_Metadata_SireMol_CGPropertyProperty_function1, bp::return_value_policy<bp::copy_const_reference>());
+        CutGroup_exposer.def( "_get_metadata_SireMol_CGPropertyProperty", &get_Metadata_SireMol_CGPropertyProperty_function2, bp::return_value_policy<bp::copy_const_reference>());
         CutGroup_exposer.def( "__copy__", &__copy__);
         CutGroup_exposer.def( "__deepcopy__", &__copy__);
         CutGroup_exposer.def( "clone", &__copy__);

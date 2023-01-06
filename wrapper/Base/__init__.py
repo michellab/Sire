@@ -1,48 +1,5 @@
-"""
-.. currentmodule:: sire.legacy.Base
 
-Classes
-=======
-
-.. autosummary::
-    :toctree: generated/
-
-    Property
-    Properties
-    PropertyList
-    PropertyMap
-    PropertyName
-    Range
-    SimpleRange
-    TempDir
-    TimeProperty
-    TrimString
-    UpperCaseString
-    VariantProperty
-    Version
-
-Functions
-=========
-
-.. autosummary::
-    :toctree: generated/
-
-    findExe
-    getBinDir
-    getBundledLibDir
-    getInstallDir
-    getLibDir
-    getReleaseVersion
-    getRepositoryBranch
-    getRepositoryURL
-    getRepositoryVersion
-    getRepositoryVersionIsClean
-    getShareDir
-    getSireDir
-    increment
-    wrap
-"""
-
+from ..Units import _Units # Need to import so that we have GeneralUnit
 from ._Base import *
 
 _wrap_functions = []
@@ -66,6 +23,18 @@ def wrap(value):
 
     elif isinstance(value, str):
         return StringProperty(value)
+
+    elif isinstance(value, list):
+        # do the number lists
+        try:
+            return IntegerArrayProperty(value)
+        except Exception:
+            pass
+
+        try:
+            return DoubleArrayProperty(value)
+        except Exception:
+            pass
 
     for func in _wrap_functions:
         try:

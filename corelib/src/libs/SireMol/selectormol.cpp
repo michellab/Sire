@@ -403,9 +403,46 @@ QList<MolViewPtr> SelectorMol::toList() const
     return l;
 }
 
+Molecules SelectorMol::toMolecules() const
+{
+    return Molecules(mols);
+}
+
 SelectResult SelectorMol::toSelectResult() const
 {
     return SelectResult(this->mols);
+}
+
+bool SelectorMol::isSelector() const
+{
+    return true;
+}
+
+void SelectorMol::update(const Molecules &molecules)
+{
+    // better to create a map from MolNum to index here
+    QMultiHash<MolNum, int> molnum_to_idx;
+    molnum_to_idx.reserve(mols.count());
+
+    int i = 0;
+
+    for (const auto &mol : mols)
+    {
+        molnum_to_idx.insert(mol.number(), i);
+        i += 1;
+    }
+
+    for (const auto &mol : molecules)
+    {
+        const auto molnum = mol.data().number();
+
+        auto it = molnum_to_idx.constFind(molnum);
+
+        while (it != molnum_to_idx.constEnd() && it.key() == molnum)
+        {
+            mols[it.value()].update(mol.data());
+        }
+    }
 }
 
 EvaluatorM SelectorMol::evaluate() const
@@ -415,7 +452,15 @@ EvaluatorM SelectorMol::evaluate() const
 
 SelectResult SelectorMol::search(const QString &search_string) const
 {
-    return this->toSelectResult().search(search_string);
+    Select search(search_string);
+    return search(this->toSelectResult());
+}
+
+SelectResult SelectorMol::search(const QString &search_string,
+                                 const PropertyMap &map) const
+{
+    Select search(search_string);
+    return search(this->toSelectResult(), map);
 }
 
 int SelectorMol::count() const
@@ -439,14 +484,14 @@ bool SelectorMol::contains(const MolNum &molnum) const
     return false;
 }
 
-Molecule SelectorMol::molecule(int i) const
+Molecule SelectorMol::molecule(int i, const PropertyMap&) const
 {
     return this->mols.at(Index(i).map(this->mols.count()));
 }
 
-Molecule SelectorMol::molecule(const QString &name) const
+Molecule SelectorMol::molecule(const QString &name, const PropertyMap &map) const
 {
-    auto m = this->molecules(name);
+    auto m = this->molecules(name, map);
 
     if (m.count() > 1)
         throw SireMol::duplicate_molecule(QObject::tr(
@@ -458,9 +503,9 @@ Molecule SelectorMol::molecule(const QString &name) const
     return m[0];
 }
 
-Molecule SelectorMol::molecule(const MolIdx &molid) const
+Molecule SelectorMol::molecule(const MolIdx &molid, const PropertyMap &map) const
 {
-    auto m = this->molecules(molid);
+    auto m = this->molecules(molid, map);
 
     if (m.count() > 1)
         throw SireMol::duplicate_molecule(QObject::tr(
@@ -472,9 +517,9 @@ Molecule SelectorMol::molecule(const MolIdx &molid) const
     return m[0];
 }
 
-Molecule SelectorMol::molecule(const MolName &molid) const
+Molecule SelectorMol::molecule(const MolName &molid, const PropertyMap &map) const
 {
-    auto m = this->molecules(molid);
+    auto m = this->molecules(molid, map);
 
     if (m.count() > 1)
         throw SireMol::duplicate_molecule(QObject::tr(
@@ -486,9 +531,9 @@ Molecule SelectorMol::molecule(const MolName &molid) const
     return m[0];
 }
 
-Molecule SelectorMol::molecule(const MolNum &molid) const
+Molecule SelectorMol::molecule(const MolNum &molid, const PropertyMap &map) const
 {
-    auto m = this->molecules(molid);
+    auto m = this->molecules(molid, map);
 
     if (m.count() > 1)
         throw SireMol::duplicate_molecule(QObject::tr(
@@ -500,9 +545,9 @@ Molecule SelectorMol::molecule(const MolNum &molid) const
     return m[0];
 }
 
-Molecule SelectorMol::molecule(const MolID &molid) const
+Molecule SelectorMol::molecule(const MolID &molid, const PropertyMap &map) const
 {
-    auto m = this->molecules(molid);
+    auto m = this->molecules(molid, map);
 
     if (m.count() > 1)
         throw SireMol::duplicate_molecule(QObject::tr(
@@ -519,12 +564,13 @@ SelectorMol SelectorMol::molecules() const
     return *this;
 }
 
-SelectorMol SelectorMol::molecules(int i) const
+SelectorMol SelectorMol::molecules(int i, const PropertyMap &map) const
 {
-    return SelectorMol(this->molecule(i));
+    return SelectorMol(this->molecule(i, map));
 }
 
-SelectorMol SelectorMol::molecules(const SireBase::Slice &slice) const
+SelectorMol SelectorMol::molecules(const SireBase::Slice &slice,
+                                   const PropertyMap&) const
 {
     SelectorMol m;
 
@@ -536,7 +582,8 @@ SelectorMol SelectorMol::molecules(const SireBase::Slice &slice) const
     return m;
 }
 
-SelectorMol SelectorMol::molecules(const QList<qint64> &idxs) const
+SelectorMol SelectorMol::molecules(const QList<qint64> &idxs,
+                                   const PropertyMap&) const
 {
     SelectorMol m;
 
@@ -548,7 +595,8 @@ SelectorMol SelectorMol::molecules(const QList<qint64> &idxs) const
     return m;
 }
 
-SelectorMol SelectorMol::molecules(const QString &name) const
+SelectorMol SelectorMol::molecules(const QString &name,
+                                   const PropertyMap &map) const
 {
     try
     {
@@ -558,7 +606,7 @@ SelectorMol SelectorMol::molecules(const QString &name) const
     {
         try
         {
-            SelectorMol ret(this->search(name));
+            SelectorMol ret(this->search(name, map));
 
             if (ret.count() == 0)
                 throw SireMol::missing_molecule(QObject::tr(
@@ -580,12 +628,14 @@ SelectorMol SelectorMol::molecules(const QString &name) const
     return SelectorMol();
 }
 
-SelectorMol SelectorMol::molecules(const MolIdx &molid) const
+SelectorMol SelectorMol::molecules(const MolIdx &molid,
+                                   const PropertyMap &map) const
 {
-    return this->molecules(molid.value());
+    return this->molecules(molid.value(), map);
 }
 
-SelectorMol SelectorMol::molecules(const MolName &molname) const
+SelectorMol SelectorMol::molecules(const MolName &molname,
+                                   const PropertyMap&) const
 {
     SelectorMol m;
 
@@ -605,7 +655,8 @@ SelectorMol SelectorMol::molecules(const MolName &molname) const
     return m;
 }
 
-SelectorMol SelectorMol::molecules(const MolNum &molnum) const
+SelectorMol SelectorMol::molecules(const MolNum &molnum,
+                                   const PropertyMap&) const
 {
     SelectorMol m;
 
@@ -639,7 +690,8 @@ MoleculeGroup SelectorMol::toMoleculeGroup() const
     return grp;
 }
 
-SelectorMol SelectorMol::molecules(const MolID &molid) const
+SelectorMol SelectorMol::molecules(const MolID &molid,
+                                   const PropertyMap&) const
 {
     auto molnums = molid.map(this->toMoleculeGroup());
 
@@ -672,7 +724,7 @@ SelectorMol SelectorMol::molecules(const MolID &molid) const
     return ret;
 }
 
-Atom SelectorMol::atom(int i) const
+Atom SelectorMol::atom(int i, const PropertyMap&) const
 {
     i = Index(i).map(this->nAtoms());
 
@@ -689,9 +741,10 @@ Atom SelectorMol::atom(int i) const
     return Atom();
 }
 
-Atom SelectorMol::atom(const QString &name) const
+Atom SelectorMol::atom(const QString &name,
+                       const PropertyMap &map) const
 {
-    auto atms = this->atoms(name);
+    auto atms = this->atoms(name, map);
 
     if (atms.count() > 1)
         throw SireMol::duplicate_atom(QObject::tr(
@@ -703,9 +756,9 @@ Atom SelectorMol::atom(const QString &name) const
     return atms[0];
 }
 
-Atom SelectorMol::atom(const AtomID &atomid) const
+Atom SelectorMol::atom(const AtomID &atomid, const PropertyMap &map) const
 {
-    auto atms = this->atoms(atomid);
+    auto atms = this->atoms(atomid, map);
 
     if (atms.count() > 1)
         throw SireMol::duplicate_atom(QObject::tr(
@@ -717,7 +770,7 @@ Atom SelectorMol::atom(const AtomID &atomid) const
     return atms[0];
 }
 
-Residue SelectorMol::residue(int i) const
+Residue SelectorMol::residue(int i, const PropertyMap&) const
 {
     i = Index(i).map(this->nResidues());
 
@@ -734,9 +787,10 @@ Residue SelectorMol::residue(int i) const
     return Residue();
 }
 
-Residue SelectorMol::residue(const QString &name) const
+Residue SelectorMol::residue(const QString &name,
+                             const PropertyMap &map) const
 {
-    auto res = this->residues(name);
+    auto res = this->residues(name, map);
 
     if (res.count() > 1)
         throw SireMol::duplicate_residue(QObject::tr(
@@ -748,9 +802,10 @@ Residue SelectorMol::residue(const QString &name) const
     return res[0];
 }
 
-Residue SelectorMol::residue(const ResID &resid) const
+Residue SelectorMol::residue(const ResID &resid,
+                             const PropertyMap &map) const
 {
-    auto res = this->residues(resid);
+    auto res = this->residues(resid, map);
 
     if (res.count() > 1)
         throw SireMol::duplicate_residue(QObject::tr(
@@ -762,7 +817,7 @@ Residue SelectorMol::residue(const ResID &resid) const
     return res[0];
 }
 
-Chain SelectorMol::chain(int i) const
+Chain SelectorMol::chain(int i, const PropertyMap&) const
 {
     i = Index(i).map(this->nChains());
 
@@ -779,9 +834,10 @@ Chain SelectorMol::chain(int i) const
     return Chain();
 }
 
-Chain SelectorMol::chain(const QString &name) const
+Chain SelectorMol::chain(const QString &name,
+                         const PropertyMap &map) const
 {
-    auto cs = this->chains(name);
+    auto cs = this->chains(name, map);
 
     if (cs.count() > 1)
         throw SireMol::duplicate_chain(QObject::tr(
@@ -793,9 +849,10 @@ Chain SelectorMol::chain(const QString &name) const
     return cs[0];
 }
 
-Chain SelectorMol::chain(const ChainID &chainid) const
+Chain SelectorMol::chain(const ChainID &chainid,
+                         const PropertyMap &map) const
 {
-    auto cs = this->chains(chainid);
+    auto cs = this->chains(chainid, map);
 
     if (cs.count() > 1)
         throw SireMol::duplicate_chain(QObject::tr(
@@ -807,7 +864,7 @@ Chain SelectorMol::chain(const ChainID &chainid) const
     return cs[0];
 }
 
-Segment SelectorMol::segment(int i) const
+Segment SelectorMol::segment(int i, const PropertyMap&) const
 {
     i = Index(i).map(this->nSegments());
 
@@ -824,9 +881,10 @@ Segment SelectorMol::segment(int i) const
     return Segment();
 }
 
-Segment SelectorMol::segment(const QString &name) const
+Segment SelectorMol::segment(const QString &name,
+                             const PropertyMap &map) const
 {
-    auto segs = this->segments(name);
+    auto segs = this->segments(name, map);
 
     if (segs.count() > 1)
         throw SireMol::duplicate_segment(QObject::tr(
@@ -838,9 +896,10 @@ Segment SelectorMol::segment(const QString &name) const
     return segs[0];
 }
 
-Segment SelectorMol::segment(const SegID &segid) const
+Segment SelectorMol::segment(const SegID &segid,
+                             const PropertyMap &map) const
 {
-    auto segs = this->segments(segid);
+    auto segs = this->segments(segid, map);
 
     if (segs.count() > 1)
         throw SireMol::duplicate_segment(QObject::tr(
@@ -852,7 +911,7 @@ Segment SelectorMol::segment(const SegID &segid) const
     return segs[0];
 }
 
-CutGroup SelectorMol::cutGroup(int i) const
+CutGroup SelectorMol::cutGroup(int i, const PropertyMap&) const
 {
     i = Index(i).map(this->nCutGroups());
 
@@ -869,9 +928,10 @@ CutGroup SelectorMol::cutGroup(int i) const
     return CutGroup();
 }
 
-CutGroup SelectorMol::cutGroup(const QString &name) const
+CutGroup SelectorMol::cutGroup(const QString &name,
+                               const PropertyMap &map) const
 {
-    auto cgs = this->cutGroups(name);
+    auto cgs = this->cutGroups(name, map);
 
     if (cgs.count() > 1)
         throw SireMol::duplicate_cutgroup(QObject::tr(
@@ -883,9 +943,10 @@ CutGroup SelectorMol::cutGroup(const QString &name) const
     return cgs[0];
 }
 
-CutGroup SelectorMol::cutGroup(const CGID &cgid) const
+CutGroup SelectorMol::cutGroup(const CGID &cgid,
+                               const PropertyMap &map) const
 {
-    auto cgs = this->cutGroups(cgid);
+    auto cgs = this->cutGroups(cgid, map);
 
     if (cgs.count() > 1)
         throw SireMol::duplicate_cutgroup(QObject::tr(
@@ -902,27 +963,31 @@ SelectorM<Atom> SelectorMol::atoms() const
     return SelectorM<Atom>(*this);
 }
 
-SelectorM<Atom> SelectorMol::atoms(int i) const
+SelectorM<Atom> SelectorMol::atoms(int i, const PropertyMap &map) const
 {
-    return SelectorM<Atom>(this->atom(i));
+    return SelectorM<Atom>(this->atom(i, map));
 }
 
-SelectorM<Atom> SelectorMol::atoms(const SireBase::Slice &slice) const
+SelectorM<Atom> SelectorMol::atoms(const SireBase::Slice &slice,
+                                   const PropertyMap&) const
 {
     return SelectorM<Atom>(*this, slice);
 }
 
-SelectorM<Atom> SelectorMol::atoms(const QList<qint64> &idxs) const
+SelectorM<Atom> SelectorMol::atoms(const QList<qint64> &idxs,
+                                   const PropertyMap&) const
 {
     return SelectorM<Atom>(*this, idxs);
 }
 
-SelectorM<Atom> SelectorMol::atoms(const QString &name) const
+SelectorM<Atom> SelectorMol::atoms(const QString &name,
+                                   const PropertyMap &map) const
 {
-    return SelectorM<Atom>(*this, name);
+    return SelectorM<Atom>(*this, name, map);
 }
 
-SelectorM<Atom> SelectorMol::atoms(const AtomID &atomid) const
+SelectorM<Atom> SelectorMol::atoms(const AtomID &atomid,
+                                   const PropertyMap&) const
 {
     return SelectorM<Atom>(*this, atomid);
 }
@@ -932,27 +997,31 @@ SelectorM<Residue> SelectorMol::residues() const
     return SelectorM<Residue>(*this);
 }
 
-SelectorM<Residue> SelectorMol::residues(int i) const
+SelectorM<Residue> SelectorMol::residues(int i, const PropertyMap &map) const
 {
-    return SelectorM<Residue>(this->residue(i));
+    return SelectorM<Residue>(this->residue(i, map));
 }
 
-SelectorM<Residue> SelectorMol::residues(const SireBase::Slice &slice) const
+SelectorM<Residue> SelectorMol::residues(const SireBase::Slice &slice,
+                                         const PropertyMap&) const
 {
     return SelectorM<Residue>(*this, slice);
 }
 
-SelectorM<Residue> SelectorMol::residues(const QList<qint64> &idxs) const
+SelectorM<Residue> SelectorMol::residues(const QList<qint64> &idxs,
+                                         const PropertyMap&) const
 {
     return SelectorM<Residue>(*this, idxs);
 }
 
-SelectorM<Residue> SelectorMol::residues(const QString &name) const
+SelectorM<Residue> SelectorMol::residues(const QString &name,
+                                         const PropertyMap &map) const
 {
-    return SelectorM<Residue>(*this, name);
+    return SelectorM<Residue>(*this, name, map);
 }
 
-SelectorM<Residue> SelectorMol::residues(const ResID &resid) const
+SelectorM<Residue> SelectorMol::residues(const ResID &resid,
+                                         const PropertyMap&) const
 {
     return SelectorM<Residue>(*this, resid);
 }
@@ -962,27 +1031,32 @@ SelectorM<Chain> SelectorMol::chains() const
     return SelectorM<Chain>(*this);
 }
 
-SelectorM<Chain> SelectorMol::chains(int i) const
+SelectorM<Chain> SelectorMol::chains(int i,
+                                     const PropertyMap &map) const
 {
-    return SelectorM<Chain>(this->chain(i));
+    return SelectorM<Chain>(this->chain(i, map));
 }
 
-SelectorM<Chain> SelectorMol::chains(const SireBase::Slice &slice) const
+SelectorM<Chain> SelectorMol::chains(const SireBase::Slice &slice,
+                                     const PropertyMap&) const
 {
     return SelectorM<Chain>(*this, slice);
 }
 
-SelectorM<Chain> SelectorMol::chains(const QList<qint64> &idxs) const
+SelectorM<Chain> SelectorMol::chains(const QList<qint64> &idxs,
+                                     const PropertyMap&) const
 {
     return SelectorM<Chain>(*this, idxs);
 }
 
-SelectorM<Chain> SelectorMol::chains(const QString &name) const
+SelectorM<Chain> SelectorMol::chains(const QString &name,
+                                     const PropertyMap &map) const
 {
-    return SelectorM<Chain>(*this, name);
+    return SelectorM<Chain>(*this, name, map);
 }
 
-SelectorM<Chain> SelectorMol::chains(const ChainID &chainid) const
+SelectorM<Chain> SelectorMol::chains(const ChainID &chainid,
+                                     const PropertyMap&) const
 {
     return SelectorM<Chain>(*this, chainid);
 }
@@ -992,27 +1066,32 @@ SelectorM<Segment> SelectorMol::segments() const
     return SelectorM<Segment>(*this);
 }
 
-SelectorM<Segment> SelectorMol::segments(int i) const
+SelectorM<Segment> SelectorMol::segments(int i,
+                                         const PropertyMap &map) const
 {
-    return SelectorM<Segment>(this->segment(i));
+    return SelectorM<Segment>(this->segment(i, map));
 }
 
-SelectorM<Segment> SelectorMol::segments(const SireBase::Slice &slice) const
+SelectorM<Segment> SelectorMol::segments(const SireBase::Slice &slice,
+                                         const PropertyMap&) const
 {
     return SelectorM<Segment>(*this, slice);
 }
 
-SelectorM<Segment> SelectorMol::segments(const QList<qint64> &idxs) const
+SelectorM<Segment> SelectorMol::segments(const QList<qint64> &idxs,
+                                         const PropertyMap&) const
 {
     return SelectorM<Segment>(*this, idxs);
 }
 
-SelectorM<Segment> SelectorMol::segments(const QString &name) const
+SelectorM<Segment> SelectorMol::segments(const QString &name,
+                                         const PropertyMap &map) const
 {
-    return SelectorM<Segment>(*this, name);
+    return SelectorM<Segment>(*this, name, map);
 }
 
-SelectorM<Segment> SelectorMol::segments(const SegID &segid) const
+SelectorM<Segment> SelectorMol::segments(const SegID &segid,
+                                         const PropertyMap&) const
 {
     return SelectorM<Segment>(*this, segid);
 }
@@ -1022,27 +1101,32 @@ SelectorM<CutGroup> SelectorMol::cutGroups() const
     return SelectorM<CutGroup>(*this);
 }
 
-SelectorM<CutGroup> SelectorMol::cutGroups(int i) const
+SelectorM<CutGroup> SelectorMol::cutGroups(int i,
+                                           const PropertyMap &map) const
 {
-    return SelectorM<CutGroup>(this->cutGroup(i));
+    return SelectorM<CutGroup>(this->cutGroup(i, map));
 }
 
-SelectorM<CutGroup> SelectorMol::cutGroups(const SireBase::Slice &slice) const
+SelectorM<CutGroup> SelectorMol::cutGroups(const SireBase::Slice &slice,
+                                           const PropertyMap&) const
 {
     return SelectorM<CutGroup>(*this, slice);
 }
 
-SelectorM<CutGroup> SelectorMol::cutGroups(const QList<qint64> &idxs) const
+SelectorM<CutGroup> SelectorMol::cutGroups(const QList<qint64> &idxs,
+                                           const PropertyMap&) const
 {
     return SelectorM<CutGroup>(*this, idxs);
 }
 
-SelectorM<CutGroup> SelectorMol::cutGroups(const QString &name) const
+SelectorM<CutGroup> SelectorMol::cutGroups(const QString &name,
+                                           const PropertyMap &map) const
 {
-    return SelectorM<CutGroup>(*this, name);
+    return SelectorM<CutGroup>(*this, name, map);
 }
 
-SelectorM<CutGroup> SelectorMol::cutGroups(const CGID &cgid) const
+SelectorM<CutGroup> SelectorMol::cutGroups(const CGID &cgid,
+                                           const PropertyMap&) const
 {
     return SelectorM<CutGroup>(*this, cgid);
 }
@@ -1179,6 +1263,56 @@ int SelectorMol::nCutGroups() const
 int SelectorMol::nMolecules() const
 {
     return this->mols.count();
+}
+
+int SelectorMol::nFrames() const
+{
+    return this->nFrames(PropertyMap());
+}
+
+int SelectorMol::nFrames(const SireBase::PropertyMap &map) const
+{
+    return SireMol::detail::_nFrames(this->mols, map);
+}
+
+void SelectorMol::loadFrame(int frame)
+{
+    this->loadFrame(frame, PropertyMap());
+}
+
+void SelectorMol::saveFrame(int frame)
+{
+    this->saveFrame(frame, PropertyMap());
+}
+
+void SelectorMol::saveFrame()
+{
+    this->saveFrame(PropertyMap());
+}
+
+void SelectorMol::deleteFrame(int frame)
+{
+    this->deleteFrame(frame, PropertyMap());
+}
+
+void SelectorMol::loadFrame(int frame, const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_loadFrame(this->mols, frame, map);
+}
+
+void SelectorMol::saveFrame(int frame, const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_saveFrame(this->mols, frame, map);
+}
+
+void SelectorMol::saveFrame(const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_saveFrame(this->mols, map);
+}
+
+void SelectorMol::deleteFrame(int frame, const SireBase::PropertyMap &map)
+{
+    SireMol::detail::_deleteFrame(this->mols, frame, map);
 }
 
 bool SelectorMol::isEmpty() const

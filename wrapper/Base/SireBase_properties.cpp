@@ -8,6 +8,7 @@
 #include "SireError/getbacktrace.h"
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
+#include "generalunitproperty.h"
 #include "property.h"
 #include "propertylist.h"
 #include <QDebug>

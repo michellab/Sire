@@ -33,6 +33,7 @@
 
 #include "SireBase/qvariant_metatype.h"
 #include "SireBase/convert_property.hpp"
+#include "SireBase/slice.h"
 
 #include "moleculeinfodata.h"
 #include "molviewproperty.h"
@@ -66,6 +67,7 @@ typedef ChainProperty<QString>  ChainStringProperty;
 typedef ChainProperty<qint64>   ChainIntProperty;
 typedef ChainProperty<double>   ChainFloatProperty;
 typedef ChainProperty<QVariant> ChainVariantProperty;
+typedef ChainProperty<SireBase::PropertyPtr> ChainPropertyProperty;
 
 /** Small class used to provide a common base for all ChainProperty types */
 class SIREMOL_EXPORT ChainProp : public MolViewProperty
@@ -129,6 +131,13 @@ public:
     const T& operator[](const ChainIdx &chainidx) const;
     const T& at(const ChainIdx &chainidx) const;
     const T& get(const ChainIdx &chainidx) const;
+
+    const T& operator[](int i) const;
+    const T& at(int i) const;
+    const T& get(int i) const;
+
+    QList<T> operator[](const QList<qint64> &idxs) const;
+    QList<T> operator[](const SireBase::Slice &slice) const;
 
     QVariant getAsVariant(const ChainIdx &idx) const;
     SireBase::PropertyPtr getAsProperty(const ChainIdx &idx) const;
@@ -258,6 +267,55 @@ bool ChainProperty<T>::operator!=(const ChainProperty<T> &other) const
     return props != other.props;
 }
 
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+const T& ChainProperty<T>::operator[](int i) const
+{
+    return props.constData()[SireID::Index(i).map(props.count())];
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+const T& ChainProperty<T>::at(int i) const
+{
+    return this->operator[](i);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+const T& ChainProperty<T>::get(int i) const
+{
+    return this->operator[](i);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QList<T> ChainProperty<T>::operator[](const QList<qint64> &idxs) const
+{
+    QList<T> ret;
+
+    for (auto idx : idxs)
+    {
+        ret.append(this->operator[](idx));
+    }
+
+    return ret;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QList<T> ChainProperty<T>::operator[](const SireBase::Slice &slice) const
+{
+    QList<T> ret;
+
+    for (auto it = slice.begin(this->count()); not it.atEnd(); it.next())
+    {
+        ret.append(this->operator[](it.value()));
+    }
+
+    return ret;
+}
+
 /** Return the property for the chain at index 'chainidx'
 
     \throw SireError::invalid_index
@@ -296,9 +354,44 @@ template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 QString ChainProperty<T>::toString() const
 {
-    return QString("ChainProperty<%1>( %2 )")
-                .arg( QMetaType::typeName( qMetaTypeId<T>() ) )
-                .arg( Sire::toString(this->array()) );
+    if (this->isEmpty())
+    {
+        return QObject::tr("%1::empty").arg(this->what());
+    }
+    else
+    {
+        QStringList parts;
+
+        const auto n = this->count();
+
+        if (n <= 10)
+        {
+            for (int i=0; i<n; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                                        .arg(Sire::toString(this->operator[](i))));
+            }
+        }
+        else
+        {
+            for (int i=0; i<5; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                                        .arg(Sire::toString(this->operator[](i))));
+            }
+
+            parts.append("...");
+
+            for (int i=n-5; i<n; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                                        .arg(Sire::toString(this->operator[](i))));
+            }
+        }
+
+        return QObject::tr("%1( size=%2\n%3\n)")
+                        .arg(this->what()).arg(n).arg(parts.join("\n"));
+    }
 }
 
 /** Return whether or not it is possible to convert the variant
@@ -524,6 +617,7 @@ Q_DECLARE_METATYPE( SireMol::ChainStringProperty );
 Q_DECLARE_METATYPE( SireMol::ChainIntProperty );
 Q_DECLARE_METATYPE( SireMol::ChainFloatProperty );
 Q_DECLARE_METATYPE( SireMol::ChainVariantProperty );
+Q_DECLARE_METATYPE( SireMol::ChainPropertyProperty );
 
 SIRE_EXPOSE_CLASS( SireMol::ChainProp )
 
@@ -531,12 +625,14 @@ SIRE_EXPOSE_CHAIN_PROPERTY( QString, SireMol::ChainStringProperty )
 SIRE_EXPOSE_CHAIN_PROPERTY( qint64, SireMol::ChainIntProperty )
 SIRE_EXPOSE_CHAIN_PROPERTY( double, SireMol::ChainFloatProperty )
 SIRE_EXPOSE_CHAIN_PROPERTY( QVariant, SireMol::ChainVariantProperty )
+SIRE_EXPOSE_CHAIN_PROPERTY( SireBase::PropertyPtr, SireMol::ChainPropertyProperty )
 
 #ifdef SIRE_INSTANTIATE_TEMPLATES
 template class SireMol::ChainProperty<QString>;
 template class SireMol::ChainProperty<qint64>;
 template class SireMol::ChainProperty<double>;
 template class SireMol::ChainProperty<QVariant>;
+template class SireMol::ChainProperty<SireBase::PropertyPtr>;
 #endif
 
 SIRE_END_HEADER

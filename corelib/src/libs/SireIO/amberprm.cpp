@@ -61,6 +61,7 @@
 #include "SireMol/molidx.h"
 #include "SireMol/atomidx.h"
 #include "SireMol/select.h"
+#include "SireMol/trajectory.h"
 
 #include "SireMol/amberparameters.h"
 
@@ -1065,6 +1066,9 @@ void AmberPrm::parse(const PropertyMap &map)
     // as we are reading, look out for any FLAGs, so that we
     // can record their locations
     QString last_flag = QString();
+
+    // make sure that there are no comment lines
+    this->removeCommentLines("%COMMENT");
 
     const int nlines = lines().count();
     const QString *lines_array = lines().constData();
@@ -4423,17 +4427,9 @@ QStringList AmberPrm::formatSuffix() const
     return suffixes;
 }
 
-/** The AmberPrm parser is a lead parser - it is capable alone
-    of creating the System. */
-bool AmberPrm::isLead() const
+bool AmberPrm::isTopology() const
 {
     return true;
-}
-
-/** The AmberPrm cannot follow another lead parsers. */
-bool AmberPrm::canFollow() const
-{
-    return false;
 }
 
 /** Return a description of the file format */

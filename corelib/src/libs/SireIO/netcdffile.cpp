@@ -989,6 +989,18 @@ static void assert_no_netcdf_error(int errnum)
     #endif
 }
 
+/** The global mutex for all netcdf operations */
+QMutex NetCDFFile::mutex;
+
+/** Return the global mutex. NetCDF is not at all thread-safe, so you
+ *  should grab and hold the mutex for the *entirety* of your netcdf
+ *  file reading (from before you open the file until you close it)
+ */
+QMutex* NetCDFFile::globalMutex()
+{
+    return &(NetCDFFile::mutex);
+}
+
 /** Constructor */
 NetCDFFile::NetCDFFile() : hndl(-1)
 {}
@@ -996,7 +1008,6 @@ NetCDFFile::NetCDFFile() : hndl(-1)
 /** Function used to call and check the output of netcdf operations */
 int NetCDFFile::call_netcdf_function(std::function<int()> func, int ignored_error) const
 {
-    QMutexLocker lkr( const_cast<QMutex*>(&mutex) );
     int err = func();
 
     if (err != ignored_error)
@@ -1090,6 +1101,18 @@ NetCDFFile::NetCDFFile(const QString &filename, bool overwrite_file,
 
 /** Destructor - this will close the NetCDFFile */
 NetCDFFile::~NetCDFFile()
+{
+    #ifdef SIRE_USE_NETCDF
+        if (hndl != -1)
+        {
+            nc_close(hndl);
+            hndl = -1;
+        }
+    #endif
+}
+
+/** Close the file - you should always do this once you are finished with it */
+void NetCDFFile::close()
 {
     #ifdef SIRE_USE_NETCDF
         if (hndl != -1)

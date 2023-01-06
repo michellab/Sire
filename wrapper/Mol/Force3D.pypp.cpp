@@ -146,6 +146,19 @@ void register_Force3D_class(){
                 , "" );
         
         }
+        { //::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::what
+        
+            typedef SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > exported_class_t;
+            typedef char const * ( ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::*what_function_type)(  ) const;
+            what_function_type what_function_value( &::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::what );
+            
+            Force3D_exposer.def( 
+                "what"
+                , what_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::x
         
             typedef SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > exported_class_t;

@@ -42,6 +42,7 @@ namespace SireIO
 {
 class MoleculeParser;
 class NullParser;
+class BrokenParser;
 }
 
 SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::MoleculeParser&);
@@ -50,9 +51,17 @@ SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::MoleculeParser&);
 SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::NullParser&);
 SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::NullParser&);
 
+SIREIO_EXPORT QDataStream& operator<<(QDataStream&, const SireIO::BrokenParser&);
+SIREIO_EXPORT QDataStream& operator>>(QDataStream&, SireIO::BrokenParser&);
+
 namespace SireSystem
 {
 class System;
+}
+
+namespace SireMol
+{
+class Frame;
 }
 
 namespace SireIO
@@ -75,6 +84,7 @@ namespace detail
         ~ParserFactoryHelper();
 
         bool isValid() const;
+        bool isSupplementary() const;
 
         QString formatName() const;
         QString formatDescription() const;
@@ -147,6 +157,8 @@ public:
 
     const QVector<QString>& lines() const;
 
+    virtual QString errorReport() const;
+
     virtual MoleculeParserPtr construct(const QString &filename,
                                         const PropertyMap &map) const=0;
 
@@ -203,6 +215,9 @@ public:
                             const PropertyMap &map);
 
     static MoleculeParserPtr parse(const QString &filename);
+    static MoleculeParserPtr parse(const SireSystem::System &system,
+                                   const QString &format,
+                                   const PropertyMap &map);
 
     static QList<MoleculeParserPtr> parse(const QStringList &filenames);
 
@@ -232,8 +247,18 @@ public:
     static QStringList save(const SireSystem::System &system,
                             const QStringList &filenames);
 
-    virtual bool isLead() const;
-    virtual bool canFollow() const;
+    virtual bool isTopology() const;
+    virtual bool isFrame() const;
+    virtual bool isBroken() const;
+    virtual bool isSupplementary() const;
+
+    virtual QStringList warnings() const;
+    bool hasWarnings() const;
+
+    virtual int nAtoms() const=0;
+
+    virtual int nFrames() const;
+    virtual SireMol::Frame getFrame(int i) const;
 
     /** Return the unique name of this format. This should be a short
         string in capital letters that will identify the format within
@@ -242,6 +267,8 @@ public:
     virtual QString formatDescription() const=0;
 
     virtual QStringList formatSuffix() const;
+
+    QString filename() const;
 
     double score() const;
 
@@ -279,6 +306,8 @@ protected:
 
     void setScore(double score);
 
+    void removeCommentLines(const QString &comment_flag);
+
     virtual SireSystem::System startSystem(const PropertyMap &map) const;
     virtual SireSystem::System startSystem(const QVector<QString> &lines,
                                            const PropertyMap &map) const;
@@ -286,6 +315,8 @@ protected:
                              const PropertyMap &map) const;
 
     void setLines(const QVector<QString> &lines);
+
+    void setFilename(const QString &filename);
 
     static QVector<QString> readTextFile(QString filename);
 
@@ -295,8 +326,12 @@ protected:
 private:
     static MoleculeParserPtr _pvt_parse(const QString &filename, const PropertyMap &map);
 
-    void sortParsers(QList<MoleculeParserPtr>& parsers,
-                     QList<MoleculeParserPtr>& supplementary) const;
+    QHash<QString, QList<MoleculeParserPtr> > sortParsers(
+                                        const QList<MoleculeParserPtr> &parsers,
+                                        const PropertyMap &map) const;
+
+    /** The name of the file (if one was read) */
+    QString fname;
 
     /** All of the lines in the file */
     QVector<QString> lnes;
@@ -309,7 +344,7 @@ private:
     bool run_parallel;
 };
 
-/** This is a null parser, returned when the file cannot be parsed */
+/** This is a null parser */
 class SIREIO_EXPORT NullParser : public SireBase::ConcreteProperty<NullParser,MoleculeParser>
 {
 
@@ -331,6 +366,8 @@ public:
     QString formatName() const;
     QString formatDescription() const;
 
+    int nAtoms() const;
+
     MoleculeParserPtr construct(const QString &filename,
                                 const PropertyMap &map) const;
 
@@ -345,6 +382,60 @@ public:
                                 const PropertyMap &map = PropertyMap()) const;
     SireSystem::System toSystem(const QList<MoleculeParserPtr> &others,
                                 const PropertyMap &map = PropertyMap()) const;
+};
+
+/** This is a broken parser, returned when the file cannot be parsed */
+class SIREIO_EXPORT BrokenParser : public SireBase::ConcreteProperty<BrokenParser,MoleculeParser>
+{
+
+friend SIREIO_EXPORT QDataStream& ::operator<<(QDataStream&, const BrokenParser&);
+friend SIREIO_EXPORT QDataStream& ::operator>>(QDataStream&, BrokenParser&);
+
+public:
+    BrokenParser();
+    BrokenParser(const QString &filename, const PropertyMap &map);
+    BrokenParser(const QStringList &lines, const PropertyMap &map);
+    BrokenParser(const SireSystem::System &system, const PropertyMap &map);
+    BrokenParser(const QString &filename, const QString &suffix,
+                 const QStringList &errors);
+    BrokenParser(const QString &filename, const QStringList &errors);
+
+    BrokenParser(const BrokenParser &other);
+    ~BrokenParser();
+
+    BrokenParser& operator=(const BrokenParser&);
+
+    bool operator==(const BrokenParser&) const;
+    bool operator!=(const BrokenParser&) const;
+
+    static const char* typeName();
+
+    bool isBroken() const;
+    QString errorReport() const;
+
+    int nAtoms() const;
+
+    QString formatName() const;
+    QString formatDescription() const;
+
+    MoleculeParserPtr construct(const QString &filename,
+                                const PropertyMap &map) const;
+
+    MoleculeParserPtr construct(const QStringList &lines,
+                                const PropertyMap &map) const;
+
+    MoleculeParserPtr construct(const SireSystem::System &system,
+                                const PropertyMap &map) const;
+
+    SireSystem::System toSystem(const PropertyMap &map = PropertyMap()) const;
+    SireSystem::System toSystem(const MoleculeParser &other,
+                                const PropertyMap &map = PropertyMap()) const;
+    SireSystem::System toSystem(const QList<MoleculeParserPtr> &others,
+                                const PropertyMap &map = PropertyMap()) const;
+
+private:
+    QStringList error_report;
+    QString suffix;
 };
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS
@@ -402,8 +493,10 @@ SIRE_ALWAYS_INLINE bool MoleculeParser::usesParallel() const
 }
 
 Q_DECLARE_METATYPE( SireIO::NullParser )
+Q_DECLARE_METATYPE( SireIO::BrokenParser )
 
 SIRE_EXPOSE_CLASS( SireIO::MoleculeParser )
+SIRE_EXPOSE_CLASS( SireIO::BrokenParser )
 SIRE_EXPOSE_CLASS( SireIO::NullParser )
 
 SIRE_EXPOSE_PROPERTY( SireIO::MoleculeParserPtr, SireIO::MoleculeParser )

@@ -10,6 +10,8 @@ namespace bp = boost::python;
 
 #include "SireBase/errors.h"
 
+#include "SireBase/parallel.h"
+
 #include "SireMol/errors.h"
 
 #include "SireStream/datastream.h"
@@ -229,6 +231,45 @@ void register_ConnectivityBase_class(){
                 , ( bp::arg("bond"), bp::arg("key") )
                 , bp::release_gil_policy()
                 , "Assert that the specified bond has the specified property" );
+        
+        }
+        { //::SireMol::ConnectivityBase::assertHasProperty
+        
+            typedef void ( ::SireMol::ConnectivityBase::*assertHasProperty_function_type)( ::SireMol::AngleID const &,::SireBase::PropertyName const & ) const;
+            assertHasProperty_function_type assertHasProperty_function_value( &::SireMol::ConnectivityBase::assertHasProperty );
+            
+            ConnectivityBase_exposer.def( 
+                "assertHasProperty"
+                , assertHasProperty_function_value
+                , ( bp::arg("ang"), bp::arg("key") )
+                , bp::release_gil_policy()
+                , "Assert that the specified angle has the specified property" );
+        
+        }
+        { //::SireMol::ConnectivityBase::assertHasProperty
+        
+            typedef void ( ::SireMol::ConnectivityBase::*assertHasProperty_function_type)( ::SireMol::DihedralID const &,::SireBase::PropertyName const & ) const;
+            assertHasProperty_function_type assertHasProperty_function_value( &::SireMol::ConnectivityBase::assertHasProperty );
+            
+            ConnectivityBase_exposer.def( 
+                "assertHasProperty"
+                , assertHasProperty_function_value
+                , ( bp::arg("dih"), bp::arg("key") )
+                , bp::release_gil_policy()
+                , "Assert that the specified angle has the specified property" );
+        
+        }
+        { //::SireMol::ConnectivityBase::assertHasProperty
+        
+            typedef void ( ::SireMol::ConnectivityBase::*assertHasProperty_function_type)( ::SireMol::ImproperID const &,::SireBase::PropertyName const & ) const;
+            assertHasProperty_function_type assertHasProperty_function_value( &::SireMol::ConnectivityBase::assertHasProperty );
+            
+            ConnectivityBase_exposer.def( 
+                "assertHasProperty"
+                , assertHasProperty_function_value
+                , ( bp::arg("imp"), bp::arg("key") )
+                , bp::release_gil_policy()
+                , "Assert that the specified angle has the specified property" );
         
         }
         { //::SireMol::ConnectivityBase::connectionType
@@ -566,6 +607,45 @@ void register_ConnectivityBase_class(){
                 , "Return whether the specified bond has a property at key key" );
         
         }
+        { //::SireMol::ConnectivityBase::hasProperty
+        
+            typedef bool ( ::SireMol::ConnectivityBase::*hasProperty_function_type)( ::SireMol::AngleID const &,::SireBase::PropertyName const & ) const;
+            hasProperty_function_type hasProperty_function_value( &::SireMol::ConnectivityBase::hasProperty );
+            
+            ConnectivityBase_exposer.def( 
+                "hasProperty"
+                , hasProperty_function_value
+                , ( bp::arg("ang"), bp::arg("key") )
+                , bp::release_gil_policy()
+                , "Return whether the specified angle has a property at key key" );
+        
+        }
+        { //::SireMol::ConnectivityBase::hasProperty
+        
+            typedef bool ( ::SireMol::ConnectivityBase::*hasProperty_function_type)( ::SireMol::DihedralID const &,::SireBase::PropertyName const & ) const;
+            hasProperty_function_type hasProperty_function_value( &::SireMol::ConnectivityBase::hasProperty );
+            
+            ConnectivityBase_exposer.def( 
+                "hasProperty"
+                , hasProperty_function_value
+                , ( bp::arg("dih"), bp::arg("key") )
+                , bp::release_gil_policy()
+                , "Return whether the specified dihedral has a property at key key" );
+        
+        }
+        { //::SireMol::ConnectivityBase::hasProperty
+        
+            typedef bool ( ::SireMol::ConnectivityBase::*hasProperty_function_type)( ::SireMol::ImproperID const &,::SireBase::PropertyName const & ) const;
+            hasProperty_function_type hasProperty_function_value( &::SireMol::ConnectivityBase::hasProperty );
+            
+            ConnectivityBase_exposer.def( 
+                "hasProperty"
+                , hasProperty_function_value
+                , ( bp::arg("imp"), bp::arg("key") )
+                , bp::release_gil_policy()
+                , "Return whether the specified improper has a property at key key" );
+        
+        }
         { //::SireMol::ConnectivityBase::inRing
         
             typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type)( ::SireMol::AtomIdx ) const;
@@ -837,6 +917,45 @@ void register_ConnectivityBase_class(){
                 , "Return the properties of the passed bond" );
         
         }
+        { //::SireMol::ConnectivityBase::properties
+        
+            typedef ::SireBase::Properties ( ::SireMol::ConnectivityBase::*properties_function_type)( ::SireMol::AngleID const & ) const;
+            properties_function_type properties_function_value( &::SireMol::ConnectivityBase::properties );
+            
+            ConnectivityBase_exposer.def( 
+                "properties"
+                , properties_function_value
+                , ( bp::arg("ang") )
+                , bp::release_gil_policy()
+                , "Return the properties of the passed angle" );
+        
+        }
+        { //::SireMol::ConnectivityBase::properties
+        
+            typedef ::SireBase::Properties ( ::SireMol::ConnectivityBase::*properties_function_type)( ::SireMol::DihedralID const & ) const;
+            properties_function_type properties_function_value( &::SireMol::ConnectivityBase::properties );
+            
+            ConnectivityBase_exposer.def( 
+                "properties"
+                , properties_function_value
+                , ( bp::arg("dih") )
+                , bp::release_gil_policy()
+                , "Return the properties of the passed dihedral" );
+        
+        }
+        { //::SireMol::ConnectivityBase::properties
+        
+            typedef ::SireBase::Properties ( ::SireMol::ConnectivityBase::*properties_function_type)( ::SireMol::ImproperID const & ) const;
+            properties_function_type properties_function_value( &::SireMol::ConnectivityBase::properties );
+            
+            ConnectivityBase_exposer.def( 
+                "properties"
+                , properties_function_value
+                , ( bp::arg("imp") )
+                , bp::release_gil_policy()
+                , "Return the properties of the passed improper" );
+        
+        }
         { //::SireMol::ConnectivityBase::property
         
             typedef ::SireBase::Property const & ( ::SireMol::ConnectivityBase::*property_function_type)( ::SireMol::BondID const &,::SireBase::PropertyName const & ) const;
@@ -861,6 +980,84 @@ void register_ConnectivityBase_class(){
                 , ( bp::arg("bond"), bp::arg("key"), bp::arg("default_value") )
                 , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
                 , "Return the specified property of the specified bond, or\ndefault_value if such a property is not defined\n" );
+        
+        }
+        { //::SireMol::ConnectivityBase::property
+        
+            typedef ::SireBase::Property const & ( ::SireMol::ConnectivityBase::*property_function_type)( ::SireMol::AngleID const &,::SireBase::PropertyName const & ) const;
+            property_function_type property_function_value( &::SireMol::ConnectivityBase::property );
+            
+            ConnectivityBase_exposer.def( 
+                "property"
+                , property_function_value
+                , ( bp::arg("ang"), bp::arg("key") )
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
+                , "Return the specified property of the specified angle" );
+        
+        }
+        { //::SireMol::ConnectivityBase::property
+        
+            typedef ::SireBase::Property const & ( ::SireMol::ConnectivityBase::*property_function_type)( ::SireMol::AngleID const &,::SireBase::PropertyName const &,::SireBase::Property const & ) const;
+            property_function_type property_function_value( &::SireMol::ConnectivityBase::property );
+            
+            ConnectivityBase_exposer.def( 
+                "property"
+                , property_function_value
+                , ( bp::arg("ang"), bp::arg("key"), bp::arg("default_value") )
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
+                , "Return the specified property of the specified angle, or\ndefault_value if such a property is not defined\n" );
+        
+        }
+        { //::SireMol::ConnectivityBase::property
+        
+            typedef ::SireBase::Property const & ( ::SireMol::ConnectivityBase::*property_function_type)( ::SireMol::DihedralID const &,::SireBase::PropertyName const & ) const;
+            property_function_type property_function_value( &::SireMol::ConnectivityBase::property );
+            
+            ConnectivityBase_exposer.def( 
+                "property"
+                , property_function_value
+                , ( bp::arg("dih"), bp::arg("key") )
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
+                , "Return the specified property of the specified dihedral" );
+        
+        }
+        { //::SireMol::ConnectivityBase::property
+        
+            typedef ::SireBase::Property const & ( ::SireMol::ConnectivityBase::*property_function_type)( ::SireMol::DihedralID const &,::SireBase::PropertyName const &,::SireBase::Property const & ) const;
+            property_function_type property_function_value( &::SireMol::ConnectivityBase::property );
+            
+            ConnectivityBase_exposer.def( 
+                "property"
+                , property_function_value
+                , ( bp::arg("dih"), bp::arg("key"), bp::arg("default_value") )
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
+                , "Return the specified property of the specified dihedral, or\ndefault_value if such a property is not defined\n" );
+        
+        }
+        { //::SireMol::ConnectivityBase::property
+        
+            typedef ::SireBase::Property const & ( ::SireMol::ConnectivityBase::*property_function_type)( ::SireMol::ImproperID const &,::SireBase::PropertyName const & ) const;
+            property_function_type property_function_value( &::SireMol::ConnectivityBase::property );
+            
+            ConnectivityBase_exposer.def( 
+                "property"
+                , property_function_value
+                , ( bp::arg("imp"), bp::arg("key") )
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
+                , "Return the specified property of the specified improper" );
+        
+        }
+        { //::SireMol::ConnectivityBase::property
+        
+            typedef ::SireBase::Property const & ( ::SireMol::ConnectivityBase::*property_function_type)( ::SireMol::ImproperID const &,::SireBase::PropertyName const &,::SireBase::Property const & ) const;
+            property_function_type property_function_value( &::SireMol::ConnectivityBase::property );
+            
+            ConnectivityBase_exposer.def( 
+                "property"
+                , property_function_value
+                , ( bp::arg("imp"), bp::arg("key"), bp::arg("default_value") )
+                , bp::return_value_policy<bp::clone_const_reference, bp::release_gil_policy>()
+                , "Return the specified property of the specified improper, or\ndefault_value if such a property is not defined\n" );
         
         }
         { //::SireMol::ConnectivityBase::propertyKeys
@@ -888,6 +1085,45 @@ void register_ConnectivityBase_class(){
                 , "Return the property keys for the specified bond" );
         
         }
+        { //::SireMol::ConnectivityBase::propertyKeys
+        
+            typedef ::QStringList ( ::SireMol::ConnectivityBase::*propertyKeys_function_type)( ::SireMol::AngleID const & ) const;
+            propertyKeys_function_type propertyKeys_function_value( &::SireMol::ConnectivityBase::propertyKeys );
+            
+            ConnectivityBase_exposer.def( 
+                "propertyKeys"
+                , propertyKeys_function_value
+                , ( bp::arg("ang") )
+                , bp::release_gil_policy()
+                , "Return the property keys for the specified angle" );
+        
+        }
+        { //::SireMol::ConnectivityBase::propertyKeys
+        
+            typedef ::QStringList ( ::SireMol::ConnectivityBase::*propertyKeys_function_type)( ::SireMol::DihedralID const & ) const;
+            propertyKeys_function_type propertyKeys_function_value( &::SireMol::ConnectivityBase::propertyKeys );
+            
+            ConnectivityBase_exposer.def( 
+                "propertyKeys"
+                , propertyKeys_function_value
+                , ( bp::arg("dih") )
+                , bp::release_gil_policy()
+                , "Return the property keys for the specified dihedral" );
+        
+        }
+        { //::SireMol::ConnectivityBase::propertyKeys
+        
+            typedef ::QStringList ( ::SireMol::ConnectivityBase::*propertyKeys_function_type)( ::SireMol::ImproperID const & ) const;
+            propertyKeys_function_type propertyKeys_function_value( &::SireMol::ConnectivityBase::propertyKeys );
+            
+            ConnectivityBase_exposer.def( 
+                "propertyKeys"
+                , propertyKeys_function_value
+                , ( bp::arg("imp") )
+                , bp::release_gil_policy()
+                , "Return the property keys for the specified improper" );
+        
+        }
         { //::SireMol::ConnectivityBase::propertyType
         
             typedef char const * ( ::SireMol::ConnectivityBase::*propertyType_function_type)( ::SireMol::BondID const &,::SireBase::PropertyName const & ) const;
@@ -899,6 +1135,45 @@ void register_ConnectivityBase_class(){
                 , ( bp::arg("bond"), bp::arg("key") )
                 , bp::release_gil_policy()
                 , "Return the type of the property for the specified bond at key key" );
+        
+        }
+        { //::SireMol::ConnectivityBase::propertyType
+        
+            typedef char const * ( ::SireMol::ConnectivityBase::*propertyType_function_type)( ::SireMol::AngleID const &,::SireBase::PropertyName const & ) const;
+            propertyType_function_type propertyType_function_value( &::SireMol::ConnectivityBase::propertyType );
+            
+            ConnectivityBase_exposer.def( 
+                "propertyType"
+                , propertyType_function_value
+                , ( bp::arg("ang"), bp::arg("key") )
+                , bp::release_gil_policy()
+                , "Return the type of the property for the specified angle at key key" );
+        
+        }
+        { //::SireMol::ConnectivityBase::propertyType
+        
+            typedef char const * ( ::SireMol::ConnectivityBase::*propertyType_function_type)( ::SireMol::DihedralID const &,::SireBase::PropertyName const & ) const;
+            propertyType_function_type propertyType_function_value( &::SireMol::ConnectivityBase::propertyType );
+            
+            ConnectivityBase_exposer.def( 
+                "propertyType"
+                , propertyType_function_value
+                , ( bp::arg("dih"), bp::arg("key") )
+                , bp::release_gil_policy()
+                , "Return the type of the property for the specified dihedral at key key" );
+        
+        }
+        { //::SireMol::ConnectivityBase::propertyType
+        
+            typedef char const * ( ::SireMol::ConnectivityBase::*propertyType_function_type)( ::SireMol::ImproperID const &,::SireBase::PropertyName const & ) const;
+            propertyType_function_type propertyType_function_value( &::SireMol::ConnectivityBase::propertyType );
+            
+            ConnectivityBase_exposer.def( 
+                "propertyType"
+                , propertyType_function_value
+                , ( bp::arg("imp"), bp::arg("key") )
+                , bp::release_gil_policy()
+                , "Return the type of the property for the specified improper at key key" );
         
         }
         { //::SireMol::ConnectivityBase::split

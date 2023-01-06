@@ -126,7 +126,7 @@ So far we have been accessing the molecular containers by index, as if
 they were Python lists. We can also treat the molecular containers
 like Python dictionaries, and get atoms by their name.
 
-For example, to get the atoms called "C" we would use
+For example, to get the atoms called ``C`` we would use
 
 >>> print(mol["C"])
 Selector<SireMol::Atom>( size=1494
@@ -143,7 +143,7 @@ Selector<SireMol::Atom>( size=1494
 1493:  Atom( C:11654 [  32.09,   -0.82,   34.12] )
 )
 
-Note that there are multiple atoms in this molecule called "C", hence
+Note that there are multiple atoms in this molecule called ``C``, hence
 several are returned. This would raise an exception if you called
 the shorthand :func:`~sire.mol.Atom.atom` function with this name,
 
@@ -158,7 +158,7 @@ AtomName('C') (number of matches is 1494).
 (call Sire.Error.get_last_error_details() for more info)"
 
 A ``KeyError`` exception has been raised because there are multiple
-atoms in this protein that are called "C" and Sire does not know which
+atoms in this protein that are called ``C`` and Sire does not know which
 one you want.
 
 In this case, you would have to use the shorthand
@@ -192,13 +192,13 @@ and so also has its own ``.atom()``, ``.atoms()`` and indexing functions, e.g.
 >>> print(mol["C"][0])
 Atom( C:3     [ -56.06,    9.95,   42.55] )
 
-gives the atom at the index 0 in the container of atoms that are called "C",
+gives the atom at the index 0 in the container of atoms that are called ``C``,
 and
 
->>> print(mol("C")[-1])
+>>> print(mol["C"][-1])
 Atom( C:11654 [  32.09,   -0.82,   34.12] )
 
-gives the last atom in the container of atoms that are called "C".
+gives the last atom in the container of atoms that are called ``C``.
 
 Asking for an atom that doesn't exist will result in a ``KeyError``
 exception being raised.
@@ -281,18 +281,17 @@ Selector<SireMol::Atom>( size=4
 or ranges of atom numbers
 
 >>> print(mol["atomnum 1:5"])
-Selector<SireMol::Atom>( size=5
+Selector<SireMol::Atom>( size=4
 0:  Atom( N:1     [ -54.07,   11.27,   41.93] )
 1:  Atom( CA:2    [ -55.43,   11.35,   42.54] )
 2:  Atom( C:3     [ -56.06,    9.95,   42.55] )
 3:  Atom( O:4     [ -57.04,    9.73,   41.82] )
-4:  Atom( CB:5    [ -56.32,   12.33,   41.76] )
 )
 
 or ranges with steps, e.g.
 
 >>> print(mol["atomnum 1:91:10"])
-Selector<SireMol::Atom>( size=10
+Selector<SireMol::Atom>( size=9
 0:  Atom( N:1     [ -54.07,   11.27,   41.93] )
 1:  Atom( C:11    [ -56.14,    7.05,   42.06] )
 2:  Atom( CG:21   [ -54.57,    8.40,   38.40] )
@@ -302,12 +301,11 @@ Selector<SireMol::Atom>( size=10
 6:  Atom( CB:61   [ -52.91,   17.54,   38.36] )
 7:  Atom( C:71    [ -56.03,   16.00,   33.41] )
 8:  Atom( CB:81   [ -52.48,   16.28,   32.24] )
-9:  Atom( OG:91   [ -55.67,   10.80,   30.06] )
 )
 
 .. note::
 
-    Search number ranges are inclusive of both ends. Also note
+    Search number ranges are half-open, like Python ranges. Also note
     that the results appear in the order the atoms match from their
     molecular container, not the order of the numbers (range) in the search
     string. So ``mol["atomnum 10:1:-1"]`` would not reverse the atoms.
@@ -315,7 +313,7 @@ Selector<SireMol::Atom>( size=10
 
 You can even mix combinations of multiple atom numbers and ranges!
 
->>> print(mol["atomnum 1:3, 7:10, 20, 30"])
+>>> print(mol["atomnum 1:4, 7:11, 20, 30"])
 Selector<SireMol::Atom>( size=9
 0:  Atom( N:1     [ -54.07,   11.27,   41.93] )
 1:  Atom( CA:2    [ -55.43,   11.35,   42.54] )
@@ -439,7 +437,7 @@ Searching by element
 --------------------
 
 The search strings are very powerful, and are described in more detail in a
-:doc:`later chapter <search strings>`. One cool feature is that you can
+:doc:`later chapter <10_searching>`. One cool feature is that you can
 search for atoms by their element.
 
 >>> print(mol["element C"])

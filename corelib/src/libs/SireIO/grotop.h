@@ -33,6 +33,7 @@
 
 #include "SireMol/atomname.h"
 #include "SireMol/resname.h"
+#include "SireMol/chainname.h"
 #include "SireMol/bondid.h"
 #include "SireMol/angleid.h"
 #include "SireMol/dihedralid.h"
@@ -107,6 +108,8 @@ public:
     SireMol::ResName residueName() const;
     SireMol::ResNum residueNumber() const;
 
+    SireMol::ChainName chainName() const;
+
     qint64 chargeGroup() const;
 
     QString atomType() const;
@@ -120,6 +123,8 @@ public:
 
     void setResidueName(const QString &name);
     void setResidueNumber(qint64 number);
+
+    void setChainName(const QString &name);
 
     void setChargeGroup(qint64 grp);
 
@@ -135,6 +140,9 @@ private:
 
     /** Name of the residue */
     QString resname;
+
+    /** Name of the chain */
+    QString chainname;
 
     /** Atom type */
     QString atmtyp;
@@ -372,8 +380,7 @@ public:
 
     const char* what() const;
 
-    bool isLead() const;
-    bool canFollow() const;
+    bool isTopology() const;
 
     QStringList includePath(bool absolute_paths=false) const;
     QStringList includedFiles(bool absolute_paths=false) const;
@@ -426,6 +433,8 @@ public:
 
     GroMolType moleculeType(const QString &name) const;
     QVector<GroMolType> moleculeTypes() const;
+
+    int nAtoms() const;
 
     GroSystem groSystem() const;
 

@@ -1,11 +1,13 @@
 
 import sire as sr
 
+
 def _assert_array_equal( array0, array1 ):
     assert( len(array0) == len(array1) )
 
     for i in range(0, len(array0)):
         assert( array0[i] == array1[i] )
+
 
 def test_wrap(verbose=False):
     from sire.base import wrap
@@ -43,7 +45,7 @@ def test_wrap(verbose=False):
 
     p = water.property("mix")
 
-    assert sr.cas.Expression(x) == p[0].value() 
+    assert sr.cas.Expression(x) == p[0].value()
     assert f == p[1].value()
     assert p[2].value() == 5.3
     assert p[3].value() == "hello"
@@ -51,6 +53,7 @@ def test_wrap(verbose=False):
     assert p[5][0].value() == f
     assert p[5][1].value() == "cat"
     assert p[5][2] == sr.vol.PeriodicBox()
+
 
 if __name__ == "__main__":
     test_wrap(True)

@@ -3,7 +3,7 @@ Indexing Bonds
 ==============
 
 Bonds represent the chemical bonds between atoms in a molecule. A
-:class:`~sire.mol.Bond` is a molecular container that contains the
+:class:`~sire.mm.Bond` is a molecular container that contains the
 two atoms that make up the bond.
 
 For example, let's look at the ``aladip`` system again.
@@ -32,7 +32,7 @@ SelectorBond( size=21
 20: Bond( CH3:19 => HH31:20 )
 )
 
-The result (a :class:`~sire.mol.SelectorBond`) is a molecular container
+The result (a :class:`~sire.mm.SelectorBond`) is a molecular container
 for bonds. Like all molecular containers, it can be indexed,
 
 >>> print(mol.bonds()[0])
@@ -60,7 +60,7 @@ SelectorBond( size=5
 4: Bond( CA:9 => HA:10 )
 )
 
-The :class:`~sire.mol.Bond` object is also a molecular container, so can
+The :class:`~sire.mm.Bond` object is also a molecular container, so can
 be indexed, searched and sliced just like any other container.
 
 >>> bond = mol.bonds()[0]
@@ -111,6 +111,19 @@ SelectorBond( size=10
 7: Bond( CH3:19 => HH31:20 )
 8: Bond( CH3:19 => HH32:21 )
 9: Bond( CH3:19 => HH33:22 )
+)
+
+>>> print(mol.bonds("element C", "not element H"))
+SelectorBond( size=9
+0: Bond( CH3:2 => C:5 )
+1: Bond( C:5 => O:6 )
+2: Bond( C:5 => N:7 )
+3: Bond( N:7 => CA:9 )
+4: Bond( CA:9 => CB:11 )
+5: Bond( CA:9 => C:15 )
+6: Bond( C:15 => O:16 )
+7: Bond( C:15 => N:17 )
+8: Bond( N:17 => CH3:19 )
 )
 
 or using the atom identifying types
@@ -164,6 +177,25 @@ SelectorBond( size=19
 )
 
 gets all of the bonds that involve carbon.
+
+Note that you can also use ``"*"`` to match anything, so
+
+>>> print(mol.bonds("element C", "*"))
+SelectorBond( size=19
+0: Bond( HH31:1 => CH3:2 )
+1: Bond( CH3:2 => HH32:3 )
+2: Bond( CH3:2 => HH33:4 )
+3: Bond( CH3:2 => C:5 )
+4: Bond( C:5 => O:6 )
+...
+14: Bond( C:15 => N:17 )
+15: Bond( N:17 => CH3:19 )
+16: Bond( CH3:19 => HH31:20 )
+17: Bond( CH3:19 => HH32:21 )
+18: Bond( CH3:19 => HH33:22 )
+)
+
+gives the same result.
 
 Accessing bonds by residue
 --------------------------

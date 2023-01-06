@@ -102,31 +102,6 @@ void register_Evaluator_class(){
                 , "Return the axis-aligned box that just contains all of the\natoms in this view\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\n" );
         
         }
-        { //::SireMol::Evaluator::alignmentAxes
-        
-            typedef ::SireMaths::AxisSet ( ::SireMol::Evaluator::*alignmentAxes_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) const;
-            alignmentAxes_function_type alignmentAxes_function_value( &::SireMol::Evaluator::alignmentAxes );
-            
-            Evaluator_exposer.def( 
-                "alignmentAxes"
-                , alignmentAxes_function_value
-                , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
-                , "" );
-        
-        }
-        { //::SireMol::Evaluator::alignmentAxes
-        
-            typedef ::SireMaths::AxisSet ( ::SireMol::Evaluator::*alignmentAxes_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) const;
-            alignmentAxes_function_type alignmentAxes_function_value( &::SireMol::Evaluator::alignmentAxes );
-            
-            Evaluator_exposer.def( 
-                "alignmentAxes"
-                , alignmentAxes_function_value
-                , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
-                , bp::release_gil_policy()
-                , "" );
-        
-        }
         { //::SireMol::Evaluator::boundingSphere
         
             typedef ::SireMaths::Sphere ( ::SireMol::Evaluator::*boundingSphere_function_type)( ::SireBase::PropertyMap const & ) const;
@@ -769,30 +744,6 @@ void register_Evaluator_class(){
                 , "" );
         
         }
-        { //::SireMol::Evaluator::principalAxes
-        
-            typedef ::SireMaths::AxisSet ( ::SireMol::Evaluator::*principalAxes_function_type)( ::SireBase::PropertyMap const & ) const;
-            principalAxes_function_type principalAxes_function_value( &::SireMol::Evaluator::principalAxes );
-            
-            Evaluator_exposer.def( 
-                "principalAxes"
-                , principalAxes_function_value
-                , ( bp::arg("map")=SireBase::PropertyMap() )
-                , "Return the principal axes of this view - this uses\nthe coordinates, and mass or element properties\nto find the moment of inertia tensor for this view, and\nthen diagonalises that to obtain the principal axes. These\naxes are constructed to follow the right-hand-rule.\n" );
-        
-        }
-        { //::SireMol::Evaluator::principalAxes
-        
-            typedef ::SireMaths::AxisSet ( ::SireMol::Evaluator::*principalAxes_function_type)( ::SireMaths::Vector &,::SireBase::PropertyMap const & ) const;
-            principalAxes_function_type principalAxes_function_value( &::SireMol::Evaluator::principalAxes );
-            
-            Evaluator_exposer.def( 
-                "principalAxes"
-                , principalAxes_function_value
-                , ( bp::arg("principal_moments"), bp::arg("map")=SireBase::PropertyMap() )
-                , "Return the principal axes of this view - this uses\nthe coordinates, and mass or element properties\nto find the moment of inertia tensor for this view, and\nthen diagonalises that to obtain the principal axes. These\naxes are constructed to follow the right-hand-rule.\nThis returns the principal moments of inertia in\nprincipal_moments" );
-        
-        }
         { //::SireMol::Evaluator::propertyKeys
         
             typedef ::QStringList ( ::SireMol::Evaluator::*propertyKeys_function_type)(  ) const;
@@ -803,6 +754,30 @@ void register_Evaluator_class(){
                 , propertyKeys_function_value
                 , bp::release_gil_policy()
                 , "" );
+        
+        }
+        { //::SireMol::Evaluator::radius
+        
+            typedef ::SireUnits::Dimension::Length ( ::SireMol::Evaluator::*radius_function_type)( ::SireBase::PropertyMap const & ) const;
+            radius_function_type radius_function_value( &::SireMol::Evaluator::radius );
+            
+            Evaluator_exposer.def( 
+                "radius"
+                , radius_function_value
+                , ( bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the radius of the sphere that encloses all of the atoms\n  in this view, assuming it is centered on the center of geometry" );
+        
+        }
+        { //::SireMol::Evaluator::radius
+        
+            typedef ::SireUnits::Dimension::Length ( ::SireMol::Evaluator::*radius_function_type)( ::SireMaths::Vector const &,::SireBase::PropertyMap const & ) const;
+            radius_function_type radius_function_value( &::SireMol::Evaluator::radius );
+            
+            Evaluator_exposer.def( 
+                "radius"
+                , radius_function_value
+                , ( bp::arg("center"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the radius of the sphere that encloses all of the atoms\n  assuming that it is centered at center" );
         
         }
         { //::SireMol::Evaluator::rmsd

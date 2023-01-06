@@ -15,6 +15,46 @@ namespace bp = boost::python;
 
 #include "approx_equal.h"
 
+#include "approx_equal.h"
+
+#include <QDebug>
+
+#include <QReadWriteLock>
+
+#include "approx_equal.h"
+
+#include "approx_equal.h"
+
+#include <QDebug>
+
+#include <QReadWriteLock>
+
+#include "approx_equal.h"
+
+#include "approx_equal.h"
+
+#include <QDebug>
+
+#include <QReadWriteLock>
+
+#include "approx_equal.h"
+
+#include "approx_equal.h"
+
+#include <QDebug>
+
+#include <QReadWriteLock>
+
+#include "approx_equal.h"
+
+#include "approx_equal.h"
+
+#include <QDebug>
+
+#include <QReadWriteLock>
+
+#include "approx_equal.h"
+
 #include "SireMol/core.h"
 
 #include "SireSearch/parser.h"
@@ -141,6 +181,71 @@ void register_free_functions(){
         bp::def( 
             "approx_equal"
             , approx_equal_function_value
+            , ( bp::arg("val0"), bp::arg("val1") )
+            , "" );
+    
+    }
+
+    { //::SireSearch::approx_greater
+    
+        typedef bool ( *approx_greater_function_type )( double,double );
+        approx_greater_function_type approx_greater_function_value( &::SireSearch::approx_greater );
+        
+        bp::def( 
+            "approx_greater"
+            , approx_greater_function_value
+            , ( bp::arg("val0"), bp::arg("val1") )
+            , "" );
+    
+    }
+
+    { //::SireSearch::approx_greater_equal
+    
+        typedef bool ( *approx_greater_equal_function_type )( double,double );
+        approx_greater_equal_function_type approx_greater_equal_function_value( &::SireSearch::approx_greater_equal );
+        
+        bp::def( 
+            "approx_greater_equal"
+            , approx_greater_equal_function_value
+            , ( bp::arg("val0"), bp::arg("val1") )
+            , "" );
+    
+    }
+
+    { //::SireSearch::approx_less
+    
+        typedef bool ( *approx_less_function_type )( double,double );
+        approx_less_function_type approx_less_function_value( &::SireSearch::approx_less );
+        
+        bp::def( 
+            "approx_less"
+            , approx_less_function_value
+            , ( bp::arg("val0"), bp::arg("val1") )
+            , "" );
+    
+    }
+
+    { //::SireSearch::approx_less_equal
+    
+        typedef bool ( *approx_less_equal_function_type )( double,double );
+        approx_less_equal_function_type approx_less_equal_function_value( &::SireSearch::approx_less_equal );
+        
+        bp::def( 
+            "approx_less_equal"
+            , approx_less_equal_function_value
+            , ( bp::arg("val0"), bp::arg("val1") )
+            , "" );
+    
+    }
+
+    { //::SireSearch::approx_not_equal
+    
+        typedef bool ( *approx_not_equal_function_type )( double,double );
+        approx_not_equal_function_type approx_not_equal_function_value( &::SireSearch::approx_not_equal );
+        
+        bp::def( 
+            "approx_not_equal"
+            , approx_not_equal_function_value
             , ( bp::arg("val0"), bp::arg("val1") )
             , "" );
     

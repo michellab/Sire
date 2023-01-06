@@ -174,6 +174,30 @@ bool IDPair::operator!=(const IDPair &other) const
     return atom0 != other.atom0 or atom1 != other.atom1;
 }
 
+bool IDPair::operator<(const IDPair &other) const
+{
+    return atom0 < other.atom0 or
+           (atom0 == other.atom0 and atom1 < other.atom1);
+}
+
+bool IDPair::operator<=(const IDPair &other) const
+{
+    return atom0 < other.atom0 or
+           (atom0 == other.atom0 and atom1 <= other.atom1);
+}
+
+bool IDPair::operator>(const IDPair &other) const
+{
+    return atom0 > other.atom0 or
+           (atom0 == other.atom0 and atom1 > other.atom1);
+}
+
+bool IDPair::operator>=(const IDPair &other) const
+{
+    return atom0 > other.atom0 or
+           (atom0 == other.atom0 and atom1 >= other.atom1);
+}
+
 //////
 ////// Implementation of TwoAtomFunctions
 //////
@@ -263,11 +287,74 @@ bool TwoAtomFunctions::operator!=(const TwoAtomFunctions &other) const
            potentials_by_atoms != other.potentials_by_atoms;
 }
 
+inline QString _id_string(const MoleculeInfoData &info, int atom)
+{
+    return QString("%1:%2").arg(info.name(AtomIdx(atom)))
+                           .arg(info.number(AtomIdx(atom)));
+}
+
+inline QString _pretty_string(const MoleculeInfoData &info,
+                              const IDPair &pair,
+                              const Expression &func)
+{
+    QString id = QString("%1-%2")
+                    .arg(_id_string(info, pair.atom0), 7)
+                    .arg(_id_string(info, pair.atom1), -7);
+
+    return QString("%1 : %2")
+                .arg(id, -15)
+                .arg(func.toString());
+}
+
 /** Return a string representation */
 QString TwoAtomFunctions::toString() const
 {
-    return QObject::tr("TwoAtomFunctions( nFunctions() == %1 )")
-                .arg(potentials_by_atoms.count());
+    if (this->isEmpty())
+    {
+        return QObject::tr("TwoAtomFunctions::empty");
+    }
+    else
+    {
+        QStringList parts;
+
+        auto keys = potentials_by_atoms.keys();
+        const int n = keys.count();
+        std::sort(keys.begin(), keys.end());
+
+        if (n <= 10)
+        {
+            for (int i=0; i<n; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                        .arg(_pretty_string(info(),
+                                            keys[i],
+                                            potentials_by_atoms[keys[i]])));
+            }
+        }
+        else
+        {
+            for (int i=0; i<5; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                        .arg(_pretty_string(info(),
+                                            keys[i],
+                                            potentials_by_atoms[keys[i]])));
+            }
+
+            parts.append("...");
+
+            for (int i=n-5; i<n; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                        .arg(_pretty_string(info(),
+                                            keys[i],
+                                            potentials_by_atoms[keys[i]])));
+            }
+        }
+
+        return QObject::tr("TwoAtomFunctions( size=%1\n%2\n)")
+                        .arg(n).arg(parts.join("\n"));
+    }
 }
 
 /** Set the potential energy function used by atoms 'atom0' and 'atom1'

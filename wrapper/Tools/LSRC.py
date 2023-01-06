@@ -1776,6 +1776,13 @@ def loadWater():
         print("Restoring from Sire Streamed Save file %s..." % water_s3file.val)
         watersys = Sire.Stream.load(water_s3file.val)
     else:
+        if not os.path.exists(water_topfile.val):
+            # we need to download this from the sire website
+            from sire._load import _resolve_path, tutorial_url
+            print(f"Downloading from {tutorial_url} to {wsrc_tools_dir}")
+            _resolve_path(f"{tutorial_url}/waterbox.top.bz2", wsrc_tools_dir)
+            _resolve_path(f"{tutorial_url}/waterbox.crd.bz2", wsrc_tools_dir)
+
         print("Loading from Amber files %s / %s..." % (water_topfile.val, water_crdfile.val))
         watersys = createSystem(water_topfile.val, water_crdfile.val)
         watersys = addFlexibility(watersys, Vector(0,0,0), reflection_radius.val)

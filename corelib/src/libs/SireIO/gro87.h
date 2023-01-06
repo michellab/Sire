@@ -112,6 +112,11 @@ public:
     bool hasCoordinates() const;
     bool hasVelocities() const;
 
+    bool isTopology() const;
+    bool isFrame() const;
+    int nFrames() const;
+    SireMol::Frame getFrame(int i) const;
+
     QVector<SireMaths::Vector> coordinates() const;
     QVector<SireMaths::Vector> velocities() const;
 
@@ -120,8 +125,6 @@ public:
 
     QVector<QString> residueNames() const;
     QVector<qint64> residueNumbers() const;
-
-    int nFrames() const;
 
     QVector<SireMaths::Vector> coordinates(int frame) const;
     QVector<SireMaths::Vector> velocities(int frame) const;
@@ -135,9 +138,6 @@ public:
     SireMaths::Vector boxV3(int frame) const;
 
     QStringList warnings() const;
-
-    bool isLead() const;
-    bool canFollow() const;
 
 protected:
     SireSystem::System startSystem(const PropertyMap &map) const;

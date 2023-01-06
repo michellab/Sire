@@ -32,10 +32,6 @@
 #include "nvector.h"
 #include "vector.h"
 
-#include "sire_blas.h"
-#include "sire_lapack.h"
-#include "sire_linpack.h"
-
 #include "SireBase/array2d.hpp"
 #include "SireBase/trigarray2d.hpp"
 
@@ -576,7 +572,9 @@ NMatrix& NMatrix::operator*=(const NMatrix &other)
     if (other.nRows() == 1 and other.nColumns() == 1)
         return this->operator*=(other(0,0));
 
-    this->operator=( dgemm(*this, other) );
+    throw SireError::incomplete_code(QObject::tr(
+        "Code needs to be re-implemented as we removed BLAS/LAPACK/LINPACK support."),
+            CODELOC);
 
     return *this;
 }
@@ -591,9 +589,9 @@ NMatrix& NMatrix::operator*=(const NMatrix &other)
 NMatrix NMatrix::inverse() const
 {
     this->assertSquare();
-    std::pair< NMatrix,QVector<int> > factors_with_pivot = dgeco(*this);
-    return dgedi_inverse(factors_with_pivot.first,
-                         factors_with_pivot.second);
+    throw SireError::incomplete_code(QObject::tr(
+        "Code needs to be re-implemented as we removed BLAS/LAPACK/LINPACK support."),
+            CODELOC);
 }
 
 /** Matrix division - this multiplies this matrix with the inverse of 'other'
@@ -704,7 +702,11 @@ NMatrix NMatrix::operator/(double scale) const
 */
 NVector NMatrix::operator*(const NVector &vector) const
 {
-    return dgemv(*this, vector);
+    throw SireError::incomplete_code(QObject::tr(
+        "Code needs to be re-implemented as we removed BLAS/LAPACK/LINPACK support."),
+            CODELOC);
+
+    return NVector();
 }
 
 /** Perform matrix-vector multiplication - the number of
@@ -1294,9 +1296,11 @@ double NMatrix::determinant() const
 {
     this->assertSquare();
 
-    std::pair< NMatrix,QVector<int> > factors_with_pivot = dgeco(*this);
-    return dgedi_determinant(factors_with_pivot.first,
-                             factors_with_pivot.second);
+    throw SireError::incomplete_code(QObject::tr(
+        "Code needs to be re-implemented as we removed BLAS/LAPACK/LINPACK support."),
+            CODELOC);
+
+    return 0;
 }
 
 /** Return the trace of this matrix - this is only valid for a square matrix
@@ -1356,5 +1360,9 @@ bool NMatrix::isTransposed() const
 std::pair<NVector,NMatrix> NMatrix::diagonalise() const
 {
     this->assertSquare();
-    return dsyev(*this);
+    throw SireError::incomplete_code(QObject::tr(
+        "Code needs to be re-implemented as we removed BLAS/LAPACK/LINPACK support."),
+            CODELOC);
+
+    return std::pair<NVector,NMatrix>();
 }

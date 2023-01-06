@@ -74,9 +74,18 @@ namespace AST
     using SireMol::parser::SelectEnginePtr;
 
     /** The different objects that can be identified */
-    enum IDObject { ID_UNKNOWN = 0, ATOM = 1, CUTGROUP = 2,
-                    RESIDUE = 3, CHAIN = 4, SEGMENT = 5, MOLECULE = 6,
-                    BOND = 7 };
+    enum IDObject { ID_UNKNOWN = 0,
+                    ATOM = 1,
+                    BOND = 2,
+                    ANGLE = 3,
+                    DIHEDRAL = 4,
+                    IMPROPER = 5,
+                    RESIDUE = 6,
+                    CHAIN = 7,
+                    SEGMENT = 8,
+                    CUTGROUP = 9,
+                    MOLECULE = 10,
+                    VIEW = 99 };
 
     QString idobject_to_string(IDObject obj);
 
@@ -93,7 +102,8 @@ namespace AST
     /** The different types of value comparison */
     enum IDComparison { ID_CMP_UNKNOWN = 0, ID_CMP_LT = 1, ID_CMP_LE = 2,
                         ID_CMP_EQ = 3, ID_CMP_NE = 4, ID_CMP_GT = 5, ID_CMP_GE = 6,
-                        ID_CMP_AE = 7 };
+                        ID_CMP_AE = 7, ID_CMP_GA = 8, ID_CMP_LA = 9, ID_CMP_NA = 10,
+                        ID_CMP_GAE = 11, ID_CMP_LAE = 12 };
 
     QString idcomparison_to_string(IDComparison cmp);
 
@@ -190,7 +200,8 @@ namespace AST
                                              boost::recursive_wrapper<IDObjCharge>,
                                              boost::recursive_wrapper<IDObjCmpMass>,
                                              boost::recursive_wrapper<IDObjCmpCharge>,
-                                             boost::recursive_wrapper<ExpressionPart> >;
+                                             boost::recursive_wrapper<ExpressionPart>,
+                                             boost::recursive_wrapper<Expression> >;
 
     QString expression_to_string(const ExpressionVariant &expression);
 
@@ -207,7 +218,6 @@ namespace AST
                                           boost::recursive_wrapper<IDWhereWithin> >;
 
     using IDNames = std::vector<IDName>;
-    using Expressions = std::vector<Expression>;
     using NameValues = std::vector<NameValue>;
     using RangeValues = std::vector<RangeVariant>;
 
@@ -485,10 +495,10 @@ namespace AST
         SelectEnginePtr toEngine() const;
     };
 
-    /** The root node of the AST - this holds a set of Expressions */
+    /** The root node of the AST - this holds a single Expression */
     struct Node
     {
-        Expressions values;
+        Expression values;
 
         QString toString() const;
 
@@ -536,7 +546,7 @@ namespace AST
     /** Structs that holds a list of elements */
     struct IDElement
     {
-        std::vector<SireMol::Element> values;
+        std::vector<QString> values;
 
         QString toString() const;
 
@@ -570,7 +580,7 @@ namespace AST
             //reset the search
             property.clear();
             value.clear();
-            name = AST::MOLECULE;
+            name = AST::VIEW;
             compare = AST::ID_CMP_EQ;
             return *this;
         }
@@ -815,11 +825,11 @@ namespace AST
     struct IDWhereWithin
     {
         LengthValue distance;
-        Expression value;
+        Expression value1;
 
         QString toString() const;
 
-        SelectEnginePtr toEngine(IDObject name, IDCoordType typ) const;
+        SelectEnginePtr toEngine(Expression value0, IDCoordType typ) const;
     };
 
     /** Struct that holds a "where" comparison expression, e.g.
@@ -831,15 +841,15 @@ namespace AST
 
         QString toString() const;
 
-        SelectEnginePtr toEngine(IDObject name, IDCoordType typ) const;
+        SelectEnginePtr toEngine(Expression value0, IDCoordType typ) const;
     };
 
     /** Struct that holds a general "where" expression */
     struct IDWhere
     {
-        IDObject name;
+        Expression value0;
         IDCoordType typ;
-        IDWhereVariant value;
+        IDWhereVariant value1;
 
         QString toString() const;
 
@@ -880,9 +890,9 @@ namespace AST
     /** Struct to hold expressions that select based on being within a distance */
     struct IDWithin
     {
-        IDObject name;
+        Expression value0;
         LengthValue distance;
-        Expression value;
+        Expression value1;
 
         QString toString() const;
 
@@ -892,9 +902,9 @@ namespace AST
     /** Struct to hold expressions that select based on being within a distance to a point*/
     struct IDWithinVector
     {
-        IDObject name;
+        Expression value0;
         LengthValue distance;
-        VectorValue value;
+        VectorValue value1;
 
         QString toString() const;
 
@@ -903,9 +913,9 @@ namespace AST
 }
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDWithin,
-                           (AST::IDObject,name)
+                           (AST::Expression,value0)
                            (AST::LengthValue,distance)
-                           (AST::Expression,value)
+                           (AST::Expression,value1)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDCharge,
@@ -951,9 +961,9 @@ BOOST_FUSION_ADAPT_STRUCT( AST::IDObjCmpMass,
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDWithinVector,
-                           (AST::IDObject,name)
+                           (AST::Expression,value0)
                            (AST::LengthValue,distance)
-                           (AST::VectorValue,value)
+                           (AST::VectorValue,value1)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::LengthValue,
@@ -969,7 +979,7 @@ BOOST_FUSION_ADAPT_STRUCT( AST::IDCount,
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDWhereWithin,
                            (AST::LengthValue,distance)
-                           (AST::Expression,value)
+                           (AST::Expression,value1)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDWhereCompare,
@@ -978,9 +988,9 @@ BOOST_FUSION_ADAPT_STRUCT( AST::IDWhereCompare,
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDWhere,
-                           (AST::IDObject,name)
+                           (AST::Expression,value0)
                            (AST::IDCoordType,typ)
-                           (AST::IDWhereVariant,value)
+                           (AST::IDWhereVariant,value1)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::NameValue,
@@ -1010,10 +1020,6 @@ BOOST_FUSION_ADAPT_STRUCT( AST::RegExpValue,
                            (bool,is_case_sensitive)
                          )
 
-BOOST_FUSION_ADAPT_STRUCT( AST::Node,
-                           (AST::Expressions,values)
-                         )
-
 BOOST_FUSION_ADAPT_STRUCT( AST::IDNull,
                            (AST::IDObject, name),
                            (AST::NameValues, values)
@@ -1025,7 +1031,7 @@ BOOST_FUSION_ADAPT_STRUCT( AST::IDName,
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDElement,
-                           (std::vector<SireMol::Element>, values)
+                           (std::vector<QString>, values)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::IDNumber,
@@ -1051,6 +1057,11 @@ BOOST_FUSION_ADAPT_STRUCT( AST::IDBond,
                            (AST::Expression,from_value)
                            (AST::IDBondToken,to_token)
                            (AST::Expression,to_value)
+                         )
+
+
+BOOST_FUSION_ADAPT_STRUCT( AST::Node,
+                           (AST::Expression, values)
                          )
 
 BOOST_FUSION_ADAPT_STRUCT( AST::Expression,

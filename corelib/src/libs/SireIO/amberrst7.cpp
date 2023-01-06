@@ -37,6 +37,7 @@
 #include "SireMol/atomcoords.h"
 #include "SireMol/atomvelocities.h"
 #include "SireMol/moleditor.h"
+#include "SireMol/trajectory.h"
 #include "SireMol/core.h"
 
 #include "SireVol/periodicbox.h"
@@ -47,6 +48,7 @@
 
 #include "SireBase/parallel.h"
 #include "SireBase/stringproperty.h"
+#include "SireBase/generalunitproperty.h"
 #include "SireBase/timeproperty.h"
 
 #include "SireIO/errors.h"
@@ -728,7 +730,12 @@ AmberRst7::AmberRst7(const System &system, const PropertyMap &map)
 
     try
     {
-        time = system.property( map["time"] ).asA<TimeProperty>().value();
+        const Property &prop = system.property( map["time"] );
+
+        if (prop.isA<TimeProperty>())
+            time = prop.asA<TimeProperty>().value();
+        else
+            time = prop.asA<GeneralUnitProperty>();
     }
     catch(...)
     {}
@@ -859,6 +866,23 @@ const char* AmberRst7::typeName()
 const char* AmberRst7::what() const
 {
     return AmberRst7::typeName();
+}
+
+bool AmberRst7::isFrame() const
+{
+    return true;
+}
+
+int AmberRst7::nFrames() const
+{
+    return 1;
+}
+
+Frame AmberRst7::getFrame(int i) const
+{
+    i = SireID::Index(i).map(this->nFrames());
+
+    return SireMol::Frame();
 }
 
 QString AmberRst7::toString() const
@@ -1071,7 +1095,7 @@ void AmberRst7::addToSystem(System &system, const PropertyMap &map) const
     }
     else if (current_time >= 0)
     {
-        system.setProperty( time_property.source(), TimeProperty(current_time*picosecond) );
+        system.setProperty( time_property.source(), GeneralUnitProperty(current_time*picosecond));
     }
 
     //update the System fileformat property to record that it includes

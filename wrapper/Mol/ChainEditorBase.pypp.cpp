@@ -83,6 +83,16 @@ SireMol::ChainEditorBase& set_Metadata_SireMol_ChainVariantProperty_function2(
                                    const QString &key, const QString &metakey, const QVariant &p)
                                    { return molview.setMetadata< QVariant >(key, metakey, p); }
 
+SireMol::ChainEditorBase& set_Metadata_SireMol_ChainPropertyProperty_function1(
+                                  SireMol::ChainEditorBase &molview,
+                                   const QString &metakey, const SireBase::PropertyPtr &p)
+                                   { return molview.setMetadata< SireBase::PropertyPtr >(metakey, p); }
+
+SireMol::ChainEditorBase& set_Metadata_SireMol_ChainPropertyProperty_function2(
+                                  SireMol::ChainEditorBase &molview,
+                                   const QString &key, const QString &metakey, const SireBase::PropertyPtr &p)
+                                   { return molview.setMetadata< SireBase::PropertyPtr >(key, metakey, p); }
+
 #include "Helpers/str.hpp"
 
 #include "Helpers/release_gil_policy.hpp"
@@ -623,6 +633,10 @@ void register_ChainEditorBase_class(){
                                            &SireMol::ChainEditorBase::setProperty< QVariant >, bp::return_self< >() );
         ChainEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_ChainVariantProperty_function1, bp::return_self< >());
         ChainEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_ChainVariantProperty_function2, bp::return_self< >());
+        ChainEditorBase_exposer.def( "_set_property_SireBase_PropertyPtr",
+                                           &SireMol::ChainEditorBase::setProperty< SireBase::PropertyPtr >, bp::return_self< >() );
+        ChainEditorBase_exposer.def( "_set_metadata_SireBase_PropertyPtr", &set_Metadata_SireMol_ChainPropertyProperty_function1, bp::return_self< >());
+        ChainEditorBase_exposer.def( "_set_metadata_SireBase_PropertyPtr", &set_Metadata_SireMol_ChainPropertyProperty_function2, bp::return_self< >());
         ChainEditorBase_exposer.def( "__str__", &__str__< ::SireMol::Editor<SireMol::ChainEditor, SireMol::Chain> > );
         ChainEditorBase_exposer.def( "__repr__", &__str__< ::SireMol::Editor<SireMol::ChainEditor, SireMol::Chain> > );
         ChainEditorBase_exposer.def( "__len__", &__len_size< ::SireMol::Editor<SireMol::ChainEditor, SireMol::Chain> > );

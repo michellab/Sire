@@ -85,6 +85,16 @@ SireMol::CGEditorBase& set_Metadata_SireMol_CGVariantProperty_function2(
                                    const QString &key, const QString &metakey, const QVariant &p)
                                    { return molview.setMetadata< QVariant >(key, metakey, p); }
 
+SireMol::CGEditorBase& set_Metadata_SireMol_CGPropertyProperty_function1(
+                                  SireMol::CGEditorBase &molview,
+                                   const QString &metakey, const SireBase::PropertyPtr &p)
+                                   { return molview.setMetadata< SireBase::PropertyPtr >(metakey, p); }
+
+SireMol::CGEditorBase& set_Metadata_SireMol_CGPropertyProperty_function2(
+                                  SireMol::CGEditorBase &molview,
+                                   const QString &key, const QString &metakey, const SireBase::PropertyPtr &p)
+                                   { return molview.setMetadata< SireBase::PropertyPtr >(key, metakey, p); }
+
 #include "Helpers/str.hpp"
 
 #include "Helpers/release_gil_policy.hpp"
@@ -625,6 +635,10 @@ void register_CGEditorBase_class(){
                                            &SireMol::CGEditorBase::setProperty< QVariant >, bp::return_self< >() );
         CGEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_CGVariantProperty_function1, bp::return_self< >());
         CGEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_CGVariantProperty_function2, bp::return_self< >());
+        CGEditorBase_exposer.def( "_set_property_SireBase_PropertyPtr",
+                                           &SireMol::CGEditorBase::setProperty< SireBase::PropertyPtr >, bp::return_self< >() );
+        CGEditorBase_exposer.def( "_set_metadata_SireBase_PropertyPtr", &set_Metadata_SireMol_CGPropertyProperty_function1, bp::return_self< >());
+        CGEditorBase_exposer.def( "_set_metadata_SireBase_PropertyPtr", &set_Metadata_SireMol_CGPropertyProperty_function2, bp::return_self< >());
         CGEditorBase_exposer.def( "__str__", &__str__< ::SireMol::Editor<SireMol::CGEditor, SireMol::CutGroup> > );
         CGEditorBase_exposer.def( "__repr__", &__str__< ::SireMol::Editor<SireMol::CGEditor, SireMol::CutGroup> > );
         CGEditorBase_exposer.def( "__len__", &__len_size< ::SireMol::Editor<SireMol::CGEditor, SireMol::CutGroup> > );

@@ -7,18 +7,17 @@
 # Optional packages: These packages aren't required by BioSimSpace, but are
 # commonly installed by users alongside it. Adding them here allows a
 # user to create environments with and without these packages installed.
-ambertools ; sys.platform != "win32"
-gromacs ; sys.platform != "win32"
+
+# Both ambertools and gromacs aren't available on Mac (M1) or Windows
+# We will only require them for Linux (not ARM64)
+ambertools ; sys_platform == "linux" and platform_machine == "x86_64" 
+gromacs ; sys_platform == "linux" and platform_machine == "x86_64"
 
 # The following are actual BioSimSpace run-time requirements. Please update
 # this list as new requirements are added.
-alchemlyb ; python_version >= '3.8'
 configargparse
-kcombu_bss
 ipywidgets<8
 lomap2
-mdtraj
-mdanalysis
 nglview
 openff-interchange-base
 openff-toolkit-base
@@ -30,3 +29,18 @@ pypdb
 pyyaml
 rdkit
 watchdog
+
+# The below are packages that aren't available on all
+# platforms/OSs and so need to be conditionally included
+
+alchemlyb ; platform_machine == "x86_64"    # Needs pymbar, not on Linux/arm64
+alchemlyb ; sys_platform == "darwin"
+
+kcombu_bss ; platform_machine == "x86_64"   # not on Linux/arm64
+kcombu_bss ; sys_platform == "darwin"
+
+mdtraj ; platform_machine == "x86_64"   # not on Linux/arm64
+mdtraj ; sys_platform == "darwin"
+
+mdanalysis ; platform_machine == "x86_64"   # not on Linux/arm64
+mdanalysis ; sys_platform == "darwin"

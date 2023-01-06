@@ -2643,7 +2643,7 @@ PropertyPtr AmberParams::_pvt_makeCompatibleWith(const MoleculeInfoData &newinfo
 
         return this->_pvt_makeCompatibleWith(molinfo, matched_atoms);
     }
-    catch(const SireError::exception &e)
+    catch(const SireError::exception&)
     {
         throw;
         return AmberParams();

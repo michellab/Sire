@@ -7,6 +7,7 @@
 
 #include "booleanproperty.h"
 #include "cpuid.h"
+#include "generalunitproperty.h"
 #include "lengthproperty.h"
 #include "linktoproperty.h"
 #include "majorminorversion.h"
@@ -28,6 +29,8 @@ void register_SireBase_objects()
 
     ObjectRegistry::registerConverterFor< SireBase::BooleanProperty >();
     ObjectRegistry::registerConverterFor< SireBase::CPUID >();
+    ObjectRegistry::registerConverterFor< SireBase::GeneralUnitProperty >();
+    ObjectRegistry::registerConverterFor< SireBase::GeneralUnitArrayProperty >();
     ObjectRegistry::registerConverterFor< SireBase::LengthProperty >();
     ObjectRegistry::registerConverterFor< SireBase::LinkToProperty >();
     ObjectRegistry::registerConverterFor< SireBase::MajorMinorVersion >();

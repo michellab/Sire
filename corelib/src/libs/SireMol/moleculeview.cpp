@@ -36,8 +36,16 @@
 #include "selector.hpp"
 #include "molecule.h"
 #include "select.h"
+#include "trajectory.h"
+#include "molecules.h"
+
+#include "SireVol/space.h"
 
 #include "SireBase/slice.h"
+
+#include "SireBase/generalunitproperty.h"
+
+#include "SireVol/space.h"
 
 #include "SireBase/errors.h"
 #include "SireError/errors.h"
@@ -50,6 +58,7 @@
 
 using namespace SireStream;
 using namespace SireBase;
+using namespace SireVol;
 using namespace SireMol;
 
 RegisterMetaType<MoleculeView> r_molview( MAGIC_ONLY,
@@ -137,6 +146,165 @@ bool MoleculeView::isNull() const
     return *d == *MoleculeData::null();
 }
 
+int MoleculeView::nFrames() const
+{
+    return this->nFrames(PropertyMap());
+}
+
+int MoleculeView::nFrames(const SireBase::PropertyMap &map) const
+{
+    const auto traj_prop = map["trajectory"];
+
+    if (d->hasProperty(traj_prop))
+    {
+        return d->property(traj_prop).asA<Trajectory>().nFrames();
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+void MoleculeView::_fromFrame(const Frame &frame,
+                              const SireBase::PropertyMap &map)
+{
+    const auto coords_prop = map["coordinates"];
+    const auto vels_prop = map["velocities"];
+    const auto frcs_prop = map["forces"];
+    const auto space_prop = map["space"];
+    const auto time_prop = map["time"];
+
+    if (frame.hasCoordinates() and coords_prop.hasSource())
+    {
+        auto coords = AtomCoords(d->info());
+        coords.copyFrom(frame.coordinates());
+        d->setProperty(coords_prop.source(), coords);
+    }
+
+    if (frame.hasVelocities() and vels_prop.hasSource())
+    {
+        auto vels = AtomVelocities(d->info());
+        vels.copyFrom(frame.velocities());
+        d->setProperty(vels_prop.source(), vels);
+    }
+
+    if (frame.hasForces() and frcs_prop.hasSource())
+    {
+        auto frcs = AtomForces(d->info());
+        frcs.copyFrom(frame.forces());
+        d->setProperty(frcs_prop.source(), frcs);
+    }
+
+    if (space_prop.hasSource())
+    {
+        d->setProperty(space_prop.source(), frame.space());
+    }
+
+    if (time_prop.hasSource())
+    {
+        d->setProperty(time_prop.source(), GeneralUnitProperty(frame.time()));
+    }
+}
+
+Frame MoleculeView::_toFrame(const SireBase::PropertyMap &map) const
+{
+    return Frame(this->data(), map);
+}
+
+void MoleculeView::loadFrame(int frame)
+{
+    this->loadFrame(frame, PropertyMap());
+}
+
+void MoleculeView::saveFrame(int frame)
+{
+    this->saveFrame(frame, PropertyMap());
+}
+
+void MoleculeView::saveFrame()
+{
+    this->saveFrame(PropertyMap());
+}
+
+void MoleculeView::deleteFrame(int frame)
+{
+    this->deleteFrame(frame, PropertyMap());
+}
+
+void MoleculeView::loadFrame(int frame, const SireBase::PropertyMap &map)
+{
+    const auto traj_prop = map["trajectory"];
+
+    if ((frame == 0 or frame == -1) and (not d->hasProperty(traj_prop)))
+        return;
+
+    auto traj = d->property(traj_prop).asA<Trajectory>();
+
+    this->_fromFrame(traj[frame], map);
+}
+
+void MoleculeView::saveFrame(int frame, const SireBase::PropertyMap &map)
+{
+    const auto traj_prop = map["trajectory"];
+
+    if (not (traj_prop.hasSource()))
+        return;
+
+    Trajectory traj;
+
+    if (d->hasProperty(traj_prop))
+    {
+        traj = d->property(traj_prop.source()).asA<Trajectory>();
+    }
+
+    if (frame == traj.nFrames())
+        this->saveFrame();
+    else
+    {
+        traj.setFrame(frame, this->_toFrame(map));
+        d->setProperty(traj_prop.source(), traj);
+    }
+}
+
+void MoleculeView::saveFrame(const SireBase::PropertyMap &map)
+{
+    const auto traj_prop = map["trajectory"];
+
+    if (not (traj_prop.hasSource()))
+        return;
+
+    Trajectory traj;
+
+    if (d->hasProperty(traj_prop))
+    {
+        traj = d->property(traj_prop.source()).asA<Trajectory>();
+    }
+
+    traj.appendFrame(this->_toFrame(map));
+    d->setProperty(traj_prop.source(), traj);
+}
+
+void MoleculeView::deleteFrame(int frame, const SireBase::PropertyMap &map)
+{
+    const auto traj_prop = map["trajectory"];
+
+    if (not (traj_prop.hasSource() and d->hasProperty(traj_prop)))
+        return;
+
+    auto traj = d->property(traj_prop.source()).asA<Trajectory>();
+
+    traj.deleteFrame(frame);
+
+    if (traj.isEmpty())
+    {
+        d->removeProperty(traj_prop.source());
+    }
+    else
+    {
+        d->setProperty(traj_prop.source(), traj);
+    }
+}
+
 /** Return whether or not this view is of the same molecule as 'other'
     (albeit perhaps a different version of the molecule) */
 bool MoleculeView::isSameMolecule(const MoleculeData &other) const
@@ -190,6 +358,23 @@ void MoleculeView::update(const MoleculeData &moldata)
     d->info().assertEqualTo(moldata.info());
 
     d = moldata;
+}
+
+/** Update this view with a new version of the molecule
+    from 'molecules' (assuming this molecule is in molecules).
+    You can only update the molecule if it has the same layout UID
+    (so same atoms, residues, cutgroups etc.)
+
+    \throw SireError::incompatible_error
+*/
+void MoleculeView::update(const Molecules &molecules)
+{
+    auto it = molecules.constFind(this->data().number());
+
+    if (it != molecules.constEnd())
+    {
+        this->update(it.value().data());
+    }
 }
 
 /** Synonym for MoleculeView::propertyKeys */
@@ -1498,7 +1683,17 @@ Atom MoleculeView::select(const AtomID &atomid, const PropertyMap &map) const
     search string */
 SelectResult MoleculeView::search(const QString &search_string) const
 {
-    return Select(search_string)(*this);
+    Select search(search_string);
+    return search(*this);
+}
+
+/** Return the result of searching this molecule using the passed
+    search string */
+SelectResult MoleculeView::search(const QString &search_string,
+                                  const PropertyMap &map) const
+{
+    Select search(search_string);
+    return search(*this, map);
 }
 
 /** Return the atoms from this view that match the ID 'atomid'
@@ -1614,6 +1809,16 @@ Selector<Segment> MoleculeView::selectAllSegments() const
     return this->segments();
 }
 
+/** Return whether or not this is a Selector<T> object. This
+ *  helps code distinguish between views of single objects,
+ *  e.g. Atom, Residue etc., and views of multiple objects,
+ *  e.g. Selector<Atom>, Selector<Residue> etc.
+*/
+bool MoleculeView::isSelector() const
+{
+    return false;
+}
+
 /** Return a completely null molecule */
 const MoleculeView& MoleculeView::null()
 {
@@ -1672,6 +1877,12 @@ int MoleculeView::size() const
 int MoleculeView::count() const
 {
     return this->nViews();
+}
+
+/** Return a Molecules set that contains this view (or views) */
+Molecules MoleculeView::toMolecules() const
+{
+    return Molecules(*this);
 }
 
 /** Expand this into a list of unit classes. This will return the view itself if

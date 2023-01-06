@@ -101,19 +101,25 @@ IndexBase::operator qint32() const
 {
     return _idx;
 }
-    
+
 void IndexBase::throwInvalidIndex(qint32 n) const
 {
-    if (n == 0)
+    if (_idx < 0)
+        throw SireError::invalid_index(QObject::tr(
+            "Cannot access item at index %1 as the container has an "
+            "invalid size! (%2)")
+                .arg(n).arg(_idx), CODELOC );
+
+    else if (n == 0)
         throw SireError::invalid_index(QObject::tr(
             "Cannot access item at index %1 as the container is empty!")
                 .arg(_idx), CODELOC );
 
     else if (n == 1)
         throw SireError::invalid_index(QObject::tr(
-            "Cannot access item at index %1 as there is only item in the "
+            "Cannot access item at index %1 as there is only one item in the "
             "container.").arg(_idx), CODELOC );
-    
+
     else
         throw SireError::invalid_index( QObject::tr(
             "No item at index %1. Index range is from %2 to %3.")
@@ -122,9 +128,9 @@ void IndexBase::throwInvalidIndex(qint32 n) const
 
 /** Map this index into the container of 'n' elements - this
     maps the index (with negative indexing, e.g. -1 is the last
-    element), and throws an exception if the index is out 
+    element), and throws an exception if the index is out
     of the bounds of the array
-    
+
     \throw SireError::invalid_index
 */
 qint32 IndexBase::map(qint32 n) const
@@ -150,24 +156,24 @@ static const RegisterMetaType<Index> r_index(NO_ROOT);
 QDataStream &operator<<(QDataStream &ds, const Index &index)
 {
     writeHeader(ds, r_index, 1);
-    
+
     ds << static_cast<const Index_T_<Index>&>(index);
-    
+
     return ds;
 }
-    
+
 /** Extract from a binary datastream */
 QDataStream &operator>>(QDataStream &ds, Index &index)
 {
     VersionID v = readHeader(ds, r_index);
-    
+
     if (v == 1)
     {
         ds >> static_cast<Index_T_<Index>&>(index);
     }
     else
         throw version_error( v, "1", r_index, CODELOC );
-    
+
     return ds;
 }
 

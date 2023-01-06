@@ -2,17 +2,56 @@
 Acknowledgements
 ================
 
-We gratefully acknowledge funding from the EPSRC and BBSRC who contributed
-funding to the development of Sire and related software.
+We give huge thanks to everyone who has contributed to Sire development,
+whether directly in the form of writing code, tests or documentation,
+or indirectly via support, discussions or submitting issues or
+bug reports.
+
+We gratefully acknowledge funding from the
+`EPSRC <https://epsrc.ukri.org>`__ and
+`BBSRC <https://bbsrc.ukri.org>`__ who contributed
+funding to the initial development of Sire. We are also thankful
+to `UCB <https://www.ucb.com>`__, `Cresset <https://www.cresset-group.com>`__,
+`Exscientia <https://www.exscientia.ai>`__ and
+`Evotec <https://www.evotec.com/en>`__ who have all either
+directly funded development, or have funded researchers
+who have contributed to Sire.
 
 We also thank the `Software Sustainability Institute <https://software.ac.uk>`__
 for many useful discussions.
 
-We thank the Universities of Bristol and Edinburgh for providing the
+We thank the Universities of
+`Bristol <https://bristol.ac.uk>`__ and
+`Edinburgh <https://ed.ac.uk>`__ for providing the
 time to the members of staff who have contributed to Sire's development.
 
 We thank `CCP-BioSim <https://ccpbiosim.ac.uk>`__ who have also provided
 guidance and encouragement during the development of this software.
+
+Website
+=======
+
+This website was generated using `sphinx <https://www.sphinx-doc.org/en/master/index.html>`__,
+using a modified version of the `furo theme <https://pradyunsg.me/furo/>`__.
+
+Hosting
+=======
+
+Sire is developed on `GitHub <https://github.com>`__, making extensive
+use of its many excellent features. This include using
+GitHub pages for hosting this website, and GitHub actions for
+CI/CD.
+
+Sire binary packages are hosted on `conda-forge <https://conda-forge.org>`__.
+
+Sire containers are hosted on `docker hub <https://hub.docker.com>`__.
+
+The Sire `notebook service <https://try.openbiosim.org>`__ is hosted
+in a `JupyterHub <https://jupyterhub.readthedocs.io/en/stable/>`__ cluster,
+built following the instructions on
+`Zero to JupyterHub <https://jupyterhub.readthedocs.io/en/stable/>`__.
+This is hosted in a `kubernetes <https://kubernetes.io>`__ cluster
+on `Microsoft Azure <https://azure.microsoft.com/en-gb/>`__.
 
 Third Party Software
 ====================
@@ -22,16 +61,23 @@ which can be found below. The software will be installed automatically
 as part of the installing the Sire conda package, so you shouldn't
 have to do anything yourself.
 
-Sire is itself distributed under the terms of the GPL version 2.
+Sire is itself distributed under the terms of the GPL version 3
+(or any later GPL license). The C++ source code is licensed
+under the GPL 2 or later, but linking with GPL3 dependencies
+(e.g. GSL) means that the entire package is licensed under GPL 3
+or later.
+
+C++ Dependencies
+================
 
 Qt 5
 ----
 
 Sire is built on top of Qt.Core from Qt 5. This is used under the terms
-of the `LGPL 2 <http://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html>`__.
-Sire does not modify Qt, so this license allows both
+of the `LGPL 2 <http://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html>`__
+or later. Sire does not modify Qt, so this license allows both
 commercial and non-commercial use without fee. You can find out more
-about Qt and its license `from here <https://www.qt.io/>`__.
+about Qt and its license `from here <https://www.qt.io/terms-conditions/>`__.
 
 Python
 ------
@@ -39,7 +85,7 @@ Python
 The Sire C++ library is wrapped up and made available for use within Python 3.
 This is used under the terms of the `PSF license <https://docs.python.org/3/license.html>`__,
 which is compatible with
-the GPLv2. The license allows both commercial and non-commercial use
+the GPLv3. The license allows both commercial and non-commercial use
 without fee. You can find out more about Python and its license
 `from here <https://www.python.org/>`__.
 
@@ -51,7 +97,7 @@ the boost::python module that is used to wrap up the C++ code.
 This is used under the terms of the
 `Boost Software License <http://www.boost.org/users/license.html>`__,
 which allows both commercial and non-commercial
-use without fee. This is compatible with the GPL. You can find out
+use without fee. This is compatible with the GPLc3. You can find out
 more about boost and its license `from here <http://www.boost.org/>`__.
 
 Py++
@@ -72,7 +118,7 @@ does not affect Sire. CMake is excellent. You can read more about it
 Anaconda
 ---------
 
-Sire uses Anaconda Python (specifically miniconda and conda-forge) to
+Sire uses Anaconda Python (specifically mambaforge and conda-forge) to
 simplify the management and installation of Python and the various
 modules on which Sire depends.
 
@@ -96,6 +142,21 @@ Sire uses some of the routines from the Gnu Scientific Library.
 This is used under the terms of the `GPL v3 <http://www.gnu.org/copyleft/gpl.html>`__
 license. More information
 about GSL and its license can be `found here <http://www.gnu.org/software/gsl/>`__.
+
+NetCDF
+------
+
+Sire links to the `NetCDF <https://docs.unidata.ucar.edu/netcdf-c/current/copyright.html>`__
+library so that it can read/write Amber binary files. NetCDF
+is openly licensed under a BSD-style license, and is compatible
+with the GPL.
+
+OpenMM
+------
+
+Sire links to `OpenMM <https://openmm.org>`__ to perform accelerated
+dynamics (e.g. as part of the ``somd`` program). This is licensed
+under either the MIT or LGPL licenses, so compatible with the GPL.
 
 Regress
 -------
@@ -246,141 +307,6 @@ and is also under a BSD-style zlib license.
   3. This notice may not be removed or altered from any source distribution.
   (this is the zlib license)
 
-BLAS
-----
-
-Sire bundles the reference version of the BLAS library. The license for which
-is described below (it is ‘freely-available’).
-
-::
-
- <http://www.netlib.org/blas/faq.html#2>
-
- The reference BLAS is a freely-available software package.
- It is available from netlib via anonymous ftp and the World Wide Web.
- Thus, it can be included in commercial software packages (and has been).
- We only ask that proper credit be given to the authors.
-
- Like all software, it is copyrighted. It is not trademarked, but we do ask the following:
-
- If you modify the source for these routines we ask that you change the name of the
- routine and comment the changes made to the original.
-
- We will gladly answer any questions regarding the software. If a modification is done,
- however, it is the responsibility of the person who modified the routine to provide support.
-
-LAPACK
-------
-
-Sire also bundles a reference LAPACK, the license for which is given below;
-
-::
-
- Redistribution and use in source and binary forms, with or without
- modification, are permitted provided that the following conditions are
- met:
-
- - Redistributions of source code must retain the above copyright
-   notice, this list of conditions and the following disclaimer.
-
- - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer listed
-   in this license in the documentation and/or other materials
-   provided with the distribution.
-
- - Neither the name of the copyright holders nor the names of its
-   contributors may be used to endorse or promote products derived from
-   this software without specific prior written permission.
-
- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-LINPACK
--------
-
-Sire also bundles some routines from LINPACK. Forum postings indicate
-that LINPACK is BSD licensed.
-
-::
-
- LINPACK is a collection of Fortran subroutines that analyze and
- solve linear equations and linear least-squares probles.  The
- package solves linear systems whose matrices are general, banded,
- symmetric indefinite, symmetric positive definite, triangular,
- and tridiagonal square.  In addition, the package computes
- the QR and singular value decompositions of rectangular matrices
- and applies them to least-squares problems.  LINPACK uses
- column-oriented algorithms to increase efficiency by preserving
- locality of reference.
-
- LINPACK was designed for supercomputers in use in the 1970s and
- early 1980s.  LINPACK has been largely superceded by LAPACK
- which has been designed to run efficiently on shared-memory, vector
- supercomputers.
-
- Developed by Jack Dongarra, Jim Bunch, Cleve Moler and Pete Stewart.
-  1 Feb 84
-
- If you are interested in acquiring the entire LINPACK, it may
- make more sense to talk with NAG. NAG distribute the software
- on a mag tape for a nominal charge.
-     NAG
-     1400 Opus Place, Suite 200
-     Downers Grove, IL  60515-5702
-     708-971-2337, FAX 971-2706
-
-See ThirdParty/LAPACK for BSD LAPACK license. Forum postings indicate
-that LINPACK is also BSD licensed (e.g.
-http://icl.cs.utk.edu/lapack-forum/archives/lapack/msg00301.html)
-
-::
-
- [Lapack] Linpack license?
- From: Jakub Kurzak
- Date: Wed, 11 Jul 2007 09:50:02 -0400
- Basically it is BSD.
- Jakub
-
- On 7/10/07, Benjamin Collar <benjamin.collar@Domain.Removed> wrote:
-
- -----BEGIN PGP SIGNED MESSAGE-----
- Hash: SHA1
-
- Hello,
-
- I am trying to find out what license Linpack is released under. I
- checked the netlib/linpack site, but didn't find the answer there. Do
- you know?
-
- Thanks
- Benjamin
- -----BEGIN PGP SIGNATURE-----
- Version: GnuPG v1.4.7 (MingW32)
- Comment: http://firegpg.tuxfamily.org
-
- iD8DBQFGlE594CA25YTAYOMRAiG8AJ4uLe6DgAIszvyZl7fUdcmdv960MACdF1mA
- jfqWri2vpHcKrlsur6Uc1yg=
- =Xb40
- -----END PGP SIGNATURE-----
- _______________________________________________
- Lapack mailing list
- Lapack@Domain.Removed
- http://lists.cs.utk.edu/listinfo/lapack
-
- -------------- next part --------------
- An HTML attachment was scrubbed...
- URL:
- http://lists.cs.utk.edu/private/lapack/attachments/20070711/cbd659b6/attachment.htm
-
 LAP (Linear Assignment Problem Solver)
 --------------------------------------
 
@@ -453,6 +379,9 @@ available https://github.com/charnley/rmsd, and under license;
         SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         =======================
 
+Python Dependencies
+===================
+
 ap (ascii plot)
 ---------------
 
@@ -484,3 +413,23 @@ The header documentation reads;
  TODO:
      imshow does not plot axis yet.
      make a correct documentation
+
+lazy_import
+-----------
+
+Sire uses `lazy_import <https://github.com/mnmelo/lazy_import>`__ to
+lazy load the modules. This is licensed under the GPLv3.
+
+rich
+----
+
+Sire uses `rich <https://github.com/Textualize/rich>`__ to provide
+rich console output when printing. This is licensed under the
+GPL-compatible MIT license.
+
+pandas
+------
+
+Sire uses `pandas <https://pandas.pydata.org/docs/>`__ to output
+data in DataFrames that can be more easily operated on and explored
+by users. Pandas is BSD-licensed, so compatible with the GPL.

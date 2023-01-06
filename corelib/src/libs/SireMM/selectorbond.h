@@ -56,12 +56,14 @@ friend QDataStream& ::operator>>(QDataStream&, SelectorBond&);
 
 public:
     SelectorBond();
+
+    SelectorBond(const Bond &bond);
+
     SelectorBond(const SireMol::MoleculeData &molecule,
                  const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
     SelectorBond(const MoleculeView &molecule,
                  const SireBase::PropertyMap &map = SireBase::PropertyMap());
-    SelectorBond(const SireMol::MoleculeView &molecule,
-                 const QList<SireMol::BondID> &bonds);
 
     SelectorBond(const SireMol::MoleculeData &molecule,
                  const SireMol::AtomID &atom,
@@ -76,7 +78,11 @@ public:
                  const SireBase::PropertyMap &map = SireBase::PropertyMap());
 
     SelectorBond(const SireMol::MoleculeView &molecule,
-                 const SireMol::BondID &atom,
+                 const SireMol::BondID &bond,
+                 const SireBase::PropertyMap &map = SireBase::PropertyMap());
+
+    SelectorBond(const SireMol::MoleculeView &molecule,
+                 const QList<SireMol::BondID> &bonds,
                  const SireBase::PropertyMap &map = SireBase::PropertyMap());
 
     SelectorBond(const SireMol::MoleculeView &molecule,
@@ -125,6 +131,8 @@ public:
 
     QList<SireMol::MolViewPtr> toList() const;
 
+    bool isSelector() const;
+
     QList<SireMol::BondID> IDs() const;
 
     SelectorBond add(const Bond &bond) const;
@@ -168,15 +176,18 @@ public:
     QList<SireUnits::Dimension::Length> lengths() const;
     QList<SireUnits::Dimension::Length> lengths(const SireBase::PropertyMap &map) const;
 
+    QList<SireUnits::Dimension::Length> measures() const;
+    QList<SireUnits::Dimension::Length> measures(const SireBase::PropertyMap &map) const;
+
     QList<SireCAS::Expression> potentials() const;
     QList<SireCAS::Expression> potentials(const SireBase::PropertyMap &map) const;
 
-    QList<SireUnits::Dimension::MolarEnergy> energies() const;
-    QList<SireUnits::Dimension::MolarEnergy> energies(
+    QList<SireUnits::Dimension::GeneralUnit> energies() const;
+    QList<SireUnits::Dimension::GeneralUnit> energies(
                             const SireBase::PropertyMap &map) const;
 
-    SireUnits::Dimension::MolarEnergy energy() const;
-    SireUnits::Dimension::MolarEnergy energy(
+    SireUnits::Dimension::GeneralUnit energy() const;
+    SireUnits::Dimension::GeneralUnit energy(
                             const SireBase::PropertyMap &map) const;
 
 protected:

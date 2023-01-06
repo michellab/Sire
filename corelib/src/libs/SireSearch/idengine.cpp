@@ -36,11 +36,16 @@
 #include "SireMol/core.h"
 
 #include "SireMM/selectorbond.h"
+#include "SireMM/selectorangle.h"
+#include "SireMM/selectordihedral.h"
+#include "SireMM/selectorimproper.h"
 
 #include "SireVol/space.h"
 #include "SireVol/cartesian.h"
 
 #include "SireSearch/helper_funcs.h"
+
+#include "SireMol/errors.h"
 
 #include "tostring.h"
 
@@ -51,6 +56,39 @@ using namespace SireMol;
 using namespace SireMM;
 using namespace SireBase;
 using namespace parser_idengine;
+
+QString objtype_to_string(SelectEngine::ObjType obj)
+{
+    switch(obj)
+    {
+    case SelectEngine::COMPLEX:
+        return "complex";
+    case SelectEngine::ATOM:
+        return "atom";
+    case SelectEngine::BOND:
+        return "bond";
+    case SelectEngine::ANGLE:
+        return "angle";
+    case SelectEngine::DIHEDRAL:
+        return "dihedral";
+    case SelectEngine::IMPROPER:
+        return "improper";
+    case SelectEngine::RESIDUE:
+        return "residue";
+    case SelectEngine::CHAIN:
+        return "chain";
+    case SelectEngine::SEGMENT:
+        return "segment";
+    case SelectEngine::CUTGROUP:
+        return "cutgroup";
+    case SelectEngine::MOLECULE:
+        return "molecule";
+    case SelectEngine::VIEW:
+        return "view";
+    default:
+        return "unknown";
+    };
+}
 
 SelectEngine::ObjType _to_obj_type(AST::IDObject obj)
 {
@@ -70,9 +108,106 @@ SelectEngine::ObjType _to_obj_type(AST::IDObject obj)
         return SelectEngine::MOLECULE;
     case AST::BOND:
         return SelectEngine::BOND;
+    case AST::VIEW:
+        return SelectEngine::VIEW;
     default:
         return SelectEngine::COMPLEX;
     }
+}
+
+IDObject mol_to_idobject(const MoleculeView &mol)
+{
+    const char* typ = mol.what();
+
+    if (typ == Atom::typeName())
+    {
+        return AST::ATOM;
+    }
+    else if (typ == Residue::typeName())
+    {
+        return AST::RESIDUE;
+    }
+    else if (typ == Chain::typeName())
+    {
+        return AST::CHAIN;
+    }
+    else if (typ == Segment::typeName())
+    {
+        return AST::SEGMENT;
+    }
+    else if (typ == CutGroup::typeName())
+    {
+        return AST::CUTGROUP;
+    }
+    else if (typ == Molecule::typeName())
+    {
+        return AST::MOLECULE;
+    }
+    else if (typ == Bond::typeName())
+    {
+        return AST::BOND;
+    }
+    else if (typ == Angle::typeName())
+    {
+        return AST::ANGLE;
+    }
+    else if (typ == Dihedral::typeName())
+    {
+        return AST::DIHEDRAL;
+    }
+    else if (typ == Improper::typeName())
+    {
+        return AST::IMPROPER;
+    }
+    else if (mol.isA<Atom>())
+    {
+        return AST::ATOM;
+    }
+    else if (mol.isA<Residue>())
+    {
+        return AST::RESIDUE;
+    }
+    else if (mol.isA<Chain>())
+    {
+        return AST::CHAIN;
+    }
+    else if (mol.isA<Segment>())
+    {
+        return AST::SEGMENT;
+    }
+    else if (mol.isA<CutGroup>())
+    {
+        return AST::CUTGROUP;
+    }
+    else if (mol.isA<Molecule>())
+    {
+        return AST::MOLECULE;
+    }
+    else if (mol.isA<Bond>())
+    {
+        return AST::BOND;
+    }
+    else if (mol.isA<Angle>())
+    {
+        return AST::ANGLE;
+    }
+    else if (mol.isA<Dihedral>())
+    {
+        return AST::DIHEDRAL;
+    }
+    else if (mol.isA<Improper>())
+    {
+        return AST::IMPROPER;
+    }
+    else
+    {
+        throw SireError::invalid_cast( QObject::tr(
+            "Unable to recognise the type of view '%1'. This is of type "
+            "'%2', which is not supported for property searches.")
+                .arg(mol.toString()).arg(mol.what()), CODELOC);
+    }
+
+    return AST::VIEW;
 }
 
 MolViewPtr _expand(const MoleculeView &mol, SelectEngine::ObjType typ,
@@ -1247,8 +1382,20 @@ SelectEngine::ObjType IDAndEngine::objectType() const
             return o0;
         else
         {
-            //the object type is always the smallest, e.g. atom and residue == atom
-            return qMin(o0,o1);
+            if (o0 > o1)
+                std::swap(o0, o1);
+
+            // combinations of a segment with anything smaller
+            // is an atom
+            if (o1 == SelectEngine::SEGMENT)
+            {
+                return SelectEngine::ATOM;
+            }
+            else
+            {
+                //the object type is always the smallest, e.g. atom and residue == atom
+                return o0;
+            }
         }
     }
     else if (part0.get())
@@ -1387,8 +1534,20 @@ SelectEngine::ObjType IDOrEngine::objectType() const
             }
             else if (o != part->objectType())
             {
-                //the object type is always the smallest, e.g. atom or residue == atom
-                o = qMin(o, part->objectType());
+                auto o2 = part->objectType();
+
+                if (o2 < o)
+                {
+                    std::swap(o2, o);
+                }
+
+                if (o2 == SelectEngine::SEGMENT)
+                {
+                    o = SelectEngine::ATOM;
+                }
+
+                if (o == SelectEngine::ATOM)
+                    return o;
             }
         }
     }
@@ -1596,6 +1755,9 @@ SelectResult IDSubScriptEngine::select(const SelectResult &mols, const PropertyM
 
     const int nviews = all.count();
 
+    if (nviews == 0)
+        return SelectResult();
+
     auto addView = [](const MoleculeView &view, QList<MolViewPtr> &result,
                       SelectEngine::ObjType obj,
                       const PropertyMap &map)
@@ -1619,6 +1781,8 @@ SelectResult IDSubScriptEngine::select(const SelectResult &mols, const PropertyM
     //now get the range of views to return
     auto slice = val.toSlice();
 
+    // use auto_fix = True so that the slice range is pinned to
+    // the actual number of returned values
     for (auto it = slice.begin(nviews, true); not it.atEnd(); it.next())
     {
         addView( *(all[it.value()]), result, obj, map );
@@ -1671,7 +1835,7 @@ QString IDCmpMass::toString() const
 
 SelectEnginePtr IDCmpMass::toEngine() const
 {
-    return IDMassEngine::construct(ATOM, compare, value.value * value.units);
+    return IDMassEngine::construct(VIEW, compare, value.value * value.units);
 }
 
 QString IDObjMass::toString() const
@@ -1732,7 +1896,7 @@ QString IDCmpCharge::toString() const
 
 SelectEnginePtr IDCmpCharge::toEngine() const
 {
-    return IDChargeEngine::construct(ATOM, compare, value.value * value.units);
+    return IDChargeEngine::construct(VIEW, compare, value.value * value.units);
 }
 
 QString IDObjCharge::toString() const
@@ -1813,6 +1977,16 @@ std::function<bool (double, double)> _get_compare(IDComparison compare)
         return std::greater_equal<double>();
     case ID_CMP_GT:
         return std::greater<double>();
+    case ID_CMP_GA:
+        return SireSearch::approx_greater;
+    case ID_CMP_LA:
+        return SireSearch::approx_less;
+    case ID_CMP_NA:
+        return SireSearch::approx_not_equal;
+    case ID_CMP_GAE:
+        return SireSearch::approx_greater_equal;
+    case ID_CMP_LAE:
+        return SireSearch::approx_less_equal;
     default:
         return std::equal_to<double>();
     }
@@ -1928,6 +2102,27 @@ SelectResult IDMassEngine::select_mols(const SelectResult &mols,
     return SelectResult(ret);
 }
 
+SelectResult IDMassEngine::select_views(const SelectResult &mols,
+                                        const PropertyMap &map) const
+{
+    if (mols.count() == 0)
+        return SelectResult();
+
+    QList<MolViewPtr> ret;
+
+    auto compare_func = _get_compare(compare);
+
+    for (const auto &mol : mols)
+    {
+        if (compare_func(Evaluator(*mol).mass(map).value(), value.value()))
+        {
+            ret.append(mol);
+        }
+    }
+
+    return SelectResult(ret);
+}
+
 SelectResult IDMassEngine::select(const SelectResult &mols,
                                   const PropertyMap &map) const
 {
@@ -1947,6 +2142,8 @@ SelectResult IDMassEngine::select(const SelectResult &mols,
         return this->select_mols(mols, map);
     case AST::BOND:
         return this->select_bonds(mols, map);
+    case AST::VIEW:
+        return this->select_views(mols, map);
     default:
         throw SireError::invalid_key(QObject::tr("Unsupported search object!"));
     }
@@ -2092,6 +2289,27 @@ SelectResult IDChargeEngine::select_mols(const SelectResult &mols,
     return SelectResult(ret);
 }
 
+SelectResult IDChargeEngine::select_views(const SelectResult &mols,
+                                          const PropertyMap &map) const
+{
+    if (mols.count() == 0)
+        return SelectResult();
+
+    QList<MolViewPtr> ret;
+
+    auto compare_func = _get_compare(compare);
+
+    for (const auto &mol : mols)
+    {
+        if (compare_func(Evaluator(*mol).charge(map).value(), value.value()))
+        {
+            ret.append(mol);
+        }
+    }
+
+    return SelectResult(ret);
+}
+
 SelectResult IDChargeEngine::select(const SelectResult &mols,
                                     const PropertyMap &map) const
 {
@@ -2111,6 +2329,8 @@ SelectResult IDChargeEngine::select(const SelectResult &mols,
         return this->select_mols(mols, map);
     case AST::BOND:
         return this->select_bonds(mols, map);
+    case AST::VIEW:
+        return this->select_views(mols, map);
     default:
         throw SireError::invalid_key(QObject::tr("Unsupported search object!"));
     }
@@ -2122,7 +2342,7 @@ SelectResult IDChargeEngine::select(const SelectResult &mols,
 //////// Implementation of the IDPropertyEngine
 ////////
 
-IDPropertyEngine::IDPropertyEngine()
+IDPropertyEngine::IDPropertyEngine() : name(AST::VIEW)
 {}
 
 SelectEnginePtr IDPropertyEngine::construct(const IDObject &name,
@@ -2175,8 +2395,14 @@ inline bool _is_false(const QString &value, bool pyfalse_only=true)
 {
     if (pyfalse_only)
         return value == "False";
+    else if (value.toLower() == "false" or value == "0" or value == "0.0")
+        return true;
     else
-        return value.toLower() == "false" or value == "0" or value == "0.0";
+    {
+        // is this a number with a unit?
+        auto words = value.split(" ");
+        return words[0] == "0" or words[0] == "0.0";
+    }
 }
 
 bool _compare_equal(const QString &left,
@@ -2187,7 +2413,7 @@ bool _compare_equal(const QString &left,
     if (left == right)
         return true;
 
-    if (compare == ID_CMP_EQ and _is_true(right))
+    if ((compare == ID_CMP_EQ or compare == ID_CMP_AE) and _is_true(right))
     {
         // we are just asking if 'left' is anything other than false
         if (not _is_false(left, false))
@@ -2208,6 +2434,19 @@ bool _compare_equal(const QString &left,
         {
             auto compare_func = _get_compare(compare);
             return compare_func(left_num, right_num);
+        }
+        else if (right_ok)
+        {
+            // is the left value a number plus unit?
+            auto parts = left.split(" ");
+
+            double left_num = parts[0].toDouble(&left_ok);
+
+            if (left_ok)
+            {
+                auto compare_func = _get_compare(compare);
+                return compare_func(left_num, right_num);
+            }
         }
     }
 
@@ -2241,6 +2480,10 @@ bool _compare(const QString &left,
     {
         return not _compare(left, ID_CMP_EQ, right);
     }
+    else if (compare == ID_CMP_NA)
+    {
+        return not _compare(left, ID_CMP_AE, right);
+    }
     else if (compare == ID_CMP_EQ or compare == ID_CMP_AE)
     {
         return _compare_equal(left, compare, right);
@@ -2253,8 +2496,16 @@ bool _compare(const QString &left,
 
         double left_num = left.toDouble(&ok);
 
+        // the left number can be the unit property
         if (!ok)
-            return false;
+        {
+            // remove the units?
+            auto words = left.split(" ");
+            left_num = words[0].toDouble(&ok);
+
+            if (!ok)
+                return false;
+        }
 
         double right_num = right.toDouble(&ok);
 
@@ -2294,7 +2545,7 @@ MolViewPtr _select_property_(const MolViewPtr &mol,
             }
             catch(...)
             {
-                if (compare == ID_CMP_EQ and _is_true(value))
+                if ((compare == ID_CMP_EQ or compare == ID_CMP_AE) and _is_true(value))
                 {
                     idxs.append(i);
                 }
@@ -2309,6 +2560,36 @@ MolViewPtr _select_property_(const MolViewPtr &mol,
         return views(idxs);
     else
         return Selector<T>();
+}
+
+MolViewPtr _select_property_molecule(const MolViewPtr &mol,
+                                     const PropertyName &property,
+                                     const IDComparison &compare,
+                                     const QString &value)
+{
+    auto m = mol->molecule();
+
+    if (m.hasProperty(property))
+    {
+        try
+        {
+            if (_compare(m.property(property).asAString(), compare, value))
+            {
+                return m;
+            }
+        }
+        catch(...)
+        {
+            // this isn't a property that can be converted to a string.
+            if ((compare == ID_CMP_EQ or compare == ID_CMP_AE) and _is_true(value))
+            {
+                // we are only asking if this property exists
+                return m;
+            }
+        }
+    }
+
+    return Molecule();
 }
 
 MolViewPtr _select_property_bond(const SelectorBond &bonds,
@@ -2333,7 +2614,7 @@ MolViewPtr _select_property_bond(const SelectorBond &bonds,
             }
             catch(...)
             {
-                if (compare == ID_CMP_EQ and _is_true(value))
+                if ((compare == ID_CMP_EQ or compare == ID_CMP_AE) and _is_true(value))
                 {
                     idxs.append(i);
                 }
@@ -2375,6 +2656,8 @@ MolViewPtr _select_property(const MolViewPtr &mol,
         else
             return _select_property_bond(SelectorBond(*mol, map), property, compare, value);
     }
+    case AST::MOLECULE:
+        return _select_property_molecule(mol, property, compare, value);
     default:
         qDebug() << "UNRECOGNISED" << name;
         return MolViewPtr();
@@ -2387,30 +2670,21 @@ SelectResult IDPropertyEngine::select(const SelectResult &mols, const PropertyMa
 
     const auto p = map[this->property];
 
-    if (name == AST::MOLECULE)
+    if (name == AST::VIEW)
     {
         for (const auto &mol : mols)
         {
-            auto m = mol->molecule();
-
-            if (m.hasProperty(p))
+            try
             {
-                try
-                {
-                    if (_compare(m.property(p).asAString(), this->compare, this->value))
-                    {
-                        ret.append(m);
-                    }
-                }
-                catch(...)
-                {
-                    // this isn't a property that can be converted to a string.
-                    if (this->compare == ID_CMP_EQ and _is_true(value))
-                    {
-                        // we are only asking if this property exists
-                        ret.append(m);
-                    }
-                }
+                auto selected = _select_property(mol, mol_to_idobject(*mol),
+                                                 p, this->compare, this->value, map);
+
+                if (not selected->isEmpty())
+                    ret.append(selected);
+            }
+            catch(...)
+            {
+                // this isn't a property
             }
         }
     }
@@ -2465,7 +2739,7 @@ SelectEnginePtr IDBondEngine::construct( IDBondToken from_token,
         if (from_token != ID_BOND_FROM)
         {
             throw SireMol::parse_error(QObject::tr(
-                "Invalid syntax: Should be 'bonds from X to Y', not "
+                "Invalid syntax: Should be 'bonds from X to Y' or 'bonds to X', not "
                 "'bonds %1 X %2 Y'")
                     .arg(AST::idbondtoken_to_string(from_token))
                     .arg(AST::idbondtoken_to_string(to_token)), CODELOC);
@@ -2482,7 +2756,7 @@ SelectEnginePtr IDBondEngine::construct( IDBondToken from_token,
     if (from_token == ID_BOND_FROM and to_token != ID_BOND_TO)
     {
         throw SireMol::parse_error(QObject::tr(
-            "Invalid syntax: Should be 'bonds from X to Y', not "
+            "Invalid syntax: Should be 'bonds from X to Y' or 'bonds to X', not "
             "'bonds %1 X %2 Y'")
                 .arg(AST::idbondtoken_to_string(from_token))
                 .arg(AST::idbondtoken_to_string(to_token)), CODELOC);
@@ -2600,10 +2874,60 @@ SelectEnginePtr IDWithEngine::construct( SelectEnginePtr part0,
     auto p = makePtr(ptr);
 
     if (part0.get() == 0)
-        part0 = IDAllEngine::construct();
+        part0 = IDAllEngine::construct(AST::VIEW);
 
     if (part1.get() == 0)
-        part1 = IDAllEngine::construct();
+        part1 = IDAllEngine::construct(AST::VIEW);
+
+    auto type0 = part0->objectType();
+    auto type1 = part1->objectType();
+
+    if (not (type0 == AST::VIEW or type1 == AST::VIEW))
+    {
+        // VIEW is a special case and can be either side of the
+        // in/with
+
+        if (type0 == type1)
+        {
+            QString compare_string = "greater";
+
+            if (token == AST::ID_IN)
+                compare_string = "smaller";
+
+            throw SireMol::parse_error(QObject::tr(
+                "Incompatible search types for a `%1` search. The view type (%2) "
+                "of both sides of the `%1` are the same. For this "
+                "type of search, the view type of the left hand side has "
+                "to be %3 than the view type of the right hand side.")
+                    .arg(idtoken_to_string(token))
+                    .arg(objtype_to_string(type0))
+                    .arg(compare_string), CODELOC);
+        }
+        else if (token == AST::ID_IN and type0 > type1)
+        {
+            throw SireMol::parse_error(QObject::tr(
+                "Incompatible search types for an 'in' search. The view type (%1) "
+                "on the left hand side of the 'in' has to be smaller than the "
+                "view type (%2) on the right hand side. A %1 is larger than "
+                "a %2, so this condition is not satisfied. Use a 'with' search "
+                "if you want an expansive search where the left hand side "
+                "is larger than the right hand side.")
+                    .arg(objtype_to_string(type0))
+                    .arg(objtype_to_string(type1)), CODELOC);
+        }
+        else if (token == AST::ID_WITH and type0 < type1)
+        {
+            throw SireMol::parse_error(QObject::tr(
+                "Incompatible search types for a 'with' search. The view type (%1) "
+                "on the left hand side of the 'with' has to be larger than the "
+                "view type (%2) on the right hand side. A %1 is smaller than "
+                "a %2, so this condition is not satisfied. Use an 'in' search "
+                "if you want a contractive search where the left hand side "
+                "is smaller than the right hand side.")
+                    .arg(objtype_to_string(type0))
+                    .arg(objtype_to_string(type1)), CODELOC);
+        }
+    }
 
     part0->setParent(p);
     part1->setParent(p);
@@ -2624,20 +2948,23 @@ SelectResult IDWithEngine::select(const SelectResult &mols, const PropertyMap &m
 
     auto first = part0;
     auto second = part1;
+    auto expander = first;
+
+    // we need to expand bonds manually and swap things around
+    // if bonds are being searched
+    const bool is_bond = part0->objectType() == SelectEngine::BOND;
 
     if (token == AST::ID_IN)
     {
-        // an "in" search is an inverted "with" search
+        // "in" searches are reversed "with" searches, except we still
+        // expand the search using the object type of the first search
         first = part1;
         second = part0;
     }
 
-    // we need to expand bonds manually
-    const bool is_bond = part0->objectType() == SelectEngine::BOND;
-
     // need to expand the result so that we have the right type of unit
     // when we try to match the second part
-    for (const auto &mol : first->expand(first->operator()(mols, map)))
+    for (const auto &mol : expander->expand(first->operator()(mols, map)))
     {
         const auto units = mol->toList();
 
@@ -2711,14 +3038,27 @@ SelectEngine::ObjType IDWithEngine::objectType() const
 IDElementEngine::IDElementEngine()
 {}
 
-SelectEnginePtr IDElementEngine::construct(const std::vector<SireMol::Element> &vals)
+SelectEnginePtr IDElementEngine::construct(const std::vector<QString> &vals)
 {
     IDElementEngine *ptr = new IDElementEngine();
     auto p = makePtr(ptr);
 
     for (const auto &value : vals)
     {
-        ptr->elements.insert(value);
+        if (value == "biological")
+        {
+            for (int i=1; i<50; ++i)
+            {
+                Element e(i);
+
+                if (e.biological())
+                {
+                    ptr->elements.insert(e);
+                }
+            }
+        }
+        else
+            ptr->elements.insert(Element(value));
     }
 
     return p;
@@ -2789,29 +3129,33 @@ SelectEngine::ObjType IDElementEngine::objectType() const
 IDDistanceEngine::IDDistanceEngine()
 {}
 
-SelectEnginePtr IDDistanceEngine::construct(IDObject obj, IDCoordType typ,
+SelectEnginePtr IDDistanceEngine::construct(SelectEnginePtr part0,
+                                            IDCoordType typ,
                                             SireUnits::Dimension::Length distance,
-                                            SelectEnginePtr part)
+                                            SelectEnginePtr part1)
 {
     IDDistanceEngine *ptr = new IDDistanceEngine();
     auto p = makePtr(ptr);
 
-    if (part)
-        part->setParent(p);
+    if (part0)
+        part0->setParent(p);
 
-    ptr->part = part;
-    ptr->obj = obj;
+    if (part1)
+        part1->setParent(p);
+
+    ptr->part0 = part0;
+    ptr->part1 = part1;
     ptr->typ = typ;
     ptr->distance = distance.value();
 
     return p;
 }
 
-SelectEnginePtr IDDistanceEngine::construct(IDObject obj,
+SelectEnginePtr IDDistanceEngine::construct(SelectEnginePtr part0,
                                             SireUnits::Dimension::Length distance,
-                                            SelectEnginePtr part)
+                                            SelectEnginePtr part1)
 {
-    return IDDistanceEngine::construct(obj, ID_COORD_CLOSEST, distance, part);
+    return IDDistanceEngine::construct(part0, ID_COORD_CLOSEST, distance, part1);
 }
 
 IDDistanceEngine::~IDDistanceEngine()
@@ -2819,15 +3163,17 @@ IDDistanceEngine::~IDDistanceEngine()
 
 SelectEnginePtr IDDistanceEngine::simplify()
 {
-    if (part.get() != 0)
-        part->simplify();
+    if (part0.get() != 0)
+        part0->simplify();
+
+    if (part1.get() != 0)
+        part1->simplify();
 
     return selfptr.lock();
 }
 
 QVector<Vector> _get_coords(const Selector<Atom> &atoms,
-                            const PropertyName &coords_property,
-                            const Space &space)
+                            const PropertyName &coords_property)
 {
     QVector<Vector> coords;
 
@@ -2837,9 +3183,7 @@ QVector<Vector> _get_coords(const Selector<Atom> &atoms,
     {
         const Atom &atom = atoms(i);
 
-        coords.append(space.getMinimumImage(
-                            atom.property<Vector>(coords_property),
-                            Vector(0)));
+        coords.append(atom.property<Vector>(coords_property));
     }
 
     return coords;
@@ -2906,13 +3250,13 @@ bool _is_within(const QVector<Vector> &coords,
 
 SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMap &map) const
 {
-    //first, get the objects against where the distance is calculated
-    if (part.get() == 0)
+    if (part0.get() == 0 or part1.get() == 0)
         return SelectResult();
 
+    //first, get the objects against where the distance is calculated
     QList<MolViewPtr> ret;
 
-    const auto refmols = part->operator()(mols, map);
+    const auto refmols = part1->operator()(mols, map);
 
     if (refmols.isEmpty())
         //nothing against which to compare
@@ -2926,54 +3270,78 @@ SelectResult IDDistanceEngine::select(const SelectResult &mols, const PropertyMa
     {
         space = map["space"].value().asA<SireVol::Space>();
     }
+    else
+    {
+        //try to find a space in refmols
+        const auto space_property = map["space"];
+
+        for (const auto &mol : refmols)
+        {
+            if (mol->data().hasProperty(space_property))
+            {
+                space = mol->data().property(space_property).asA<SireVol::Space>();
+                break;
+            }
+        }
+    }
 
     // merge all atoms in 'refmols' into a single array of coordinates
     QVector<Vector> ref_coords;
 
     for (const auto &mol : refmols)
     {
-        ref_coords += _get_coords(mol->atoms(), coords_property, *space);
+        ref_coords += _get_coords(mol->atoms(), coords_property);
     }
 
     CoordGroup ref_group(ref_coords);
 
-    for (const auto &mol : mols)
+    // now search the matches from part0 that are within the distance
+    // specifed from part1
+    QList<MolViewPtr> result;
+
+    // need to expand the result so that we have the right type of unit
+    // when we try to match the second part
+    for (const auto &mol : part0->expand(part0->operator()(mols, map)))
     {
-        // expand this molecule into the views that are requested
-        const auto expanded = _expand(*mol, this->objectType(), map);
+        const auto units = mol->toList();
 
-        QList<qint64> idxs;
-        idxs.reserve(expanded->count());
+        QList<qint64> matches;
+        matches.reserve(units.count());
 
-        for (int i=0; i<expanded->count(); ++i)
+        for (int i=0; i<units.count(); ++i)
         {
-            const auto view = expanded->operator[](i);
-
-            QVector<Vector> coords = _get_coords(view->atoms(),
-                                                 coords_property, *space);
+            QVector<Vector> coords = _get_coords(units[i]->atoms(),
+                                                 coords_property);
 
             if (_is_within(coords, ref_group, distance, typ, *space))
             {
-                idxs.append(i);
+                matches.append(i);
             }
         }
 
-        if (idxs.count() == expanded->count())
+        if (not matches.isEmpty())
         {
-            ret.append(expanded);
-        }
-        else if (not idxs.isEmpty())
-        {
-            ret.append(expanded->operator[](idxs));
+            if (matches.count() == units.count())
+            {
+                result.append(mol);
+            }
+            else
+            {
+                //rejoin the matches into the appropriate Selector
+                result.append(mol->operator[](matches));
+            }
         }
     }
 
-    return SelectResult(ret);
+    return SelectResult(result);
 }
 
 SelectEngine::ObjType IDDistanceEngine::objectType() const
 {
-    return _to_obj_type(obj);
+    if (part0.get() == 0)
+        return SelectEngine::COMPLEX;
+    else
+        return part0->objectType();
 }
 
 ////////
@@ -2983,26 +3351,30 @@ SelectEngine::ObjType IDDistanceEngine::objectType() const
 IDDistanceVectorEngine::IDDistanceVectorEngine()
 {}
 
-SelectEnginePtr IDDistanceVectorEngine::construct(IDObject obj, IDCoordType typ,
+SelectEnginePtr IDDistanceVectorEngine::construct(SelectEnginePtr value0,
+                                                  IDCoordType typ,
                                                   SireUnits::Dimension::Length distance,
                                                   VectorValue position)
 {
     IDDistanceVectorEngine *ptr = new IDDistanceVectorEngine();
     auto p = makePtr(ptr);
 
+    if (value0)
+        value0->setParent(p);
+
     ptr->position = position;
-    ptr->obj = obj;
+    ptr->value0 = value0;
     ptr->typ = typ;
     ptr->distance = distance.value();
 
     return p;
 }
 
-SelectEnginePtr IDDistanceVectorEngine::construct(IDObject obj,
+SelectEnginePtr IDDistanceVectorEngine::construct(SelectEnginePtr value0,
                                                   SireUnits::Dimension::Length distance,
                                                   VectorValue position)
 {
-    return IDDistanceVectorEngine::construct(obj, ID_COORD_CLOSEST, distance, position);
+    return IDDistanceVectorEngine::construct(value0, ID_COORD_CLOSEST, distance, position);
 }
 
 IDDistanceVectorEngine::~IDDistanceVectorEngine()
@@ -3034,43 +3406,53 @@ SelectResult IDDistanceVectorEngine::select(const SelectResult &mols, const Prop
     QVector<Vector> ref_coords(1, point);
     CoordGroup ref_group(ref_coords);
 
-    for (const auto &mol : mols)
+    // now search the matches from part0 that are within the distance
+    // specifed from part1
+    QList<MolViewPtr> result;
+
+    // need to expand the result so that we have the right type of unit
+    // when we try to match the second part
+    for (const auto &mol : value0->expand(value0->operator()(mols, map)))
     {
-        // expand this molecule into the views that are requested
-        const auto expanded = _expand(*mol, this->objectType(), map);
+        const auto units = mol->toList();
 
-        QList<qint64> idxs;
-        idxs.reserve(expanded->count());
+        QList<qint64> matches;
+        matches.reserve(units.count());
 
-        for (int i=0; i<expanded->count(); ++i)
+        for (int i=0; i<units.count(); ++i)
         {
-            const auto view = expanded->operator[](i);
-
-            QVector<Vector> coords = _get_coords(view->atoms(),
-                                                 coords_property, *space);
+            QVector<Vector> coords = _get_coords(units[i]->atoms(),
+                                                 coords_property);
 
             if (_is_within(coords, ref_group, distance, typ, *space))
             {
-                idxs.append(i);
+                matches.append(i);
             }
         }
 
-        if (idxs.count() == expanded->count())
+        if (not matches.isEmpty())
         {
-            ret.append(expanded);
-        }
-        else if (not idxs.isEmpty())
-        {
-            ret.append(expanded->operator[](idxs));
+            if (matches.count() == units.count())
+            {
+                result.append(mol);
+            }
+            else
+            {
+                //rejoin the matches into the appropriate Selector
+                result.append(mol->operator[](matches));
+            }
         }
     }
 
-    return SelectResult(ret);
+    return SelectResult(result);
 }
 
 SelectEngine::ObjType IDDistanceVectorEngine::objectType() const
 {
-    return _to_obj_type(obj);
+    if (value0.get() == 0)
+        return SelectEngine::COMPLEX;
+    else
+        return value0->objectType();
 }
 
 ////////
@@ -3128,6 +3510,10 @@ SelectResult IDAllEngine::select(const SelectResult &mols,
         return mols.molecules();
     case AST::BOND:
         return _get_bonds(mols, map);
+    case AST::VIEW:
+        // just return the current view - this is everything
+        // in the current view
+        return mols;
     default:
         return mols.molecules();
     }

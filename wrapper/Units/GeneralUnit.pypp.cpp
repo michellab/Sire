@@ -7,15 +7,9 @@
 
 namespace bp = boost::python;
 
-#include "generalunit.h"
-
-#include "SireBase/lengthproperty.h"
-
-#include "SireBase/timeproperty.h"
-
-#include "SireBase/variantproperty.h"
-
 #include "SireError/errors.h"
+
+#include "SireStream/shareddatastream.h"
 
 #include "SireUnits/dimensions.h"
 
@@ -23,7 +17,9 @@ namespace bp = boost::python;
 
 #include "generalunit.h"
 
-#include <Python.h>
+#include "tostring.h"
+
+#include <QDebug>
 
 #include <QHash>
 
@@ -31,7 +27,7 @@ namespace bp = boost::python;
 
 #include <QStringList>
 
-#include <boost/python.hpp>
+#include "generalunit.h"
 
 SireUnits::Dimension::GeneralUnit __copy__(const SireUnits::Dimension::GeneralUnit &other){ return SireUnits::Dimension::GeneralUnit(other); }
 
@@ -47,6 +43,8 @@ void register_GeneralUnit_class(){
         typedef bp::class_< SireUnits::Dimension::GeneralUnit, bp::bases< SireUnits::Dimension::Unit > > GeneralUnit_exposer_t;
         GeneralUnit_exposer_t GeneralUnit_exposer = GeneralUnit_exposer_t( "GeneralUnit", "", bp::init< >("") );
         bp::scope GeneralUnit_scope( GeneralUnit_exposer );
+        GeneralUnit_exposer.def( bp::init< SireUnits::Dimension::TempBase const & >(( bp::arg("temperature") ), "") );
+        GeneralUnit_exposer.def( bp::init< double >(( bp::arg("value") ), "") );
         GeneralUnit_exposer.def( bp::init< SireUnits::Dimension::GeneralUnit const & >(( bp::arg("other") ), "") );
         { //::SireUnits::Dimension::GeneralUnit::ANGLE
         
@@ -132,6 +130,81 @@ void register_GeneralUnit_class(){
                 , "" );
         
         }
+        { //::SireUnits::Dimension::GeneralUnit::_to_cpp_type
+        
+            typedef ::QString ( ::SireUnits::Dimension::GeneralUnit::*_to_cpp_type_function_type)(  ) const;
+            _to_cpp_type_function_type _to_cpp_type_function_value( &::SireUnits::Dimension::GeneralUnit::_to_cpp_type );
+            
+            GeneralUnit_exposer.def( 
+                "_to_cpp_type"
+                , _to_cpp_type_function_value
+                , bp::release_gil_policy()
+                , "Return the C++ type that this particular GeneralUnit corresponds to" );
+        
+        }
+        { //::SireUnits::Dimension::GeneralUnit::addComponent
+        
+            typedef void ( ::SireUnits::Dimension::GeneralUnit::*addComponent_function_type)( ::QString const &,::SireUnits::Dimension::GeneralUnit const & ) ;
+            addComponent_function_type addComponent_function_value( &::SireUnits::Dimension::GeneralUnit::addComponent );
+            
+            GeneralUnit_exposer.def( 
+                "addComponent"
+                , addComponent_function_value
+                , ( bp::arg("component"), bp::arg("value") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireUnits::Dimension::GeneralUnit::components
+        
+            typedef ::QHash< QString, SireUnits::Dimension::GeneralUnit > ( ::SireUnits::Dimension::GeneralUnit::*components_function_type)(  ) const;
+            components_function_type components_function_value( &::SireUnits::Dimension::GeneralUnit::components );
+            
+            GeneralUnit_exposer.def( 
+                "components"
+                , components_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireUnits::Dimension::GeneralUnit::getComponent
+        
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireUnits::Dimension::GeneralUnit::*getComponent_function_type)( ::QString const & ) const;
+            getComponent_function_type getComponent_function_value( &::SireUnits::Dimension::GeneralUnit::getComponent );
+            
+            GeneralUnit_exposer.def( 
+                "getComponent"
+                , getComponent_function_value
+                , ( bp::arg("component") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireUnits::Dimension::GeneralUnit::getDefault
+        
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireUnits::Dimension::GeneralUnit::*getDefault_function_type)(  ) const;
+            getDefault_function_type getDefault_function_value( &::SireUnits::Dimension::GeneralUnit::getDefault );
+            
+            GeneralUnit_exposer.def( 
+                "getDefault"
+                , getDefault_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireUnits::Dimension::GeneralUnit::hasSameUnits
+        
+            typedef bool ( ::SireUnits::Dimension::GeneralUnit::*hasSameUnits_function_type)( ::SireUnits::Dimension::GeneralUnit const & ) const;
+            hasSameUnits_function_type hasSameUnits_function_value( &::SireUnits::Dimension::GeneralUnit::hasSameUnits );
+            
+            GeneralUnit_exposer.def( 
+                "hasSameUnits"
+                , hasSameUnits_function_value
+                , ( bp::arg("other") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireUnits::Dimension::GeneralUnit::invert
         
             typedef ::SireUnits::Dimension::GeneralUnit ( ::SireUnits::Dimension::GeneralUnit::*invert_function_type)(  ) const;
@@ -144,18 +217,46 @@ void register_GeneralUnit_class(){
                 , "" );
         
         }
+        { //::SireUnits::Dimension::GeneralUnit::isDimensionless
+        
+            typedef bool ( ::SireUnits::Dimension::GeneralUnit::*isDimensionless_function_type)(  ) const;
+            isDimensionless_function_type isDimensionless_function_value( &::SireUnits::Dimension::GeneralUnit::isDimensionless );
+            
+            GeneralUnit_exposer.def( 
+                "isDimensionless"
+                , isDimensionless_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireUnits::Dimension::GeneralUnit::isZero
+        
+            typedef bool ( ::SireUnits::Dimension::GeneralUnit::*isZero_function_type)(  ) const;
+            isZero_function_type isZero_function_value( &::SireUnits::Dimension::GeneralUnit::isZero );
+            
+            GeneralUnit_exposer.def( 
+                "isZero"
+                , isZero_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         GeneralUnit_exposer.def( bp::self != bp::self );
         GeneralUnit_exposer.def( bp::self * bp::self );
         GeneralUnit_exposer.def( bp::self * bp::other< double >() );
         GeneralUnit_exposer.def( bp::self * bp::other< int >() );
         GeneralUnit_exposer.def( bp::self *= bp::self );
         GeneralUnit_exposer.def( bp::self + bp::self );
+        GeneralUnit_exposer.def( bp::self + bp::other< double >() );
         GeneralUnit_exposer.def( -bp::self );
         GeneralUnit_exposer.def( bp::self - bp::self );
+        GeneralUnit_exposer.def( bp::self - bp::other< double >() );
         GeneralUnit_exposer.def( bp::self / bp::self );
         GeneralUnit_exposer.def( bp::self / bp::other< double >() );
         GeneralUnit_exposer.def( bp::self / bp::other< int >() );
         GeneralUnit_exposer.def( bp::self /= bp::self );
+        GeneralUnit_exposer.def( bp::self < bp::self );
+        GeneralUnit_exposer.def( bp::self <= bp::self );
         { //::SireUnits::Dimension::GeneralUnit::operator=
         
             typedef ::SireUnits::Dimension::GeneralUnit & ( ::SireUnits::Dimension::GeneralUnit::*assign_function_type)( ::SireUnits::Dimension::GeneralUnit const & ) ;
@@ -170,6 +271,47 @@ void register_GeneralUnit_class(){
         
         }
         GeneralUnit_exposer.def( bp::self == bp::self );
+        GeneralUnit_exposer.def( bp::self > bp::self );
+        GeneralUnit_exposer.def( bp::self >= bp::self );
+        { //::SireUnits::Dimension::GeneralUnit::setAsDefault
+        
+            typedef void ( ::SireUnits::Dimension::GeneralUnit::*setAsDefault_function_type)( ::QString const & ) const;
+            setAsDefault_function_type setAsDefault_function_value( &::SireUnits::Dimension::GeneralUnit::setAsDefault );
+            
+            GeneralUnit_exposer.def( 
+                "setAsDefault"
+                , setAsDefault_function_value
+                , ( bp::arg("unit_name") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireUnits::Dimension::GeneralUnit::setComponent
+        
+            typedef void ( ::SireUnits::Dimension::GeneralUnit::*setComponent_function_type)( ::QString const &,::SireUnits::Dimension::GeneralUnit const & ) ;
+            setComponent_function_type setComponent_function_value( &::SireUnits::Dimension::GeneralUnit::setComponent );
+            
+            GeneralUnit_exposer.def( 
+                "setComponent"
+                , setComponent_function_value
+                , ( bp::arg("component"), bp::arg("value") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireUnits::Dimension::GeneralUnit::subtractComponent
+        
+            typedef void ( ::SireUnits::Dimension::GeneralUnit::*subtractComponent_function_type)( ::QString const &,::SireUnits::Dimension::GeneralUnit const & ) ;
+            subtractComponent_function_type subtractComponent_function_value( &::SireUnits::Dimension::GeneralUnit::subtractComponent );
+            
+            GeneralUnit_exposer.def( 
+                "subtractComponent"
+                , subtractComponent_function_value
+                , ( bp::arg("component"), bp::arg("value") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireUnits::Dimension::GeneralUnit::to
         
             typedef double ( ::SireUnits::Dimension::GeneralUnit::*to_function_type)( ::SireUnits::Dimension::TempBase const & ) const;
@@ -196,18 +338,6 @@ void register_GeneralUnit_class(){
                 , "" );
         
         }
-        { //::SireUnits::Dimension::GeneralUnit::toProperty
-        
-            typedef ::SireBase::PropertyPtr ( ::SireUnits::Dimension::GeneralUnit::*toProperty_function_type)(  ) const;
-            toProperty_function_type toProperty_function_value( &::SireUnits::Dimension::GeneralUnit::toProperty );
-            
-            GeneralUnit_exposer.def( 
-                "toProperty"
-                , toProperty_function_value
-                , bp::release_gil_policy()
-                , "" );
-        
-        }
         { //::SireUnits::Dimension::GeneralUnit::toString
         
             typedef ::QString ( ::SireUnits::Dimension::GeneralUnit::*toString_function_type)(  ) const;
@@ -222,7 +352,7 @@ void register_GeneralUnit_class(){
         }
         { //::SireUnits::Dimension::GeneralUnit::typeName
         
-            typedef ::QString ( ::SireUnits::Dimension::GeneralUnit::*typeName_function_type)(  ) const;
+            typedef char const * ( *typeName_function_type )(  );
             typeName_function_type typeName_function_value( &::SireUnits::Dimension::GeneralUnit::typeName );
             
             GeneralUnit_exposer.def( 
@@ -232,9 +362,33 @@ void register_GeneralUnit_class(){
                 , "" );
         
         }
+        { //::SireUnits::Dimension::GeneralUnit::unitString
+        
+            typedef ::QString ( ::SireUnits::Dimension::GeneralUnit::*unitString_function_type)(  ) const;
+            unitString_function_type unitString_function_value( &::SireUnits::Dimension::GeneralUnit::unitString );
+            
+            GeneralUnit_exposer.def( 
+                "unitString"
+                , unitString_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireUnits::Dimension::GeneralUnit::units
+        
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireUnits::Dimension::GeneralUnit::*units_function_type)(  ) const;
+            units_function_type units_function_value( &::SireUnits::Dimension::GeneralUnit::units );
+            
+            GeneralUnit_exposer.def( 
+                "units"
+                , units_function_value
+                , bp::release_gil_policy()
+                , "Return the units of this value" );
+        
+        }
         { //::SireUnits::Dimension::GeneralUnit::what
         
-            typedef ::QString ( ::SireUnits::Dimension::GeneralUnit::*what_function_type)(  ) const;
+            typedef char const * ( ::SireUnits::Dimension::GeneralUnit::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireUnits::Dimension::GeneralUnit::what );
             
             GeneralUnit_exposer.def( 
@@ -244,6 +398,9 @@ void register_GeneralUnit_class(){
                 , "" );
         
         }
+        GeneralUnit_exposer.staticmethod( "typeName" );
+        GeneralUnit_exposer.def( bp::other<double>() + bp::self );
+        GeneralUnit_exposer.def( bp::other<double>() - bp::self );
         GeneralUnit_exposer.def( bp::other<double>() * bp::self );
         GeneralUnit_exposer.def( bp::other<double>() / bp::self );
         GeneralUnit_exposer.def( "__copy__", &__copy__);

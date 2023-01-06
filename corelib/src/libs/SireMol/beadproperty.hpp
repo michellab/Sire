@@ -32,6 +32,7 @@
 #include <QVector>
 
 #include "SireBase/qvariant_metatype.h"
+#include "SireBase/slice.h"
 
 #include "moleculeinfodata.h"
 #include "molviewproperty.h"
@@ -69,6 +70,7 @@ typedef BeadProperty<QString>  BeadStringProperty;
 typedef BeadProperty<qint64>   BeadIntProperty;
 typedef BeadProperty<double>   BeadFloatProperty;
 typedef BeadProperty<QVariant> BeadVariantProperty;
+typedef BeadProperty<SireBase::PropertyPtr> BeadPropertyProperty;
 
 /** Small class used to provide a common base for all BeadProperty types */
 class SIREMOL_EXPORT BeadProp : public MolViewProperty
@@ -81,15 +83,15 @@ public:
     BeadProp();
     BeadProp(const Beading &beading);
     BeadProp(const BeadProp &other);
-   
+
     virtual ~BeadProp();
-    
+
     virtual bool canConvert(const QVariant &value) const=0;
-    
+
     virtual void assignFrom(const BeadProperty<QVariant> &values)=0;
-    
+
     virtual BeadProperty<QVariant> toVariant() const=0;
-    
+
     virtual void assertCanConvert(const QVariant &value) const=0;
 
     const Beading& beading() const;
@@ -110,16 +112,16 @@ private:
 
 /** This is a property that can hold one value for each
     bead in the molecule.
-    
+
     mol.setProperty( "charge", BeadCharges( [....] ) )
     mol.setProperty( "lj", BeadLJs( [....] ) )
 
     bead.setProperty( "charge", 0.0 * mod_e )
-    
+
     @author Christopher Woods
 */
 template<class T>
-class SIREMOL_EXPORT BeadProperty 
+class SIREMOL_EXPORT BeadProperty
     : public SireBase::ConcreteProperty<BeadProperty<T>, BeadProp>
 {
 
@@ -134,23 +136,30 @@ public:
 
     BeadProperty(const QVector<T> &values,
                  const Beading &beading);
-    
+
     BeadProperty(const BeadProperty<T> &other);
-    
+
     ~BeadProperty();
-    
+
     BeadProperty<T>& operator=(const BeadProperty<T> &other);
-    
+
     static const char* typeName();
-    
+
     BeadProperty<T>* clone() const;
-    
+
     bool operator==(const BeadProperty<T> &other) const;
     bool operator!=(const BeadProperty<T> &other) const;
 
     const T& operator[](const BeadIdx &beadidx) const;
     const T& at(const BeadIdx &beadidx) const;
     const T& get(const BeadIdx &beadidx) const;
+
+    const T& operator[](int i) const;
+    const T& at(int i) const;
+    const T& get(int i) const;
+
+    QList<T> operator[](const QList<qint64> &idxs) const;
+    QList<T> operator[](const SireBase::Slice &slice) const;
 
     BeadProperty<T>& set(BeadIdx beadidx, const T &value);
 
@@ -161,23 +170,23 @@ public:
 
     int size() const;
     int count() const;
-    
+
     int nBeads() const;
 
     QString toString() const;
-    
+
     const QVector<T>& array() const;
 
     void assignFrom(const BeadProperty<QVariant> &values);
-    
+
     static BeadProperty<T> fromVariant(const BeadProperty<QVariant> &values);
-    
+
     BeadProperty<QVariant> toVariant() const;
-    
+
     bool isCompatibleWith(const MoleculeInfoData &molinfo) const;
-    
+
     bool canConvert(const QVariant &value) const;
-    
+
     void assertCanConvert(const QVariant &value) const;
 
 private:
@@ -194,7 +203,7 @@ BeadProperty<T>::BeadProperty()
                 : SireBase::ConcreteProperty<BeadProperty<T>,BeadProp>()
 {}
 
-/** Construct space for the values of the property for all of the 
+/** Construct space for the values of the property for all of the
     beads in the molecule described by 'molinfo' */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
@@ -224,7 +233,7 @@ BeadProperty<T>::BeadProperty(const QVector<T> &values,
 
 /** Assert that the variant can be converted to a value that can
     be held in this list of properties
-    
+
     \throw SireError::invalid_cast
 */
 template<class T>
@@ -281,7 +290,57 @@ bool BeadProperty<T>::operator!=(const BeadProperty<T> &other) const
     return not BeadProperty<T>::operator==(other);
 }
 
-/** Return the property for the bead at index 'beadidx' 
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+const T& BeadProperty<T>::operator[](int i) const
+{
+    return props.constData()[SireID::Index(i).map(props.count())];
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+const T& BeadProperty<T>::at(int i) const
+{
+    return this->operator[](i);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+const T& BeadProperty<T>::get(int i) const
+{
+    return this->operator[](i);
+}
+
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QList<T> BeadProperty<T>::operator[](const QList<qint64> &idxs) const
+{
+    QList<T> ret;
+
+    for (auto idx : idxs)
+    {
+        ret.append(this->operator[](idx));
+    }
+
+    return ret;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QList<T> BeadProperty<T>::operator[](const SireBase::Slice &slice) const
+{
+    QList<T> ret;
+
+    for (auto it = slice.begin(this->count()); not it.atEnd(); it.next())
+    {
+        ret.append(this->operator[](it.value()));
+    }
+
+    return ret;
+}
+
+/** Return the property for the bead at index 'beadidx'
 
     \throw SireError::invalid_index
 */
@@ -291,7 +350,7 @@ const T& BeadProperty<T>::operator[](const BeadIdx &beadidx) const
 {
     return props.constData()[beadidx.map(props.count())];
 }
-    
+
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 const char* BeadProperty<T>::typeName()
@@ -319,10 +378,44 @@ template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 QString BeadProperty<T>::toString() const
 {
-    return QString("BeadProperty<%1>( %2, beading() == %3 )")
-                .arg( QMetaType::typeName( qMetaTypeId<T>() ) )
-                .arg( Sire::toString(this->array()) )
-                .arg( this->beading().toString() );
+    if (this->isEmpty())
+    {
+        return QObject::tr("%1::empty").arg(this->what());
+    }
+    else
+    {
+        QStringList parts;
+
+        const auto n = this->count();
+
+        if (n <= 10)
+        {
+            for (int i=0; i<n; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                                        .arg(Sire::toString(this->operator[](i))));
+            }
+        }
+        else
+        {
+            for (int i=0; i<5; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                                        .arg(Sire::toString(this->operator[](i))));
+            }
+
+            parts.append("...");
+
+            for (int i=n-5; i<n; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                                        .arg(Sire::toString(this->operator[](i))));
+            }
+        }
+
+        return QObject::tr("%1( size=%2\n%3\n)")
+                        .arg(this->what()).arg(n).arg(parts.join("\n"));
+    }
 }
 
 /** Return whether or not it is possible to convert the variant
@@ -339,15 +432,15 @@ BeadProperty<T> BeadProperty<T>::fromVariant(const BeadProperty<QVariant> &varia
 {
     BeadProperty<T> array;
     array.setBeading(variant.beading());
-    
+
     array.assignFrom(variant);
-    
+
     return array;
 }
 
 /** Assign the values of this property from the array of variants
     in 'values'
-    
+
     \throw SireError::invalid_cast
 */
 template<class T>
@@ -359,19 +452,19 @@ void BeadProperty<T>::assignFrom(const BeadProperty<QVariant> &variant)
         props.clear();
         return;
     }
-        
+
     int nvals = variant.count();
     const QVariant *variant_array = variant.constData();
-    
+
     props = QVector<T>(nvals);
     props.squeeze();
     T *props_array = props.data();
-    
+
     for (int i=0; i<nvals; ++i)
     {
         const QVariant &value = variant_array[i];
         BeadProperty<T>::assertCanConvert(value);
-        
+
         if (value.isNull())
             props_array[i] = T();
         else
@@ -388,10 +481,10 @@ BeadProperty<QVariant> BeadProperty<T>::toVariant() const
 {
     if (props.isEmpty())
         return BeadProperty<QVariant>();
-        
+
     int nvals = props.count();
     const T *props_array = props.constData();
-    
+
     QVector<QVariant> converted_vals(nvals);
     converted_vals.squeeze();
     QVariant *converted_vals_array = converted_vals.data();
@@ -400,11 +493,11 @@ BeadProperty<QVariant> BeadProperty<T>::toVariant() const
     {
         converted_vals_array[i].setValue<T>(props_array[i]);
     }
-    
+
     return BeadProperty<QVariant>(converted_vals, this->beading());
 }
 
-/** Return the property for the bead at index 'beadidx' 
+/** Return the property for the bead at index 'beadidx'
 
     \throw SireError::invalid_index
 */
@@ -415,7 +508,7 @@ const T& BeadProperty<T>::at(const BeadIdx &beadidx) const
     return this->operator[](beadidx);
 }
 
-/** Return the property for the bead at index 'beadidx' 
+/** Return the property for the bead at index 'beadidx'
 
     \throw SireError::invalid_index
 */
@@ -426,7 +519,7 @@ const T& BeadProperty<T>::get(const BeadIdx &beadidx) const
     return this->operator[](beadidx);
 }
 
-/** Set the value of the property for the bead at 
+/** Set the value of the property for the bead at
     index 'beadidx' */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
@@ -505,7 +598,7 @@ QDataStream& operator<<(QDataStream &ds, const SireMol::BeadProperty<T> &prop)
     //serialise the base class - this writes the header and version!
     ds << static_cast<const SireMol::BeadProp&>(prop);
     ds << prop.props;
-    
+
     return ds;
 }
 
@@ -516,7 +609,7 @@ QDataStream& operator>>(QDataStream &ds, SireMol::BeadProperty<T> &prop)
 {
     ds >> static_cast<SireMol::BeadProp&>(prop);
     ds >> prop.props;
-        
+
     return ds;
 }
 
@@ -524,6 +617,7 @@ Q_DECLARE_METATYPE( SireMol::BeadStringProperty );
 Q_DECLARE_METATYPE( SireMol::BeadIntProperty );
 Q_DECLARE_METATYPE( SireMol::BeadFloatProperty );
 Q_DECLARE_METATYPE( SireMol::BeadVariantProperty );
+Q_DECLARE_METATYPE( SireMol::BeadPropertyProperty );
 
 SIRE_EXPOSE_CLASS( SireMol::BeadProp )
 
@@ -531,12 +625,14 @@ SIRE_EXPOSE_BEAD_PROPERTY( QString, SireMol::BeadStringProperty )
 SIRE_EXPOSE_BEAD_PROPERTY( qint64, SireMol::BeadIntProperty )
 SIRE_EXPOSE_BEAD_PROPERTY( double, SireMol::BeadFloatProperty )
 SIRE_EXPOSE_BEAD_PROPERTY( QVariant, SireMol::BeadVariantProperty )
+SIRE_EXPOSE_BEAD_PROPERTY( SireBase::PropertyPtr, SireMol::BeadPropertyProperty )
 
 #ifdef SIRE_INSTANTIATE_TEMPLATES
 template class SireMol::BeadProperty<QString>;
 template class SireMol::BeadProperty<qint64>;
 template class SireMol::BeadProperty<double>;
 template class SireMol::BeadProperty<QVariant>;
+template class SireMol::BeadProperty<SireBase::PropertyPtr>;
 #endif
 
 SIRE_END_HEADER

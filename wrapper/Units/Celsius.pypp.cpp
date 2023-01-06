@@ -104,6 +104,8 @@ void register_Celsius_class(){
         Celsius_exposer.def( bp::other< int >() * bp::self );
         Celsius_exposer.def( bp::other< double >() / bp::self );
         Celsius_exposer.def( bp::other< int >() / bp::self );
+        Celsius_exposer.def( bp::other<double>() + bp::self );
+        Celsius_exposer.def( bp::other<double>() - bp::self );
         Celsius_exposer.def( bp::other<double>() * bp::self );
         Celsius_exposer.def( bp::other<double>() / bp::self );
         Celsius_exposer.def( "__copy__", &__copy__);

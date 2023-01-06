@@ -53,13 +53,14 @@ void register_SelectorBond_class(){
         typedef bp::class_< SireMM::SelectorBond, bp::bases< SireMol::MoleculeView, SireBase::Property > > SelectorBond_exposer_t;
         SelectorBond_exposer_t SelectorBond_exposer = SelectorBond_exposer_t( "SelectorBond", "This provides a Selector<T>-style interface for multiple bonds", bp::init< >("") );
         bp::scope SelectorBond_scope( SelectorBond_exposer );
+        SelectorBond_exposer.def( bp::init< SireMM::Bond const & >(( bp::arg("bond") ), "") );
         SelectorBond_exposer.def( bp::init< SireMol::MoleculeData const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorBond_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ), "") );
-        SelectorBond_exposer.def( bp::init< SireMol::MoleculeView const &, QList< SireMol::BondID > const & >(( bp::arg("molecule"), bp::arg("bonds") ), "") );
         SelectorBond_exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::AtomID const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("atom"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorBond_exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::AtomID const &, SireMol::AtomID const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("atom0"), bp::arg("atom1"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorBond_exposer.def( bp::init< SireMol::MoleculeView const &, SireMol::AtomID const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("atom"), bp::arg("map")=SireBase::PropertyMap() ), "") );
-        SelectorBond_exposer.def( bp::init< SireMol::MoleculeView const &, SireMol::BondID const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("atom"), bp::arg("map")=SireBase::PropertyMap() ), "") );
+        SelectorBond_exposer.def( bp::init< SireMol::MoleculeView const &, SireMol::BondID const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("bond"), bp::arg("map")=SireBase::PropertyMap() ), "") );
+        SelectorBond_exposer.def( bp::init< SireMol::MoleculeView const &, QList< SireMol::BondID > const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("bonds"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorBond_exposer.def( bp::init< SireMol::MoleculeView const &, SireMol::AtomID const &, SireMol::AtomID const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("atom0"), bp::arg("atom1"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorBond_exposer.def( bp::init< SireMol::Selector< SireMol::Atom > const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atoms"), bp::arg("map")=SireBase::PropertyMap() ), "") );
         SelectorBond_exposer.def( bp::init< SireMol::Selector< SireMol::Atom > const &, SireMol::Selector< SireMol::Atom > const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atoms0"), bp::arg("atoms1"), bp::arg("map")=SireBase::PropertyMap() ), "") );
@@ -116,7 +117,7 @@ void register_SelectorBond_class(){
         }
         { //::SireMM::SelectorBond::energies
         
-            typedef ::QList< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > ( ::SireMM::SelectorBond::*energies_function_type)(  ) const;
+            typedef ::QList< SireUnits::Dimension::GeneralUnit > ( ::SireMM::SelectorBond::*energies_function_type)(  ) const;
             energies_function_type energies_function_value( &::SireMM::SelectorBond::energies );
             
             SelectorBond_exposer.def( 
@@ -128,7 +129,7 @@ void register_SelectorBond_class(){
         }
         { //::SireMM::SelectorBond::energies
         
-            typedef ::QList< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > ( ::SireMM::SelectorBond::*energies_function_type)( ::SireBase::PropertyMap const & ) const;
+            typedef ::QList< SireUnits::Dimension::GeneralUnit > ( ::SireMM::SelectorBond::*energies_function_type)( ::SireBase::PropertyMap const & ) const;
             energies_function_type energies_function_value( &::SireMM::SelectorBond::energies );
             
             SelectorBond_exposer.def( 
@@ -141,7 +142,7 @@ void register_SelectorBond_class(){
         }
         { //::SireMM::SelectorBond::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::SelectorBond::*energy_function_type)(  ) const;
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireMM::SelectorBond::*energy_function_type)(  ) const;
             energy_function_type energy_function_value( &::SireMM::SelectorBond::energy );
             
             SelectorBond_exposer.def( 
@@ -153,7 +154,7 @@ void register_SelectorBond_class(){
         }
         { //::SireMM::SelectorBond::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::SelectorBond::*energy_function_type)( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireMM::SelectorBond::*energy_function_type)( ::SireBase::PropertyMap const & ) const;
             energy_function_type energy_function_value( &::SireMM::SelectorBond::energy );
             
             SelectorBond_exposer.def( 
@@ -265,6 +266,18 @@ void register_SelectorBond_class(){
                 , "" );
         
         }
+        { //::SireMM::SelectorBond::isSelector
+        
+            typedef bool ( ::SireMM::SelectorBond::*isSelector_function_type)(  ) const;
+            isSelector_function_type isSelector_function_value( &::SireMM::SelectorBond::isSelector );
+            
+            SelectorBond_exposer.def( 
+                "isSelector"
+                , isSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::SelectorBond::lengths
         
             typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 > > ( ::SireMM::SelectorBond::*lengths_function_type)(  ) const;
@@ -285,6 +298,31 @@ void register_SelectorBond_class(){
             SelectorBond_exposer.def( 
                 "lengths"
                 , lengths_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorBond::measures
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 > > ( ::SireMM::SelectorBond::*measures_function_type)(  ) const;
+            measures_function_type measures_function_value( &::SireMM::SelectorBond::measures );
+            
+            SelectorBond_exposer.def( 
+                "measures"
+                , measures_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::SelectorBond::measures
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 > > ( ::SireMM::SelectorBond::*measures_function_type)( ::SireBase::PropertyMap const & ) const;
+            measures_function_type measures_function_value( &::SireMM::SelectorBond::measures );
+            
+            SelectorBond_exposer.def( 
+                "measures"
+                , measures_function_value
                 , ( bp::arg("map") )
                 , bp::release_gil_policy()
                 , "" );

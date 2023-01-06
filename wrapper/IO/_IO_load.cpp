@@ -18,6 +18,8 @@
 #include "SireMol/atomelements.h"
 #include "SireMol/core.h"
 
+#include "SireVol/cartesian.h"
+
 #include "Helpers/release_gil_policy.hpp"
 
 #include <QFileInfo>
@@ -28,6 +30,7 @@ using namespace SireBase;
 using namespace SireIO;
 using namespace SireSystem;
 using namespace SireMol;
+using namespace SireVol;
 
 System load_molecules(const QStringList &files,
                       const PropertyMap &map=PropertyMap())
@@ -48,6 +51,18 @@ System load_molecules(const QStringList &files,
             name = QFileInfo(files[0]).baseName();
         }
 
+        SpacePtr space;
+        const QString space_property("space");
+
+        if (mols.containsProperty(space_property))
+        {
+            space = mols.property(space_property);
+        }
+        else
+        {
+            space = Cartesian();
+        }
+
         // This is an opinionated loader - we must have atom elements
         // and a connectivity defined
         auto grp = MoleculeGroup("all");
@@ -57,11 +72,10 @@ System load_molecules(const QStringList &files,
         for (const auto &molnum : mols.molNums())
         {
             auto mol = mols[molnum].molecule();
+            auto editor = mol.edit();
 
             if (not mol.hasProperty("element"))
             {
-                auto editor = mol.edit();
-
                 for (int i=0; i<mol.nAtoms(); ++i)
                 {
                     auto atom = editor.atom(AtomIdx(i));
@@ -69,8 +83,6 @@ System load_molecules(const QStringList &files,
                                      Element::biologicalElement(atom.name()));
                     editor = atom.molecule();
                 }
-
-                mol = editor.commit();
             }
 
             if (not mol.hasProperty("connectivity"))
@@ -78,7 +90,7 @@ System load_molecules(const QStringList &files,
                 try
                 {
                     auto hunter = CovalentBondHunter();
-                    mol = mol.edit().setProperty("connectivity",
+                    editor.setProperty("connectivity",
                                                  hunter(mol) ).commit();
                 }
                 catch(...)
@@ -113,14 +125,17 @@ System load_molecules(const QStringList &files,
                     }
                 }
 
-                mol = mol.edit().rename(molname).commit();
+                editor.rename(molname).commit();
             }
+
+            // we want every molecule to know what space it has
+            editor.setProperty("space", space);
 
             // we now want to break the molecule up into sub-molecules,
             // based on the connectivity
             // NOT IMPLEMENTED YET
 
-            grp.add(mol);
+            grp.add(editor.commit());
         }
 
         auto s = System();

@@ -796,6 +796,32 @@ void register_System_class(){
                 , "Return whether or not any of the forcefields identified by the ID ffid\ncontain a property called name" );
         
         }
+        { //::SireSystem::System::deleteFrame
+        
+            typedef void ( ::SireSystem::System::*deleteFrame_function_type)( int ) ;
+            deleteFrame_function_type deleteFrame_function_value( &::SireSystem::System::deleteFrame );
+            
+            System_exposer.def( 
+                "deleteFrame"
+                , deleteFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireSystem::System::deleteFrame
+        
+            typedef void ( ::SireSystem::System::*deleteFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            deleteFrame_function_type deleteFrame_function_value( &::SireSystem::System::deleteFrame );
+            
+            System_exposer.def( 
+                "deleteFrame"
+                , deleteFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireSystem::System::energies
         
             typedef ::SireCAS::Values ( ::SireSystem::System::*energies_function_type)(  ) ;
@@ -1208,6 +1234,32 @@ void register_System_class(){
                 , "Return whether or not the property name exists and is a user\nsupplied property (either a compound property or an extra\nSystem property)" );
         
         }
+        { //::SireSystem::System::loadFrame
+        
+            typedef void ( ::SireSystem::System::*loadFrame_function_type)( int ) ;
+            loadFrame_function_type loadFrame_function_value( &::SireSystem::System::loadFrame );
+            
+            System_exposer.def( 
+                "loadFrame"
+                , loadFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireSystem::System::loadFrame
+        
+            typedef void ( ::SireSystem::System::*loadFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            loadFrame_function_type loadFrame_function_value( &::SireSystem::System::loadFrame );
+            
+            System_exposer.def( 
+                "loadFrame"
+                , loadFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireSystem::System::monitor
         
             typedef ::SireSystem::SystemMonitor const & ( ::SireSystem::System::*monitor_function_type)( ::SireSystem::MonitorID const & ) const;
@@ -1293,6 +1345,31 @@ void register_System_class(){
                 , nForceFields_function_value
                 , bp::release_gil_policy()
                 , "Return the number of forcefields in this system" );
+        
+        }
+        { //::SireSystem::System::nFrames
+        
+            typedef int ( ::SireSystem::System::*nFrames_function_type)(  ) const;
+            nFrames_function_type nFrames_function_value( &::SireSystem::System::nFrames );
+            
+            System_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireSystem::System::nFrames
+        
+            typedef int ( ::SireSystem::System::*nFrames_function_type)( ::SireBase::PropertyMap const & ) const;
+            nFrames_function_type nFrames_function_value( &::SireSystem::System::nFrames );
+            
+            System_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireSystem::System::nMonitors
@@ -1899,6 +1976,57 @@ void register_System_class(){
                 , ( bp::arg("name") )
                 , bp::release_gil_policy()
                 , "Remove the property with name name. Note that this can only\nremove user-level properties - it cannot remove built-in properties\nof the system. This does nothing if there is no user-level\nproperty with this name" );
+        
+        }
+        { //::SireSystem::System::saveFrame
+        
+            typedef void ( ::SireSystem::System::*saveFrame_function_type)( int ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireSystem::System::saveFrame );
+            
+            System_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireSystem::System::saveFrame
+        
+            typedef void ( ::SireSystem::System::*saveFrame_function_type)(  ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireSystem::System::saveFrame );
+            
+            System_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireSystem::System::saveFrame
+        
+            typedef void ( ::SireSystem::System::*saveFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireSystem::System::saveFrame );
+            
+            System_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireSystem::System::saveFrame
+        
+            typedef void ( ::SireSystem::System::*saveFrame_function_type)( ::SireBase::PropertyMap const & ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireSystem::System::saveFrame );
+            
+            System_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireSystem::System::setComponent

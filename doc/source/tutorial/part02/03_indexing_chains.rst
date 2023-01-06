@@ -133,8 +133,8 @@ are molecular containers, they also have their own
 :func:`~sire.mol.Residue.residue` and :func:`~sire.mol.Residue.residues` functions,
 which behave as you would expect.
 
->>> print(mol["chainname A"].residue(sr.resid("ALA", 25)))
-print(mol["chainname A"].residue(sr.resid("ALA", 23)))
+>>> print(mol["chainname A"].residue(sr.resid("ALA", 23)))
+Residue( ALA:23  num_atoms=5 )
 
 You can get all of the residues in a chain by calling the
 :func:`~sire.mol.Chain.residues` function without any arguments,

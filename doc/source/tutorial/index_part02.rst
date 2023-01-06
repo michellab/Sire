@@ -25,11 +25,15 @@ Unzipping './7SA1.pdb.gz'...
 >>> mol = mols[0]
 >>> print(mol)
 Molecule( 7SA1:2  num_atoms=11728 num_residues=1518 )
+>>> mol.view()
+
+.. image:: part02/images/7SA1.jpg
+   :alt: Picture of 7SA1 viewed in NGLView
 
 .. note::
 
-``sire`` automatically downloads and unpacks structures from the PDB. Just
-put in the PDB code as the argument to :func:`sire.load`.
+   ``sire`` automatically downloads and unpacks structures from the PDB. Just
+   put in the PDB code as the argument to :func:`sire.load`.
 
 Molecules are constructed as atoms, which be can be (optionally) arranged
 into residues, chains and segments. We can get the number of each using
@@ -52,4 +56,7 @@ The number of segments is 0
    part02/04_indexing_segments
    part02/05_indexing_molecules
    part02/06_indexing_bonds
-   part02/07_searching
+   part02/07_indexing_angles
+   part02/08_indexing_dihedrals
+   part02/09_indexing_impropers
+   part02/10_searching

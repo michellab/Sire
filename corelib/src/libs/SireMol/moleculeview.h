@@ -59,11 +59,14 @@ class MoleculeData;
 class AtomSelection;
 
 class Molecule;
+class Molecules;
 class Segment;
 class Chain;
 class Residue;
 class CutGroup;
 class Atom;
+class Trajectory;
+class Frame;
 
 template<class T>
 class Selector;
@@ -149,6 +152,8 @@ public:
     virtual MolViewPtr operator[](const QList<qint64> &idxs) const;
 
     virtual QList<MolViewPtr> toList() const;
+    virtual Molecules toMolecules() const;
+
     virtual MolViewPtr toSelector() const=0;
 
     MolViewPtr at(int i) const;
@@ -266,6 +271,8 @@ public:
     Molecule molecule() const;
 
     SelectResult search(const QString &search_string) const;
+    SelectResult search(const QString &search_string,
+                        const PropertyMap &map) const;
 
     CutGroup select(const CGID &cgid, const PropertyMap &map = PropertyMap()) const;
     Residue select(const ResID &resid, const PropertyMap &map = PropertyMap()) const;
@@ -297,7 +304,10 @@ public:
                                 const PropertyMap &map = PropertyMap()) const;
     Selector<Segment> selectAllSegments() const;
 
+    virtual bool isSelector() const;
+
     virtual void update(const MoleculeData &moldata);
+    virtual void update(const Molecules &molecules);
 
     /** Return whether or not this view has the property at key 'key'
          - note that this returns true only if there is a property,
@@ -337,6 +347,19 @@ public:
         this returns the metakeys of all AtomProperty derived objects */
     virtual QStringList metadataKeys(const PropertyName &key) const=0;
 
+    int nFrames() const;
+    int nFrames(const SireBase::PropertyMap &map) const;
+
+    void loadFrame(int frame);
+    void saveFrame(int frame);
+    void saveFrame();
+    void deleteFrame(int frame);
+
+    void loadFrame(int frame, const SireBase::PropertyMap &map);
+    void saveFrame(int frame, const SireBase::PropertyMap &map);
+    void saveFrame(const SireBase::PropertyMap &map);
+    void deleteFrame(int frame, const SireBase::PropertyMap &map);
+
     const char* propertyType(const PropertyName &key) const;
     const char* metadataType(const PropertyName &metakey) const;
 
@@ -368,6 +391,9 @@ protected:
     bool operator==(const MoleculeView &other) const;
     bool operator!=(const MoleculeView &other) const;
 
+    Frame _toFrame(const PropertyMap &map) const;
+    void _fromFrame(const Frame &frame, const PropertyMap &map);
+
     template<class Index, class PropType, class T>
     static void setProperty(MoleculeData &data,
                             const QString &key,
@@ -383,6 +409,7 @@ protected:
                             const QString &key, const QString &metakey,
                             const Index &idx, const T &value);
 
+    Trajectory _getTrajectory(const SireBase::PropertyMap &map) const;
 
     /** Shared pointer to the raw data of the molecule */
     SireBase::SharedDataPointer<MoleculeData> d;

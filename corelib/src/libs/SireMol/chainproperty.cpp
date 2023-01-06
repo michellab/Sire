@@ -36,9 +36,11 @@ namespace SireMol
     template class ChainProperty<qint64>;
     template class ChainProperty<double>;
     template class ChainProperty<QVariant>;
-} 
+    template class ChainProperty<SireBase::PropertyPtr>;
+}
 
 static const RegisterMetaType<ChainStringProperty> r_chainstring;
 static const RegisterMetaType<ChainIntProperty> r_chainint;
 static const RegisterMetaType<ChainFloatProperty> r_chainfloat;
 static const RegisterMetaType<ChainVariantProperty> r_chainvariant;
+static const RegisterMetaType<ChainPropertyProperty> r_chainproprop;

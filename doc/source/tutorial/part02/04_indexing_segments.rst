@@ -18,6 +18,7 @@ that does.
 
 >>> mols = sr.load(sr.expand(sr.tutorial_url, "alanin.psf"))
 Downloading from 'https://siremol.org/m/alanin.psf'...
+Unzipping './alanin.psf.bz2'...
 >>> mol = mols[0]
 
 This molecule contains only a single segment called "MAIN".

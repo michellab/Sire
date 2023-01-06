@@ -98,6 +98,20 @@ void register_AtomElements_class(){
         { //::SireMol::AtomProperty< SireMol::Element >::at
         
             typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
+            typedef ::SireMol::Element const & ( ::SireMol::AtomProperty< SireMol::Element >::*at_function_type)( int ) const;
+            at_function_type at_function_value( &::SireMol::AtomProperty< SireMol::Element >::at );
+            
+            AtomElements_exposer.def( 
+                "at"
+                , at_function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMol::Element >::at
+        
+            typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
             typedef ::SireMol::Element const & ( ::SireMol::AtomProperty< SireMol::Element >::*at_function_type)( ::SireMol::CGAtomIdx const & ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< SireMol::Element >::at );
             
@@ -216,6 +230,20 @@ void register_AtomElements_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgidx") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMol::Element >::get
+        
+            typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
+            typedef ::SireMol::Element const & ( ::SireMol::AtomProperty< SireMol::Element >::*get_function_type)( int ) const;
+            get_function_type get_function_value( &::SireMol::AtomProperty< SireMol::Element >::get );
+            
+            AtomElements_exposer.def( 
+                "get"
+                , get_function_value
+                , ( bp::arg("i") )
                 , bp::return_value_policy< bp::copy_const_reference >()
                 , "" );
         
@@ -404,6 +432,20 @@ void register_AtomElements_class(){
         { //::SireMol::AtomProperty< SireMol::Element >::operator[]
         
             typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
+            typedef ::SireMol::Element const & ( ::SireMol::AtomProperty< SireMol::Element >::*__getitem___function_type)( int ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireMol::Element >::operator[] );
+            
+            AtomElements_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMol::Element >::operator[]
+        
+            typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
             typedef ::SireMol::Element const & ( ::SireMol::AtomProperty< SireMol::Element >::*__getitem___function_type)( ::SireMol::CGAtomIdx const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireMol::Element >::operator[] );
             
@@ -412,6 +454,32 @@ void register_AtomElements_class(){
                 , __getitem___function_value
                 , ( bp::arg("cgatomidx") )
                 , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMol::Element >::operator[]
+        
+            typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
+            typedef ::QList< SireMol::Element > ( ::SireMol::AtomProperty< SireMol::Element >::*__getitem___function_type)( ::QList< long long > const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireMol::Element >::operator[] );
+            
+            AtomElements_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("idxs") )
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMol::Element >::operator[]
+        
+            typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
+            typedef ::QList< SireMol::Element > ( ::SireMol::AtomProperty< SireMol::Element >::*__getitem___function_type)( ::SireBase::Slice const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireMol::Element >::operator[] );
+            
+            AtomElements_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("slice") )
                 , "" );
         
         }
@@ -452,6 +520,33 @@ void register_AtomElements_class(){
             AtomElements_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMol::Element >::toList
+        
+            typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
+            typedef ::QList< SireMol::Element > ( ::SireMol::AtomProperty< SireMol::Element >::*toList_function_type)(  ) const;
+            toList_function_type toList_function_value( &::SireMol::AtomProperty< SireMol::Element >::toList );
+            
+            AtomElements_exposer.def( 
+                "toList"
+                , toList_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMol::Element >::toList
+        
+            typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
+            typedef ::QList< SireMol::Element > ( ::SireMol::AtomProperty< SireMol::Element >::*toList_function_type)( ::SireMol::AtomSelection const & ) const;
+            toList_function_type toList_function_value( &::SireMol::AtomProperty< SireMol::Element >::toList );
+            
+            AtomElements_exposer.def( 
+                "toList"
+                , toList_function_value
+                , ( bp::arg("selection") )
                 , bp::release_gil_policy()
                 , "" );
         

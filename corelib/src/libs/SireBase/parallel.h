@@ -31,7 +31,12 @@
 
 #include "sireglobal.h"
 
+#include "SireBase/propertymap.h"
+#include "SireBase/booleanproperty.h"
+
 SIRE_BEGIN_HEADER
+
+#ifndef GCCXML_PARSE
 
 #include <QVector>
 #include <QMutex>
@@ -52,6 +57,17 @@ SIRE_BEGIN_HEADER
 
 namespace SireBase
 {
+    inline bool should_run_in_parallel(int count, const PropertyMap &map=PropertyMap())
+    {
+        if (count < 8)
+            return false;
+        else if (map["parallel"].hasValue())
+            return map["parallel"].value().asA<BooleanProperty>().value();
+        else
+            return true;
+    }
+
+
     /** This function runs the passed array T of functions in parallel, if
         the optional 'run_parallel' is true. Otherwise, it runs the functions
         serially, one after another */
@@ -79,6 +95,8 @@ namespace SireBase
     }
 
 } // end of namespace SireBase
+
+#endif
 
 SIRE_END_HEADER
 

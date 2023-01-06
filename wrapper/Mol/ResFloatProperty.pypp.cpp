@@ -89,6 +89,20 @@ void register_ResFloatProperty_class(){
                 , "" );
         
         }
+        { //::SireMol::ResProperty< double >::at
+        
+            typedef SireMol::ResProperty< double > exported_class_t;
+            typedef double const & ( ::SireMol::ResProperty< double >::*at_function_type)( int ) const;
+            at_function_type at_function_value( &::SireMol::ResProperty< double >::at );
+            
+            ResFloatProperty_exposer.def( 
+                "at"
+                , at_function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
         { //::SireMol::ResProperty< double >::canConvert
         
             typedef SireMol::ResProperty< double > exported_class_t;
@@ -140,6 +154,20 @@ void register_ResFloatProperty_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("residx") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::ResProperty< double >::get
+        
+            typedef SireMol::ResProperty< double > exported_class_t;
+            typedef double const & ( ::SireMol::ResProperty< double >::*get_function_type)( int ) const;
+            get_function_type get_function_value( &::SireMol::ResProperty< double >::get );
+            
+            ResFloatProperty_exposer.def( 
+                "get"
+                , get_function_value
+                , ( bp::arg("i") )
                 , bp::return_value_policy< bp::copy_const_reference >()
                 , "" );
         
@@ -239,6 +267,46 @@ void register_ResFloatProperty_class(){
                 , __getitem___function_value
                 , ( bp::arg("residx") )
                 , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::ResProperty< double >::operator[]
+        
+            typedef SireMol::ResProperty< double > exported_class_t;
+            typedef double const & ( ::SireMol::ResProperty< double >::*__getitem___function_type)( int ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::ResProperty< double >::operator[] );
+            
+            ResFloatProperty_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::ResProperty< double >::operator[]
+        
+            typedef SireMol::ResProperty< double > exported_class_t;
+            typedef ::QList< double > ( ::SireMol::ResProperty< double >::*__getitem___function_type)( ::QList< long long > const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::ResProperty< double >::operator[] );
+            
+            ResFloatProperty_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("idxs") )
+                , "" );
+        
+        }
+        { //::SireMol::ResProperty< double >::operator[]
+        
+            typedef SireMol::ResProperty< double > exported_class_t;
+            typedef ::QList< double > ( ::SireMol::ResProperty< double >::*__getitem___function_type)( ::SireBase::Slice const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::ResProperty< double >::operator[] );
+            
+            ResFloatProperty_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("slice") )
                 , "" );
         
         }

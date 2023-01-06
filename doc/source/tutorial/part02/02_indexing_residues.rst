@@ -151,7 +151,7 @@ Selector<SireMol::Residue>( size=10
 9:  Residue( GLU:9   num_atoms=9 )
 )
 
->>> print(mol["resnum 201:204"])
+>>> print(mol["resnum 201:205"])
 Selector<SireMol::Residue>( size=9
 0:  Residue( LEU:201 num_atoms=8 )
 1:  Residue( ARG:202 num_atoms=11 )

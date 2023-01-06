@@ -6,6 +6,9 @@
 #ifndef TUPLES_HPP_16_JAN_2007
 #define TUPLES_HPP_16_JAN_2007
 
+#include <QDebug>
+#include "sireglobal.h"
+
 #include <boost/python.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <boost/python/object.hpp> //len function
@@ -155,7 +158,12 @@ struct from_py_sequence{
         auto raii = boost::python::release_gil_policy::acquire_gil();
         {
             long result = PyObject_Length(obj.ptr());
-            if (PyErr_Occurred()) throw_error_already_set();
+            if (PyErr_Occurred())
+            {
+                qDebug() << CODELOC;
+                PyErr_Print();
+                throw_error_already_set();
+            }
             return result;
         }
     }

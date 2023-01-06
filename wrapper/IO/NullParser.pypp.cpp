@@ -21,7 +21,13 @@ namespace bp = boost::python;
 
 #include "SireMM/mmdetail.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/molecule.h"
+
+#include "SireMol/moleditor.h"
+
+#include "SireMol/trajectory.h"
 
 #include "SireStream/datastream.h"
 
@@ -29,7 +35,11 @@ namespace bp = boost::python;
 
 #include "SireSystem/system.h"
 
+#include "filetrajectory.h"
+
 #include "moleculeparser.h"
+
+#include "supplementary.h"
 
 #include <QDebug>
 
@@ -57,7 +67,7 @@ void register_NullParser_class(){
 
     { //::SireIO::NullParser
         typedef bp::class_< SireIO::NullParser, bp::bases< SireIO::MoleculeParser, SireBase::Property > > NullParser_exposer_t;
-        NullParser_exposer_t NullParser_exposer = NullParser_exposer_t( "NullParser", "This is a null parser, returned when the file cannot be parsed", bp::init< >("") );
+        NullParser_exposer_t NullParser_exposer = NullParser_exposer_t( "NullParser", "This is a null parser", bp::init< >("") );
         bp::scope NullParser_scope( NullParser_exposer );
         NullParser_exposer.def( bp::init< SireIO::NullParser const & >(( bp::arg("arg0") ), "") );
         { //::SireIO::NullParser::construct
@@ -119,6 +129,18 @@ void register_NullParser_class(){
             NullParser_exposer.def( 
                 "formatName"
                 , formatName_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireIO::NullParser::nAtoms
+        
+            typedef int ( ::SireIO::NullParser::*nAtoms_function_type)(  ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireIO::NullParser::nAtoms );
+            
+            NullParser_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
                 , bp::release_gil_policy()
                 , "" );
         

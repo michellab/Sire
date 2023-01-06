@@ -291,14 +291,7 @@ namespace AST
 
     QString Node::toString() const
     {
-        QStringList lines;
-
-        for (const auto &value : values)
-        {
-            lines.append( value.toString() );
-        }
-
-        return lines.join("; ");
+        return values.toString();
     }
 
     QString IDNull::toString() const
@@ -354,7 +347,10 @@ namespace AST
 
         for (const auto &element : values)
         {
-            lines.append( element.symbol() );
+            if (element == "biological")
+                lines.append(element);
+            else
+                lines.append( SireMol::Element(element).symbol() );
         }
 
         return QObject::tr("element %1").arg(lines.join(","));
@@ -411,7 +407,7 @@ namespace AST
     {
         return QString("is within %1 of %2")
                     .arg(distance.toString())
-                    .arg(value.toString());
+                    .arg(value1.toString());
     }
 
     QString IDWhereCompare::toString() const
@@ -424,9 +420,9 @@ namespace AST
     QString IDWhere::toString() const
     {
         return QString("%1s where %2 %3")
-                    .arg(idobject_to_string(name))
+                    .arg(value0.toString())
                     .arg(idcoordtype_to_string(typ))
-                    .arg(boost::apply_visitor( qstring_visitor(), value ));
+                    .arg(boost::apply_visitor( qstring_visitor(), value1 ));
     }
 
     QString IDJoin::toString() const
@@ -441,42 +437,28 @@ namespace AST
 
     QString IDSubscript::toString() const
     {
-        return QString("{%1}[%2]").arg(value.toString()).arg(range.toString());
+        return QString("(%1)[%2]").arg(value.toString()).arg(range.toString());
     }
 
     QString IDWithin::toString() const
     {
         return QObject::tr("%1s within %2 of %3")
-                    .arg(idobject_to_string(name))
+                    .arg(value0.toString())
                     .arg(distance.toString())
-                    .arg(value.toString());
+                    .arg(value1.toString());
     }
 
     QString IDWithinVector::toString() const
     {
         return QObject::tr("%1s within %2 of %3")
-                    .arg(idobject_to_string(name))
+                    .arg(value0.toString())
                     .arg(distance.toString())
-                    .arg(value.toString());
+                    .arg(value1.toString());
     }
 
     SelectEnginePtr Node::toEngine() const
     {
-        if (values.size() == 0)
-            return SelectEnginePtr();
-        else if (values.size() == 1)
-            return values.at(0).toEngine();
-        else
-        {
-            QList<SelectEnginePtr> engines;
-
-            for (const auto &value : values)
-            {
-                engines.append( value.toEngine() );
-            }
-
-            return IDOrEngine::construct(engines);
-        }
+        return values.toEngine();
     }
 
     SelectEnginePtr Expression::toEngine() const
@@ -581,13 +563,14 @@ namespace AST
                                        to_token, to_value.toEngine());
     }
 
-    SelectEnginePtr IDWhereWithin::toEngine(IDObject name, IDCoordType typ) const
+    SelectEnginePtr IDWhereWithin::toEngine(Expression value0, IDCoordType typ) const
     {
-        return IDDistanceEngine::construct(name, typ, distance.value * distance.unit,
-                                           value.toEngine());
+        return IDDistanceEngine::construct(value0.toEngine(),
+                                           typ, distance.value * distance.unit,
+                                           value1.toEngine());
     }
 
-    SelectEnginePtr IDWhereCompare::toEngine(IDObject name, IDCoordType typ) const
+    SelectEnginePtr IDWhereCompare::toEngine(Expression value0, IDCoordType typ) const
     {
         qDebug() << "NOT YET IMPLEMENTED IDWhereCompare!";
         return SelectEnginePtr();
@@ -596,11 +579,11 @@ namespace AST
     class where_engine_visitor : public boost::static_visitor<SelectEnginePtr>
     {
     public:
-        where_engine_visitor(IDObject o, IDCoordType t)
+        where_engine_visitor(Expression o, IDCoordType t)
             : boost::static_visitor<SelectEnginePtr>(), obj(o), typ(t)
         {}
 
-        IDObject obj;
+        Expression obj;
         IDCoordType typ;
 
         template<class T>
@@ -612,7 +595,7 @@ namespace AST
 
     SelectEnginePtr IDWhere::toEngine() const
     {
-        return boost::apply_visitor( where_engine_visitor(name,typ), value );
+        return boost::apply_visitor( where_engine_visitor(value0,typ), value1 );
     }
 
     SelectEnginePtr IDJoin::toEngine() const
@@ -632,11 +615,15 @@ namespace AST
 
     SelectEnginePtr IDWithin::toEngine() const
     {
-        return IDDistanceEngine::construct(name, distance.value * distance.unit, value.toEngine());
+        return IDDistanceEngine::construct(value0.toEngine(),
+                                           distance.value * distance.unit,
+                                           value1.toEngine());
     }
 
     SelectEnginePtr IDWithinVector::toEngine() const
     {
-        return IDDistanceVectorEngine::construct(name, distance.value * distance.unit, value);
+        return IDDistanceVectorEngine::construct(value0.toEngine(),
+                                                 distance.value * distance.unit,
+                                                 value1);
     }
 }

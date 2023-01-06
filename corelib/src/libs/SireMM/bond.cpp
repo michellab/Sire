@@ -86,7 +86,7 @@ Bond::Bond() : ConcreteProperty<Bond, MoleculeView>()
 
 
 Bond::Bond(const Atom &atom0, const Atom &atom1)
-     : ConcreteProperty<Bond, MoleculeView>(atom0)
+     : ConcreteProperty<Bond, MoleculeView>()
 {
     if (not atom0.isSameMolecule(atom1))
     {
@@ -97,14 +97,9 @@ Bond::Bond(const Atom &atom0, const Atom &atom1)
                 .arg(atom0.molecule().toString())
                 .arg(atom1.molecule().toString()), CODELOC);
     }
-    else if (atom0.index() == atom1.index())
-    {
-        throw SireMol::duplicate_atom(QObject::tr(
-            "You cannot create a bond from two identical atoms. %1")
-                .arg(atom0.toString()), CODELOC);
-    }
 
-    bnd = BondID(atom0.index(), atom1.index());
+    this->operator=(Bond(atom0.data(),
+                         BondID(atom0.index(), atom1.index())));
 }
 
 Bond::Bond(const MoleculeView &molview,
@@ -227,6 +222,16 @@ bool Bond::selectedAll() const
     return this->data().info().nAtoms() == 2;
 }
 
+SelectorBond Bond::selector() const
+{
+    return SelectorBond(*this);
+}
+
+SelectorBond Bond::invert() const
+{
+    return this->selector().invert();
+}
+
 AtomSelection Bond::selection() const
 {
     if (this->isNull())
@@ -344,6 +349,16 @@ SireUnits::Dimension::Length Bond::length() const
     return this->length(PropertyMap());
 }
 
+SireUnits::Dimension::Length Bond::measure(const PropertyMap &map) const
+{
+    return this->length(map);
+}
+
+SireUnits::Dimension::Length Bond::measure() const
+{
+    return this->length();
+}
+
 SireCAS::Expression Bond::potential() const
 {
     return this->potential(PropertyMap());
@@ -362,18 +377,22 @@ Expression Bond::potential(const PropertyMap &map) const
     return Expression();
 }
 
-SireUnits::Dimension::MolarEnergy Bond::energy() const
+SireUnits::Dimension::GeneralUnit Bond::energy() const
 {
     return this->energy(PropertyMap());
 }
 
-SireUnits::Dimension::MolarEnergy Bond::energy(const PropertyMap &map) const
+SireUnits::Dimension::GeneralUnit Bond::energy(const PropertyMap &map) const
 {
     auto pot = this->potential(map);
     auto l = this->length(map);
 
+    GeneralUnit value;
+
     Values vals(Symbol("r")==l.to(angstrom));
-    return pot.evaluate(vals) * kcal_per_mol;
+    value.setComponent("bond", pot.evaluate(vals) * kcal_per_mol);
+
+    return value;
 }
 
 namespace SireMol

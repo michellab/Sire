@@ -49,6 +49,8 @@ namespace bp = boost::python;
 
 #include "SireMol/stereoscopy.h"
 
+#include "SireMol/trajectory.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -85,18 +87,6 @@ void register_SDF_class(){
         SDF_exposer.def( bp::init< QStringList const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("lines"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to read in the data from the passed text lines. The\npassed property map can be used to pass extra parameters to control\nthe parsing") );
         SDF_exposer.def( bp::init< SireSystem::System const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("system"), bp::arg("map")=SireBase::PropertyMap() ), "Construct this parser by extracting all necessary information from the\npassed SireSystem::System, looking for the properties that are specified\nin the passed property map") );
         SDF_exposer.def( bp::init< SireIO::SDF const & >(( bp::arg("other") ), "Copy constructor") );
-        { //::SireIO::SDF::canFollow
-        
-            typedef bool ( ::SireIO::SDF::*canFollow_function_type)(  ) const;
-            canFollow_function_type canFollow_function_value( &::SireIO::SDF::canFollow );
-            
-            SDF_exposer.def( 
-                "canFollow"
-                , canFollow_function_value
-                , bp::release_gil_policy()
-                , "The SDF cannot follow another lead parsers." );
-        
-        }
         { //::SireIO::SDF::construct
         
             typedef ::SireIO::MoleculeParserPtr ( ::SireIO::SDF::*construct_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
@@ -172,16 +162,41 @@ void register_SDF_class(){
                 , "Return the suffixes that these files are normally associated with" );
         
         }
-        { //::SireIO::SDF::isLead
+        { //::SireIO::SDF::getFrame
         
-            typedef bool ( ::SireIO::SDF::*isLead_function_type)(  ) const;
-            isLead_function_type isLead_function_value( &::SireIO::SDF::isLead );
+            typedef ::SireMol::Frame ( ::SireIO::SDF::*getFrame_function_type)( int ) const;
+            getFrame_function_type getFrame_function_value( &::SireIO::SDF::getFrame );
             
             SDF_exposer.def( 
-                "isLead"
-                , isLead_function_value
+                "getFrame"
+                , getFrame_function_value
+                , ( bp::arg("i") )
                 , bp::release_gil_policy()
-                , "Return whether or not this is a lead parser. The lead parser is responsible\nfor starting the process of turning the parsed file into the System. There\nmust be one and one-only lead parser in a set of parsers creating a System" );
+                , "" );
+        
+        }
+        { //::SireIO::SDF::isFrame
+        
+            typedef bool ( ::SireIO::SDF::*isFrame_function_type)(  ) const;
+            isFrame_function_type isFrame_function_value( &::SireIO::SDF::isFrame );
+            
+            SDF_exposer.def( 
+                "isFrame"
+                , isFrame_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireIO::SDF::isTopology
+        
+            typedef bool ( ::SireIO::SDF::*isTopology_function_type)(  ) const;
+            isTopology_function_type isTopology_function_value( &::SireIO::SDF::isTopology );
+            
+            SDF_exposer.def( 
+                "isTopology"
+                , isTopology_function_value
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireIO::SDF::nAtoms
@@ -207,6 +222,18 @@ void register_SDF_class(){
                 , ( bp::arg("i") )
                 , bp::release_gil_policy()
                 , "Return the number of atoms in molecule i." );
+        
+        }
+        { //::SireIO::SDF::nFrames
+        
+            typedef int ( ::SireIO::SDF::*nFrames_function_type)(  ) const;
+            nFrames_function_type nFrames_function_value( &::SireIO::SDF::nFrames );
+            
+            SDF_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireIO::SDF::nMolecules

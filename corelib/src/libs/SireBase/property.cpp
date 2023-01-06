@@ -30,6 +30,7 @@
 
 #include "property.h"
 #include "propertylist.h"
+#include "generalunitproperty.h"
 
 #include <QDebug>
 
@@ -104,6 +105,14 @@ bool Property::isAString() const
     return false;
 }
 
+/** Return whether or not this property holds a unit (or can convert
+    to a unit)
+*/
+bool Property::isAUnit() const
+{
+    return isADouble();
+}
+
 /** Return whether or not this property holds a double (or can convert
     to a double) */
 bool Property::isADouble() const
@@ -118,7 +127,7 @@ bool Property::isAnInteger() const
     return false;
 }
 
-/** Return whether or not this is an array property (or can convert to an 
+/** Return whether or not this is an array property (or can convert to an
     array property) */
 bool Property::isAnArray() const
 {
@@ -130,6 +139,12 @@ bool Property::isAnArray() const
 bool Property::isABoolean() const
 {
     return false;
+}
+
+/** Return this property converted to a unit */
+SireUnits::Dimension::GeneralUnit Property::asAUnit() const
+{
+    return SireUnits::Dimension::GeneralUnit(this->asADouble());
 }
 
 /** Return this property converted to a string. This throws an invalid
@@ -290,7 +305,7 @@ static const RegisterMetaType<PropPtrBase> r_propptr( MAGIC_ONLY, NO_ROOT,
                                                       "SireBase::PropPtrBase" );
 
 /** Serialise to a binary datastream */
-QDataStream &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds,
                                         const PropPtrBase &propptr)
 {
     writeHeader(ds, r_propptr, 1);
@@ -420,6 +435,12 @@ bool PropPtrBase::isAString() const
     return ptr->isAString();
 }
 
+bool PropPtrBase::isAUnit() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->isAUnit();
+}
+
 bool PropPtrBase::isADouble() const
 {
     BOOST_ASSERT( ptr.constData() != 0 );
@@ -448,6 +469,12 @@ QString PropPtrBase::asAString() const
 {
     BOOST_ASSERT( ptr.constData() != 0 );
     return ptr->asAString();
+}
+
+SireUnits::Dimension::GeneralUnit PropPtrBase::asAUnit() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->asAUnit();
 }
 
 double PropPtrBase::asADouble() const
@@ -493,7 +520,7 @@ static const RegisterMetaType<GlobalPropPtrBase> r_globalpropptr( MAGIC_ONLY, NO
                                                       "SireBase::GlobalPropPtrBase" );
 
 /** Serialise to a binary datastream */
-QDataStream &operator<<(QDataStream &ds, 
+QDataStream &operator<<(QDataStream &ds,
                                         const GlobalPropPtrBase &propptr)
 {
     writeHeader(ds, r_globalpropptr, 1);
@@ -599,6 +626,12 @@ bool GlobalPropPtrBase::isAString() const
     return ptr->isAString();
 }
 
+bool GlobalPropPtrBase::isAUnit() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->isAUnit();
+}
+
 bool GlobalPropPtrBase::isADouble() const
 {
     BOOST_ASSERT( ptr.constData() != 0 );
@@ -627,6 +660,12 @@ QString GlobalPropPtrBase::asAString() const
 {
     BOOST_ASSERT( ptr.constData() != 0 );
     return ptr->asAString();
+}
+
+SireUnits::Dimension::GeneralUnit GlobalPropPtrBase::asAUnit() const
+{
+    BOOST_ASSERT( ptr.constData() != 0 );
+    return ptr->asAUnit();
 }
 
 double GlobalPropPtrBase::asADouble() const

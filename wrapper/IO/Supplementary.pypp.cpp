@@ -38,18 +38,6 @@ void register_Supplementary_class(){
         Supplementary_exposer.def( bp::init< QString const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("filename"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to read in the data from the file called filename. The\npassed property map can be used to pass extra parameters to control\nthe parsing") );
         Supplementary_exposer.def( bp::init< QStringList const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("lines"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to read in the data from the passed text lines. The\npassed property map can be used to pass extra parameters to control\nthe parsing") );
         Supplementary_exposer.def( bp::init< SireIO::Supplementary const & >(( bp::arg("other") ), "Copy constructor") );
-        { //::SireIO::Supplementary::canFollow
-        
-            typedef bool ( ::SireIO::Supplementary::*canFollow_function_type)(  ) const;
-            canFollow_function_type canFollow_function_value( &::SireIO::Supplementary::canFollow );
-            
-            Supplementary_exposer.def( 
-                "canFollow"
-                , canFollow_function_value
-                , bp::release_gil_policy()
-                , "Return whether or not this parser can follow another lead parser, and add\ndata to an existing molecular system. The Supplementary parser cannot follow." );
-        
-        }
         { //::SireIO::Supplementary::construct
         
             typedef ::SireIO::MoleculeParserPtr ( ::SireIO::Supplementary::*construct_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
@@ -123,6 +111,30 @@ void register_Supplementary_class(){
                 , formatSuffix_function_value
                 , bp::release_gil_policy()
                 , "Return the suffixes that these files are normally associated with" );
+        
+        }
+        { //::SireIO::Supplementary::isSupplementary
+        
+            typedef bool ( ::SireIO::Supplementary::*isSupplementary_function_type)(  ) const;
+            isSupplementary_function_type isSupplementary_function_value( &::SireIO::Supplementary::isSupplementary );
+            
+            Supplementary_exposer.def( 
+                "isSupplementary"
+                , isSupplementary_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireIO::Supplementary::nAtoms
+        
+            typedef int ( ::SireIO::Supplementary::*nAtoms_function_type)(  ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireIO::Supplementary::nAtoms );
+            
+            Supplementary_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
+                , bp::release_gil_policy()
+                , "" );
         
         }
         Supplementary_exposer.def( bp::self != bp::self );

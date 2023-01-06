@@ -139,6 +139,7 @@ public:
     Evaluator evaluate() const;
     CGEditor edit() const;
     Selector<CutGroup> selector() const;
+    Selector<CutGroup> invert() const;
 
     int nAtoms() const;
 

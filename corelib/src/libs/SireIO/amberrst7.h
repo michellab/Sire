@@ -48,13 +48,13 @@ namespace SireIO
 
 /** This class represents an Amber-format restart/coordinate file (ascii),
     currently supporting these files from Amber7 to Amber16.
-    
+
     The format of this file is described here;
-    
+
     http://ambermd.org/formats.html
-    
+
     (specifically the "AMBER coordinate/restart" file specification
- 
+
     @author Christopher Woods
 */
 class SIREIO_EXPORT AmberRst7 : public SireBase::ConcreteProperty<AmberRst7,MoleculeParser>
@@ -71,26 +71,26 @@ public:
               const PropertyMap &map = PropertyMap());
     AmberRst7(const SireSystem::System &system,
               const PropertyMap &map = PropertyMap());
-    
+
     AmberRst7(const AmberRst7 &other);
-    
+
     ~AmberRst7();
-    
+
     AmberRst7& operator=(const AmberRst7 &other);
-    
+
     bool operator==(const AmberRst7 &other) const;
     bool operator!=(const AmberRst7 &other) const;
-    
+
     static const char* typeName();
-    
+
     const char* what() const;
-    
+
     MoleculeParserPtr construct(const QString &filename,
                                 const PropertyMap &map) const;
 
     MoleculeParserPtr construct(const QStringList &lines,
                                 const PropertyMap &map) const;
-    
+
     MoleculeParserPtr construct(const SireSystem::System &system,
                                 const PropertyMap &map) const;
 
@@ -102,11 +102,17 @@ public:
 
     static AmberRst7 parse(const QString &filename);
 
+    bool isFrame() const;
+
+    int nFrames() const;
+
+    SireMol::Frame getFrame(int i) const;
+
     QString title() const;
     double time() const;
 
     int nAtoms() const;
-    
+
     bool hasVelocities() const;
 
     QVector<SireMaths::Vector> coordinates() const;
@@ -125,19 +131,19 @@ private:
 
     /** The title of the file */
     QString ttle;
-    
+
     /** The current time of the simulation in picoseconds */
     double current_time;
-    
+
     /** The coordinate data */
     QVector<SireMaths::Vector> coords;
-    
+
     /** The velocity data in amber units (angstroms / 1/20.455 ps) */
     QVector<SireMaths::Vector> vels;
-    
+
     /** The box dimensions */
     SireMaths::Vector box_dims;
-    
+
     /** The box angles */
     SireMaths::Vector box_angs;
 };

@@ -89,7 +89,8 @@ skip_metatypes = [ "QVariant",
                    "SireCAS::ExpressionBase",
                    "SireMaths::Rational",
                    "SireCluster::Node",
-                   "SireCluster::Nodes" ]
+                   "SireCluster::Nodes",
+                   "SireBase::PropertyPtr" ]
 
 class HeaderInfo:
     def __init__(self, filename, dir, module_dir):

@@ -97,11 +97,11 @@ LJParameter::~LJParameter()
 LJParameter LJParameter::combineArithmetic(const LJParameter &other) const
 {
     LJPair pair(*this, other, LJParameterDB::ARITHMETIC);
-    
+
     LJParameter ret;
     ret.sqrtsig = std::sqrt(pair.sigma());
     ret.sqrteps = std::sqrt(pair.epsilon());
-    
+
     return ret;
 }
 
@@ -110,11 +110,11 @@ LJParameter LJParameter::combineArithmetic(const LJParameter &other) const
 LJParameter LJParameter::combineGeometric(const LJParameter &other) const
 {
     LJPair pair(*this, other, LJParameterDB::GEOMETRIC);
-    
+
     LJParameter ret;
     ret.sqrtsig = std::sqrt(pair.sigma());
     ret.sqrteps = std::sqrt(pair.epsilon());
-    
+
     return ret;
 }
 
@@ -143,14 +143,14 @@ LJParameter LJParameter::dummy()
 /** Return the LJ 'A' parameter */
 double LJParameter::A() const
 {
-    return double(4.0) * double(epsilon()) 
+    return double(4.0) * double(epsilon())
                        * SireMaths::pow_12( double(sigma()) );
 }
 
 /** Return the LJ 'B' parameter */
 double LJParameter::B() const
 {
-    return double(4.0) * double(epsilon()) 
+    return double(4.0) * double(epsilon())
                        * SireMaths::pow_6( double(sigma()) );
 }
 
@@ -167,7 +167,8 @@ Length LJParameter::rmin() const
 /** Return a string representation of the CLJ parameter */
 QString LJParameter::toString() const
 {
-    return QString("LJ( sigma = %1 A, epsilon = %2 kcal mol-1 )").arg(sigma()).arg(epsilon());
+    return QString("LJ( sigma = %1, epsilon = %2 )").arg(sigma().toString())
+                                                    .arg(epsilon().toString());
 }
 
 /** Return a LJ parameter that corresponds to the passed values of sigma and epsilon,

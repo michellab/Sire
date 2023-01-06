@@ -66,6 +66,7 @@ using namespace SireSystem;
 using namespace SireFF;
 using namespace SireMol;
 using namespace SireCAS;
+using namespace SireVol;
 using namespace SireBase;
 using namespace SireUnits::Dimension;
 using namespace SireStream;
@@ -3299,6 +3300,119 @@ void System::commitDelta(const Constraints &constraints,
         old_state.restore(*this);
         throw;
     }
+}
+
+int System::nFrames() const
+{
+    return this->nFrames(PropertyMap());
+}
+
+int System::nFrames(const SireBase::PropertyMap &map) const
+{
+    return MolGroupsBase::nFrames(map);
+}
+
+void System::loadFrame(int frame)
+{
+    this->loadFrame(frame, PropertyMap());
+}
+
+void System::saveFrame(int frame)
+{
+    this->saveFrame(frame, PropertyMap());
+}
+
+void System::saveFrame()
+{
+    this->saveFrame(PropertyMap());
+}
+
+void System::deleteFrame(int frame)
+{
+    this->deleteFrame(frame, PropertyMap());
+}
+
+void System::loadFrame(int frame, const SireBase::PropertyMap &map)
+{
+    this->accept();
+    this->mustNowRecalculateFromScratch();
+    MolGroupsBase::loadFrame(frame, map);
+
+
+    // we must get the space property
+    SpacePtr old_space;
+
+    const auto space_property = map["space"];
+
+    if (not space_property.hasSource())
+    {
+        //nothing to do
+        return;
+    }
+
+    try
+    {
+        old_space = this->property(space_property.source()).asA<Space>();
+    }
+    catch(...)
+    {
+        // no default space
+        old_space = Cartesian();
+    }
+
+    SpacePtr new_space = Cartesian();
+
+    const auto groups = this->getGroups();
+
+    for (auto it = groups.constBegin();
+         it != groups.constEnd();
+         ++it)
+    {
+        bool found = false;
+
+        for (const auto &mol : (*it)->molecules())
+        {
+            try
+            {
+                new_space = mol.data().property(space_property.source()).asA<Space>();
+                found = true;
+            }
+            catch(...)
+            {}
+
+            if (found)
+                break;
+        }
+
+        if (found)
+            break;
+    }
+
+    if (not old_space.read().equals(*new_space))
+    {
+        this->setProperty(space_property.source(), new_space);
+    }
+}
+
+void System::saveFrame(int frame, const SireBase::PropertyMap &map)
+{
+    this->accept();
+    this->mustNowRecalculateFromScratch();
+    MolGroupsBase::saveFrame(frame, map);
+}
+
+void System::saveFrame(const SireBase::PropertyMap &map)
+{
+    this->accept();
+    this->mustNowRecalculateFromScratch();
+    MolGroupsBase::saveFrame(map);
+}
+
+void System::deleteFrame(int frame, const SireBase::PropertyMap &map)
+{
+    this->accept();
+    this->mustNowRecalculateFromScratch();
+    MolGroupsBase::deleteFrame(frame, map);
 }
 
 const char* System::typeName()

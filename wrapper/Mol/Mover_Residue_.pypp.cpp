@@ -156,62 +156,6 @@ void register_Mover_Residue__class(){
                 , "" );
         
         }
-        { //::SireMol::Mover< SireMol::Residue >::alignTo
-        
-            typedef SireMol::Mover< SireMol::Residue > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Residue > & ( ::SireMol::Mover< SireMol::Residue >::*alignTo_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
-            alignTo_function_type alignTo_function_value( &::SireMol::Mover< SireMol::Residue >::alignTo );
-            
-            Mover_Residue__exposer.def( 
-                "alignTo"
-                , alignTo_function_value
-                , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >()
-                , "" );
-        
-        }
-        { //::SireMol::Mover< SireMol::Residue >::alignTo
-        
-            typedef SireMol::Mover< SireMol::Residue > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Residue > & ( ::SireMol::Mover< SireMol::Residue >::*alignTo_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
-            alignTo_function_type alignTo_function_value( &::SireMol::Mover< SireMol::Residue >::alignTo );
-            
-            Mover_Residue__exposer.def( 
-                "alignTo"
-                , alignTo_function_value
-                , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
-                , bp::return_self< >()
-                , "" );
-        
-        }
-        { //::SireMol::Mover< SireMol::Residue >::alignTo
-        
-            typedef SireMol::Mover< SireMol::Residue > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Residue > & ( ::SireMol::Mover< SireMol::Residue >::*alignTo_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomSelection const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
-            alignTo_function_type alignTo_function_value( &::SireMol::Mover< SireMol::Residue >::alignTo );
-            
-            Mover_Residue__exposer.def( 
-                "alignTo"
-                , alignTo_function_value
-                , ( bp::arg("other"), bp::arg("aligning_atoms"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >()
-                , "" );
-        
-        }
-        { //::SireMol::Mover< SireMol::Residue >::alignTo
-        
-            typedef SireMol::Mover< SireMol::Residue > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Residue > & ( ::SireMol::Mover< SireMol::Residue >::*alignTo_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomSelection const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
-            alignTo_function_type alignTo_function_value( &::SireMol::Mover< SireMol::Residue >::alignTo );
-            
-            Mover_Residue__exposer.def( 
-                "alignTo"
-                , alignTo_function_value
-                , ( bp::arg("other"), bp::arg("aligning_atoms"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
-                , bp::return_self< >()
-                , "" );
-        
-        }
         { //::SireMol::Mover< SireMol::Residue >::change
         
             typedef SireMol::Mover< SireMol::Residue > exported_class_t;

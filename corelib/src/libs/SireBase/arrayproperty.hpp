@@ -57,7 +57,7 @@ namespace detail
 /** This class provides a thin Property wrapper around an array.
     This is useful when you want to store a large array of a basic
     type without transforming all of the elements into property objects
-    
+
     @author Christopher Woods
 */
 template<class T>
@@ -67,9 +67,9 @@ class ArrayProperty : public Property
 public:
     ArrayProperty();
     ArrayProperty(const T &value);
-    
+
     ~ArrayProperty();
-    
+
     T operator[](int i) const;
 
     QString toString() const;
@@ -81,53 +81,53 @@ public:
 
     void append(T value);
     void append(const ArrayProperty<T> &values);
-    
+
     T at(int i) const;
-    
+
     T getitem(int i) const;
 
     void clear();
-    
+
     bool empty() const;
     bool isEmpty() const;
 
     void insert(int i, T value);
-    
+
     void move(int from, int to);
-    
+
     void pop_back();
     void pop_front();
     void prepend(T value);
     void push_back(T value);
     void push_front(T value);
-    
+
     void removeAt(int i);
     void removeFirst();
     void removeLast();
-    
+
     void replace(int i, T value);
 
     void swap(ArrayProperty<T> &other);
-    
+
     void swap(int i, int j);
-    
+
     T takeAt(int i);
     T takeFirst();
     T takeLast();
-    
+
     QList<T> toList() const;
     QVector<T> toVector() const;
 
     QVector<T> value() const;
- 
+
 protected:
     /** These functions must be reimplemented by the deriving class */
     ArrayProperty(const QList<T> &array);
     ArrayProperty(const QVector<T> &array);
     ArrayProperty(const ArrayProperty<T> &other);
-    
+
     ArrayProperty<T>& operator=(const ArrayProperty &other);
-    
+
     bool operator==(const ArrayProperty &other) const;
     bool operator!=(const ArrayProperty &other) const;
 
@@ -162,7 +162,7 @@ ArrayProperty<T>::ArrayProperty(const QList<T> &array) : Property()
     if (not array.isEmpty())
     {
         a.reserve(array.count());
-        
+
         for (typename QList<T>::const_iterator it = array.constBegin();
              it != array.constEnd();
              ++it)
@@ -246,7 +246,44 @@ template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 QString ArrayProperty<T>::toString() const
 {
-    return Sire::toString(a);
+    if (this->isEmpty())
+    {
+        return QObject::tr("%1::empty").arg(this->what());
+    }
+    else
+    {
+        QStringList parts;
+
+        const auto n = this->count();
+
+        if (n <= 10)
+        {
+            for (int i=0; i<n; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                                        .arg(Sire::toString(this->operator[](i))));
+            }
+        }
+        else
+        {
+            for (int i=0; i<5; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                                        .arg(Sire::toString(this->operator[](i))));
+            }
+
+            parts.append("...");
+
+            for (int i=n-5; i<n; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                                        .arg(Sire::toString(this->operator[](i))));
+            }
+        }
+
+        return QObject::tr("%1( size=%2\n%3\n)")
+                        .arg(this->what()).arg(n).arg(parts.join("\n"));
+    }
 }
 
 template<class T>
@@ -288,7 +325,7 @@ void ArrayProperty<T>::append(const ArrayProperty<T> &values)
     if (not values.isEmpty())
     {
         a.reserve( a.count() + values.count() );
-        
+
         for (int i=0; i<values.count(); ++i)
         {
             a.append( values.a.constData()[i] );
@@ -351,7 +388,7 @@ void ArrayProperty<T>::move(int from, int to)
 {
     from = detail::checkIndex(from, a.count());
     to = detail::checkIndex(to, a.count());
-    
+
     if (from != to)
     {
         QList<T> list = a.toList();
@@ -406,7 +443,7 @@ SIRE_OUTOFLINE_TEMPLATE
 void ArrayProperty<T>::removeAt(int i)
 {
     i = detail::checkIndex(i,a.count());
-    
+
     QList<T> list = a.toList();
     list.removeAt(i);
     a = list.toVector();
@@ -472,7 +509,7 @@ SIRE_OUTOFLINE_TEMPLATE
 T ArrayProperty<T>::takeAt(int i)
 {
     i = detail::checkIndex(i,a.count());
-    
+
     QList<T> list = a.toList();
     T val = list.takeAt(i);
     a = list.toVector();
@@ -507,12 +544,12 @@ SIRE_OUTOFLINE_TEMPLATE
 QList<T> ArrayProperty<T>::toList() const
 {
     QList<T> list;
-    
+
     for (int i=0; i<a.count(); ++i)
     {
         list.append( a.constData()[i] );
     }
-    
+
     return list;
 }
 

@@ -188,6 +188,34 @@ bool IDTriple::operator!=(const IDTriple &other) const
            atom2 != other.atom2;
 }
 
+bool IDTriple::operator>(const IDTriple &other) const
+{
+    return atom0 > other.atom0 or
+           (atom0 == other.atom0 and (
+                atom1 > other.atom1 or (
+                    atom1 == other.atom1 and (
+                        atom2 > other.atom2
+                        )
+                    )
+                )
+           );
+}
+
+bool IDTriple::operator>=(const IDTriple &other) const
+{
+    return IDTriple::operator==(other) or IDTriple::operator>(other);
+}
+
+bool IDTriple::operator<(const IDTriple &other) const
+{
+    return not IDTriple::operator>=(other);
+}
+
+bool IDTriple::operator<=(const IDTriple &other) const
+{
+    return not IDTriple::operator>(other);
+}
+
 //////
 ////// Implementation of ThreeAtomFunctions
 //////
@@ -277,11 +305,75 @@ bool ThreeAtomFunctions::operator!=(const ThreeAtomFunctions &other) const
            potentials_by_atoms != other.potentials_by_atoms;
 }
 
+inline QString _id_string(const MoleculeInfoData &info, int atom)
+{
+    return QString("%1:%2").arg(info.name(AtomIdx(atom)))
+                           .arg(info.number(AtomIdx(atom)));
+}
+
+inline QString _pretty_string(const MoleculeInfoData &info,
+                              const IDTriple &triple,
+                              const Expression &func)
+{
+    QString id = QString("%1-%2-%3")
+                    .arg(_id_string(info, triple.atom0), 7)
+                    .arg(_id_string(info, triple.atom1))
+                    .arg(_id_string(info, triple.atom2), -7);
+
+    return QString("%1 : %2")
+                .arg(id, -23)
+                .arg(func.toString());
+}
+
 /** Return a string representation */
 QString ThreeAtomFunctions::toString() const
 {
-    return QObject::tr("ThreeAtomFunctions( nFunctions() == %1 )")
-                .arg(potentials_by_atoms.count());
+    if (this->isEmpty())
+    {
+        return QObject::tr("ThreeAtomFunctions::empty");
+    }
+    else
+    {
+        QStringList parts;
+
+        auto keys = potentials_by_atoms.keys();
+        const int n = keys.count();
+        std::sort(keys.begin(), keys.end());
+
+        if (n <= 10)
+        {
+            for (int i=0; i<n; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                        .arg(_pretty_string(info(),
+                                            keys[i],
+                                            potentials_by_atoms[keys[i]])));
+            }
+        }
+        else
+        {
+            for (int i=0; i<5; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                        .arg(_pretty_string(info(),
+                                            keys[i],
+                                            potentials_by_atoms[keys[i]])));
+            }
+
+            parts.append("...");
+
+            for (int i=n-5; i<n; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                        .arg(_pretty_string(info(),
+                                            keys[i],
+                                            potentials_by_atoms[keys[i]])));
+            }
+        }
+
+        return QObject::tr("ThreeAtomFunctions( size=%1\n%2\n)")
+                        .arg(n).arg(parts.join("\n"));
+    }
 }
 
 /** Set the potential energy function used by atoms 'atom0', 'atom1' and 'atom2'

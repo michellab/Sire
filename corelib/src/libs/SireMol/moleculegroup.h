@@ -310,6 +310,19 @@ public:
     virtual void accept();
     virtual bool needsAccepting() const;
 
+    virtual int nFrames() const;
+    virtual int nFrames(const SireBase::PropertyMap &map) const;
+
+    virtual void loadFrame(int frame);
+    virtual void saveFrame(int frame);
+    virtual void saveFrame();
+    virtual void deleteFrame(int frame);
+
+    virtual void loadFrame(int frame, const SireBase::PropertyMap &map);
+    virtual void saveFrame(int frame, const SireBase::PropertyMap &map);
+    virtual void saveFrame(const SireBase::PropertyMap &map);
+    virtual void deleteFrame(int frame, const SireBase::PropertyMap &map);
+
     static const MoleculeGroup& null();
 
 private:

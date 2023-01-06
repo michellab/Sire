@@ -10,6 +10,8 @@ namespace bp = boost::python;
 
 #include "SireBase/errors.h"
 
+#include "SireBase/generalunitproperty.h"
+
 #include "SireBase/slice.h"
 
 #include "SireError/errors.h"
@@ -19,6 +21,8 @@ namespace bp = boost::python;
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
+
+#include "SireVol/space.h"
 
 #include "atom.h"
 
@@ -30,6 +34,8 @@ namespace bp = boost::python;
 
 #include "molecule.h"
 
+#include "molecules.h"
+
 #include "moleculeview.h"
 
 #include "residue.h"
@@ -39,6 +45,8 @@ namespace bp = boost::python;
 #include "select.h"
 
 #include "selector.hpp"
+
+#include "trajectory.h"
 
 #include <QDebug>
 
@@ -599,6 +607,32 @@ void register_MoleculeView_class(){
                 , "Return the MoleculeData that contains all of the information\nabout the molecule which this view is showing" );
         
         }
+        { //::SireMol::MoleculeView::deleteFrame
+        
+            typedef void ( ::SireMol::MoleculeView::*deleteFrame_function_type)( int ) ;
+            deleteFrame_function_type deleteFrame_function_value( &::SireMol::MoleculeView::deleteFrame );
+            
+            MoleculeView_exposer.def( 
+                "deleteFrame"
+                , deleteFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeView::deleteFrame
+        
+            typedef void ( ::SireMol::MoleculeView::*deleteFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            deleteFrame_function_type deleteFrame_function_value( &::SireMol::MoleculeView::deleteFrame );
+            
+            MoleculeView_exposer.def( 
+                "deleteFrame"
+                , deleteFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::MoleculeView::hasMetadata
         
             typedef bool ( ::SireMol::MoleculeView::*hasMetadata_function_type)( ::SireBase::PropertyName const & ) const;
@@ -688,6 +722,18 @@ void register_MoleculeView_class(){
                 , "Return whether or not this view is of the same molecule as other\n(albeit perhaps a different version of the molecule)" );
         
         }
+        { //::SireMol::MoleculeView::isSelector
+        
+            typedef bool ( ::SireMol::MoleculeView::*isSelector_function_type)(  ) const;
+            isSelector_function_type isSelector_function_value( &::SireMol::MoleculeView::isSelector );
+            
+            MoleculeView_exposer.def( 
+                "isSelector"
+                , isSelector_function_value
+                , bp::release_gil_policy()
+                , "Return whether or not this is a Selector<T> object. This\n  helps code distinguish between views of single objects,\n  e.g. Atom, Residue etc., and views of multiple objects,\n  e.g. Selector<Atom>, Selector<Residue> etc.\n" );
+        
+        }
         { //::SireMol::MoleculeView::keys
         
             typedef ::QStringList ( ::SireMol::MoleculeView::*keys_function_type)(  ) const;
@@ -698,6 +744,32 @@ void register_MoleculeView_class(){
                 , keys_function_value
                 , bp::release_gil_policy()
                 , "Synonym for MoleculeView::propertyKeys" );
+        
+        }
+        { //::SireMol::MoleculeView::loadFrame
+        
+            typedef void ( ::SireMol::MoleculeView::*loadFrame_function_type)( int ) ;
+            loadFrame_function_type loadFrame_function_value( &::SireMol::MoleculeView::loadFrame );
+            
+            MoleculeView_exposer.def( 
+                "loadFrame"
+                , loadFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeView::loadFrame
+        
+            typedef void ( ::SireMol::MoleculeView::*loadFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            loadFrame_function_type loadFrame_function_value( &::SireMol::MoleculeView::loadFrame );
+            
+            MoleculeView_exposer.def( 
+                "loadFrame"
+                , loadFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireMol::MoleculeView::metadataKeys
@@ -797,6 +869,31 @@ void register_MoleculeView_class(){
                 , nCutGroups_function_value
                 , bp::release_gil_policy()
                 , "Return the number of CutGroups in this view" );
+        
+        }
+        { //::SireMol::MoleculeView::nFrames
+        
+            typedef int ( ::SireMol::MoleculeView::*nFrames_function_type)(  ) const;
+            nFrames_function_type nFrames_function_value( &::SireMol::MoleculeView::nFrames );
+            
+            MoleculeView_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeView::nFrames
+        
+            typedef int ( ::SireMol::MoleculeView::*nFrames_function_type)( ::SireBase::PropertyMap const & ) const;
+            nFrames_function_type nFrames_function_value( &::SireMol::MoleculeView::nFrames );
+            
+            MoleculeView_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireMol::MoleculeView::nResidues
@@ -1112,6 +1209,57 @@ void register_MoleculeView_class(){
                 , "Return all of the residues that are involved with this view\nThrow: SireMol::missing_residue\n" );
         
         }
+        { //::SireMol::MoleculeView::saveFrame
+        
+            typedef void ( ::SireMol::MoleculeView::*saveFrame_function_type)( int ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::MoleculeView::saveFrame );
+            
+            MoleculeView_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeView::saveFrame
+        
+            typedef void ( ::SireMol::MoleculeView::*saveFrame_function_type)(  ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::MoleculeView::saveFrame );
+            
+            MoleculeView_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeView::saveFrame
+        
+            typedef void ( ::SireMol::MoleculeView::*saveFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::MoleculeView::saveFrame );
+            
+            MoleculeView_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::MoleculeView::saveFrame
+        
+            typedef void ( ::SireMol::MoleculeView::*saveFrame_function_type)( ::SireBase::PropertyMap const & ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireMol::MoleculeView::saveFrame );
+            
+            MoleculeView_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::MoleculeView::search
         
             typedef ::SireMol::SelectResult ( ::SireMol::MoleculeView::*search_function_type)( ::QString const & ) const;
@@ -1123,6 +1271,19 @@ void register_MoleculeView_class(){
                 , ( bp::arg("search_string") )
                 , bp::release_gil_policy()
                 , "Return the result of searching this molecule using the passed\nsearch string" );
+        
+        }
+        { //::SireMol::MoleculeView::search
+        
+            typedef ::SireMol::SelectResult ( ::SireMol::MoleculeView::*search_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
+            search_function_type search_function_value( &::SireMol::MoleculeView::search );
+            
+            MoleculeView_exposer.def( 
+                "search"
+                , search_function_value
+                , ( bp::arg("search_string"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireMol::MoleculeView::segment
@@ -1485,6 +1646,18 @@ void register_MoleculeView_class(){
                 , "Expand this into a list of unit classes. This will return the view itself if\n  this is a unit class, e.g. Atom, Residue, Molecule etc.\n  This will return a list of unit classes if this is a Selector<T> or\n  equivalent type class.\n" );
         
         }
+        { //::SireMol::MoleculeView::toMolecules
+        
+            typedef ::SireMol::Molecules ( ::SireMol::MoleculeView::*toMolecules_function_type)(  ) const;
+            toMolecules_function_type toMolecules_function_value( &::SireMol::MoleculeView::toMolecules );
+            
+            MoleculeView_exposer.def( 
+                "toMolecules"
+                , toMolecules_function_value
+                , bp::release_gil_policy()
+                , "Return a Molecules set that contains this view (or views)" );
+        
+        }
         { //::SireMol::MoleculeView::toSelector
         
             typedef ::SireMol::MolViewPtr ( ::SireMol::MoleculeView::*toSelector_function_type)(  ) const;
@@ -1532,6 +1705,19 @@ void register_MoleculeView_class(){
                 , ( bp::arg("moldata") )
                 , bp::release_gil_policy()
                 , "Update this view with a new version of the molecule. You\ncan only update the molecule if it has the same layout UID\n(so same atoms, residues, cutgroups etc.)\nThrow: SireError::incompatible_error\n" );
+        
+        }
+        { //::SireMol::MoleculeView::update
+        
+            typedef void ( ::SireMol::MoleculeView::*update_function_type)( ::SireMol::Molecules const & ) ;
+            update_function_type update_function_value( &::SireMol::MoleculeView::update );
+            
+            MoleculeView_exposer.def( 
+                "update"
+                , update_function_value
+                , ( bp::arg("molecules") )
+                , bp::release_gil_policy()
+                , "Update this view with a new version of the molecule\nfrom molecules (assuming this molecule is in molecules).\nYou can only update the molecule if it has the same layout UID\n(so same atoms, residues, cutgroups etc.)\nThrow: SireError::incompatible_error\n" );
         
         }
         MoleculeView_exposer.staticmethod( "null" );

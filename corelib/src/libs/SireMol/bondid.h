@@ -106,6 +106,8 @@ public:
 
     BondID mirror() const;
 
+    const AtomID& operator[](int i) const;
+
     tuple<AtomIdx,AtomIdx> map(const MoleculeInfoData &molinfo) const;
     tuple<AtomIdx,AtomIdx> map(const MoleculeInfoData &mol0info,
                                const MoleculeInfoData &mol1info) const;

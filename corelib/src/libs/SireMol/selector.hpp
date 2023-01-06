@@ -37,6 +37,8 @@
 #include "residue.h"
 #include "chain.h"
 #include "segment.h"
+#include "molecules.h"
+#include "viewsofmol.h"
 
 #include "SireBase/slice.h"
 
@@ -193,10 +195,14 @@ public:
     MolViewPtr toSelector() const;
     QList<MolViewPtr> toList() const;
 
+    Molecules toMolecules() const;
+
     QString toString() const;
 
     bool isEmpty() const;
     bool selectedAll() const;
+
+    bool isSelector() const;
 
     Selector<T> add(const Selector<T> &other) const;
     Selector<T> add(const T &view) const;
@@ -556,6 +562,14 @@ bool Selector<T>::selectedAll() const
     }
 
     return false;
+}
+
+/** Return whether or not this is a Selector object */
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+bool Selector<T>::isSelector() const
+{
+    return true;
 }
 
 /** Return a string representation of this selector */
@@ -1166,6 +1180,13 @@ SIRE_OUTOFLINE_TEMPLATE
 MolViewPtr Selector<T>::toSelector() const
 {
     return MolViewPtr(*this);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+Molecules Selector<T>::toMolecules() const
+{
+    return Molecules( ViewsOfMol(*this) );
 }
 
 template<class T>

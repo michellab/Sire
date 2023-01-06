@@ -277,6 +277,12 @@ Selector<Segment> Segment::selector() const
     return Selector<Segment>(*this);
 }
 
+/** Return a selector that has everything except this view */
+Selector<Segment> Segment::invert() const
+{
+    return this->selector().invert();
+}
+
 /** Return the number of atoms in this Segment */
 int Segment::nAtoms() const
 {

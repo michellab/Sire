@@ -384,6 +384,19 @@ void register_Selector_Atom__class(){
                 , "" );
         
         }
+        { //::SireMol::Selector< SireMol::Atom >::isSelector
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef bool ( ::SireMol::Selector< SireMol::Atom >::*isSelector_function_type)(  ) const;
+            isSelector_function_type isSelector_function_value( &::SireMol::Selector< SireMol::Atom >::isSelector );
+            
+            Selector_Atom__exposer.def( 
+                "isSelector"
+                , isSelector_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMol::Selector< SireMol::Atom >::metadataKeys
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
@@ -946,6 +959,19 @@ void register_Selector_Atom__class(){
             Selector_Atom__exposer.def( 
                 "toList"
                 , toList_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::Selector< SireMol::Atom >::toMolecules
+        
+            typedef SireMol::Selector< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::Molecules ( ::SireMol::Selector< SireMol::Atom >::*toMolecules_function_type)(  ) const;
+            toMolecules_function_type toMolecules_function_value( &::SireMol::Selector< SireMol::Atom >::toMolecules );
+            
+            Selector_Atom__exposer.def( 
+                "toMolecules"
+                , toMolecules_function_value
                 , bp::release_gil_policy()
                 , "" );
         

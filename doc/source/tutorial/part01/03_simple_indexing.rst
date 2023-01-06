@@ -7,13 +7,13 @@ the index, e.g.
 
 >>> atom = mol[0]
 >>> print(atom)
-Atom( C : 1 )
+Atom( C:1     [  -0.02,    1.53,    0.01] )
 
 or
 
 >>> atom = mol.atom(0)
 >>> print(atom)
-Atom( C : 1 )
+Atom( C:1     [  -0.02,    1.53,    0.01] )
 
 would access the first atom in the molecule. The :func:`~sire.mol.Molecule.num_atoms`
 function returns the total number of atoms.
@@ -31,8 +31,6 @@ Atom( C:3     [   0.66,   -0.52,    1.29] )
 Atom( C:4     [   1.42,    2.06,   -0.00] )
 Atom( C:5     [   2.16,    1.44,    1.17] )
 Atom( C:6     [   2.81,    2.24,    1.98] )
-Atom( C:7     [   3.58,    1.75,    3.17] )
-Atom( C:8     [   4.02,    0.30,    2.93] )
 etc.
 
 You can also loop over a slice of atoms, e.g.

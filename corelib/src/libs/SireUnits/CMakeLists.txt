@@ -16,6 +16,7 @@ set ( SIREUNITS_HEADERS
       angle.h
       convert.h
       dimensions.h
+      generalunit.h
       temperature.h
       units.h
     )
@@ -26,9 +27,10 @@ set ( SIREUNITS_SOURCES
       register_sireunits.cpp
 
       angle.cpp
-      convert.cpp            
+      convert.cpp
       dimensions.cpp
-    
+      generalunit.cpp
+
       ${SIREUNITS_HEADERS}
     )
 

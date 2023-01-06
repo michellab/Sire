@@ -9,6 +9,8 @@ namespace bp = boost::python;
 
 #include "SireBase/quickcopy.hpp"
 
+#include "SireBase/slice.h"
+
 #include "SireMaths/align.h"
 
 #include "SireMaths/vectorproperty.h"
@@ -106,6 +108,20 @@ void register_AtomCoords_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("cgidx") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMaths::Vector >::at
+        
+            typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
+            typedef ::SireMaths::Vector const & ( ::SireMol::AtomProperty< SireMaths::Vector >::*at_function_type)( int ) const;
+            at_function_type at_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::at );
+            
+            AtomCoords_exposer.def( 
+                "at"
+                , at_function_value
+                , ( bp::arg("i") )
                 , bp::return_value_policy< bp::copy_const_reference >()
                 , "" );
         
@@ -266,6 +282,20 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::get
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
+            typedef ::SireMaths::Vector const & ( ::SireMol::AtomProperty< SireMaths::Vector >::*get_function_type)( int ) const;
+            get_function_type get_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::get );
+            
+            AtomCoords_exposer.def( 
+                "get"
+                , get_function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMaths::Vector >::get
+        
+            typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
             typedef ::SireMaths::Vector const & ( ::SireMol::AtomProperty< SireMaths::Vector >::*get_function_type)( ::SireMol::CGAtomIdx const & ) const;
             get_function_type get_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::get );
             
@@ -315,6 +345,19 @@ void register_AtomCoords_class(){
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
                 , ( bp::arg("molinfo") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMaths::Vector >::isEmpty
+        
+            typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
+            typedef bool ( ::SireMol::AtomProperty< SireMaths::Vector >::*isEmpty_function_type)(  ) const;
+            isEmpty_function_type isEmpty_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::isEmpty );
+            
+            AtomCoords_exposer.def( 
+                "isEmpty"
+                , isEmpty_function_value
                 , bp::release_gil_policy()
                 , "" );
         
@@ -434,6 +477,20 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::operator[]
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
+            typedef ::SireMaths::Vector const & ( ::SireMol::AtomProperty< SireMaths::Vector >::*__getitem___function_type)( int ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireMaths::Vector >::operator[] );
+            
+            AtomCoords_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("i") )
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMaths::Vector >::operator[]
+        
+            typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
             typedef ::SireMaths::Vector const & ( ::SireMol::AtomProperty< SireMaths::Vector >::*__getitem___function_type)( ::SireMol::CGAtomIdx const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireMaths::Vector >::operator[] );
             
@@ -442,6 +499,32 @@ void register_AtomCoords_class(){
                 , __getitem___function_value
                 , ( bp::arg("cgatomidx") )
                 , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMaths::Vector >::operator[]
+        
+            typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
+            typedef ::QList< SireMaths::Vector > ( ::SireMol::AtomProperty< SireMaths::Vector >::*__getitem___function_type)( ::QList< long long > const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireMaths::Vector >::operator[] );
+            
+            AtomCoords_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("idxs") )
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMaths::Vector >::operator[]
+        
+            typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
+            typedef ::QList< SireMaths::Vector > ( ::SireMol::AtomProperty< SireMaths::Vector >::*__getitem___function_type)( ::SireBase::Slice const & ) const;
+            __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireMaths::Vector >::operator[] );
+            
+            AtomCoords_exposer.def( 
+                "__getitem__"
+                , __getitem___function_value
+                , ( bp::arg("slice") )
                 , "" );
         
         }
@@ -552,6 +635,46 @@ void register_AtomCoords_class(){
             AtomCoords_exposer.def( 
                 "size"
                 , size_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMaths::Vector >::toList
+        
+            typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
+            typedef ::QList< SireMaths::Vector > ( ::SireMol::AtomProperty< SireMaths::Vector >::*toList_function_type)(  ) const;
+            toList_function_type toList_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::toList );
+            
+            AtomCoords_exposer.def( 
+                "toList"
+                , toList_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMaths::Vector >::toList
+        
+            typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
+            typedef ::QList< SireMaths::Vector > ( ::SireMol::AtomProperty< SireMaths::Vector >::*toList_function_type)( ::SireMol::AtomSelection const & ) const;
+            toList_function_type toList_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::toList );
+            
+            AtomCoords_exposer.def( 
+                "toList"
+                , toList_function_value
+                , ( bp::arg("selection") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMol::AtomProperty< SireMaths::Vector >::toString
+        
+            typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
+            typedef ::QString ( ::SireMol::AtomProperty< SireMaths::Vector >::*toString_function_type)(  ) const;
+            toString_function_type toString_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::toString );
+            
+            AtomCoords_exposer.def( 
+                "toString"
+                , toString_function_value
                 , bp::release_gil_policy()
                 , "" );
         

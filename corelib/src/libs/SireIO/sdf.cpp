@@ -55,6 +55,7 @@
 #include "SireMol/bondtype.h"
 #include "SireMol/stereoscopy.h"
 #include "SireMol/radical.h"
+#include "SireMol/trajectory.h"
 #include "SireMol/core.h"
 
 #include "SireBase/propertylist.h"
@@ -1233,6 +1234,28 @@ const char* SDF::what() const
     return SDF::typeName();
 }
 
+bool SDF::isTopology() const
+{
+    return true;
+}
+
+bool SDF::isFrame() const
+{
+    return true;
+}
+
+int SDF::nFrames() const
+{
+    return 1;
+}
+
+Frame SDF::getFrame(int i) const
+{
+    i = SireID::Index(i).map(this->nFrames());
+
+    return SireMol::Frame();
+}
+
 /** Return the parser that has been constructed by reading in the passed
     file using the passed properties */
 MoleculeParserPtr SDF::construct(const QString &filename,
@@ -1316,20 +1339,6 @@ QStringList SDF::formatSuffix() const
 {
     static const QStringList suffixes = { "sdf", "mol" };
     return suffixes;
-}
-
-/** Return whether or not this is a lead parser. The lead parser is responsible
-    for starting the process of turning the parsed file into the System. There
-    must be one and one-only lead parser in a set of parsers creating a System */
-bool SDF::isLead() const
-{
-    return true;
-}
-
-/** The SDF cannot follow another lead parsers. */
-bool SDF::canFollow() const
-{
-    return false;
 }
 
 /** Function that is called to assert that this object is sane. This

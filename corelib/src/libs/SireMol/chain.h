@@ -142,6 +142,7 @@ public:
     Evaluator evaluate() const;
     ChainEditor edit() const;
     Selector<Chain> selector() const;
+    Selector<Chain> invert() const;
 
     int nAtoms() const;
 

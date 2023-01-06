@@ -21,7 +21,13 @@ namespace bp = boost::python;
 
 #include "SireMM/mmdetail.h"
 
+#include "SireMol/core.h"
+
 #include "SireMol/molecule.h"
+
+#include "SireMol/moleditor.h"
+
+#include "SireMol/trajectory.h"
 
 #include "SireStream/datastream.h"
 
@@ -29,7 +35,11 @@ namespace bp = boost::python;
 
 #include "SireSystem/system.h"
 
+#include "filetrajectory.h"
+
 #include "moleculeparser.h"
+
+#include "supplementary.h"
 
 #include <QDebug>
 
@@ -57,18 +67,6 @@ void register_MoleculeParser_class(){
         typedef bp::class_< SireIO::MoleculeParser, bp::bases< SireBase::Property >, boost::noncopyable > MoleculeParser_exposer_t;
         MoleculeParser_exposer_t MoleculeParser_exposer = MoleculeParser_exposer_t( "MoleculeParser", "The base class of all molecule parsers", bp::no_init );
         bp::scope MoleculeParser_scope( MoleculeParser_exposer );
-        { //::SireIO::MoleculeParser::canFollow
-        
-            typedef bool ( ::SireIO::MoleculeParser::*canFollow_function_type)(  ) const;
-            canFollow_function_type canFollow_function_value( &::SireIO::MoleculeParser::canFollow );
-            
-            MoleculeParser_exposer.def( 
-                "canFollow"
-                , canFollow_function_value
-                , bp::release_gil_policy()
-                , "Return whether or not this parser can follow a lead parser and add data\nto an existing molecular system. By default, all parsers can follow." );
-        
-        }
         { //::SireIO::MoleculeParser::construct
         
             typedef ::SireIO::MoleculeParserPtr ( ::SireIO::MoleculeParser::*construct_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
@@ -132,6 +130,30 @@ void register_MoleculeParser_class(){
                 , "Enable code to parse files in parallel" );
         
         }
+        { //::SireIO::MoleculeParser::errorReport
+        
+            typedef ::QString ( ::SireIO::MoleculeParser::*errorReport_function_type)(  ) const;
+            errorReport_function_type errorReport_function_value( &::SireIO::MoleculeParser::errorReport );
+            
+            MoleculeParser_exposer.def( 
+                "errorReport"
+                , errorReport_function_value
+                , bp::release_gil_policy()
+                , "Return the error report, if this parser is broken. If it isnt,\n  then an empty string is returned." );
+        
+        }
+        { //::SireIO::MoleculeParser::filename
+        
+            typedef ::QString ( ::SireIO::MoleculeParser::*filename_function_type)(  ) const;
+            filename_function_type filename_function_value( &::SireIO::MoleculeParser::filename );
+            
+            MoleculeParser_exposer.def( 
+                "filename"
+                , filename_function_value
+                , bp::release_gil_policy()
+                , "Return the name of the file that was parsed" );
+        
+        }
         { //::SireIO::MoleculeParser::formatDescription
         
             typedef ::QString ( ::SireIO::MoleculeParser::*formatDescription_function_type)(  ) const;
@@ -168,6 +190,31 @@ void register_MoleculeParser_class(){
                 , "Return the suffix (or suffixes) given to files that support this format.\nThe first suffix is the preferred on to use" );
         
         }
+        { //::SireIO::MoleculeParser::getFrame
+        
+            typedef ::SireMol::Frame ( ::SireIO::MoleculeParser::*getFrame_function_type)( int ) const;
+            getFrame_function_type getFrame_function_value( &::SireIO::MoleculeParser::getFrame );
+            
+            MoleculeParser_exposer.def( 
+                "getFrame"
+                , getFrame_function_value
+                , ( bp::arg("i") )
+                , bp::release_gil_policy()
+                , "Return the ith trajectory frame from this parser. Note that\n  some parsers may have to re-read the file, so this may fail\n  if the filename changes since the last time this parser\n  was used\n" );
+        
+        }
+        { //::SireIO::MoleculeParser::hasWarnings
+        
+            typedef bool ( ::SireIO::MoleculeParser::*hasWarnings_function_type)(  ) const;
+            hasWarnings_function_type hasWarnings_function_value( &::SireIO::MoleculeParser::hasWarnings );
+            
+            MoleculeParser_exposer.def( 
+                "hasWarnings"
+                , hasWarnings_function_value
+                , bp::release_gil_policy()
+                , "Return whether there were any warnings when loading the file\n  using this parser" );
+        
+        }
         { //::SireIO::MoleculeParser::isBinaryFile
         
             typedef bool ( ::SireIO::MoleculeParser::*isBinaryFile_function_type)(  ) const;
@@ -178,6 +225,18 @@ void register_MoleculeParser_class(){
                 , isBinaryFile_function_value
                 , bp::release_gil_policy()
                 , "" );
+        
+        }
+        { //::SireIO::MoleculeParser::isBroken
+        
+            typedef bool ( ::SireIO::MoleculeParser::*isBroken_function_type)(  ) const;
+            isBroken_function_type isBroken_function_value( &::SireIO::MoleculeParser::isBroken );
+            
+            MoleculeParser_exposer.def( 
+                "isBroken"
+                , isBroken_function_value
+                , bp::release_gil_policy()
+                , "Return whether or not this parser is broken" );
         
         }
         { //::SireIO::MoleculeParser::isEmpty
@@ -192,16 +251,28 @@ void register_MoleculeParser_class(){
                 , "" );
         
         }
-        { //::SireIO::MoleculeParser::isLead
+        { //::SireIO::MoleculeParser::isFrame
         
-            typedef bool ( ::SireIO::MoleculeParser::*isLead_function_type)(  ) const;
-            isLead_function_type isLead_function_value( &::SireIO::MoleculeParser::isLead );
+            typedef bool ( ::SireIO::MoleculeParser::*isFrame_function_type)(  ) const;
+            isFrame_function_type isFrame_function_value( &::SireIO::MoleculeParser::isFrame );
             
             MoleculeParser_exposer.def( 
-                "isLead"
-                , isLead_function_value
+                "isFrame"
+                , isFrame_function_value
                 , bp::release_gil_policy()
-                , "Return whether or not this is a lead parser. The lead parser is responsible\nfor starting the process of turning the parsed file into the System. There\nmust be one and one-only lead parser in a set of parsers creating a System" );
+                , "Return whether or not this parser is a frame parser" );
+        
+        }
+        { //::SireIO::MoleculeParser::isSupplementary
+        
+            typedef bool ( ::SireIO::MoleculeParser::*isSupplementary_function_type)(  ) const;
+            isSupplementary_function_type isSupplementary_function_value( &::SireIO::MoleculeParser::isSupplementary );
+            
+            MoleculeParser_exposer.def( 
+                "isSupplementary"
+                , isSupplementary_function_value
+                , bp::release_gil_policy()
+                , "Return whether or not this parser is a supplementary parser" );
         
         }
         { //::SireIO::MoleculeParser::isTextFile
@@ -214,6 +285,18 @@ void register_MoleculeParser_class(){
                 , isTextFile_function_value
                 , bp::release_gil_policy()
                 , "" );
+        
+        }
+        { //::SireIO::MoleculeParser::isTopology
+        
+            typedef bool ( ::SireIO::MoleculeParser::*isTopology_function_type)(  ) const;
+            isTopology_function_type isTopology_function_value( &::SireIO::MoleculeParser::isTopology );
+            
+            MoleculeParser_exposer.def( 
+                "isTopology"
+                , isTopology_function_value
+                , bp::release_gil_policy()
+                , "Return whether or not this parser is a topology parser" );
         
         }
         { //::SireIO::MoleculeParser::lines
@@ -306,6 +389,30 @@ void register_MoleculeParser_class(){
                 , "Synonym for MoleculeParser::read" );
         
         }
+        { //::SireIO::MoleculeParser::nAtoms
+        
+            typedef int ( ::SireIO::MoleculeParser::*nAtoms_function_type)(  ) const;
+            nAtoms_function_type nAtoms_function_value( &::SireIO::MoleculeParser::nAtoms );
+            
+            MoleculeParser_exposer.def( 
+                "nAtoms"
+                , nAtoms_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireIO::MoleculeParser::nFrames
+        
+            typedef int ( ::SireIO::MoleculeParser::*nFrames_function_type)(  ) const;
+            nFrames_function_type nFrames_function_value( &::SireIO::MoleculeParser::nFrames );
+            
+            MoleculeParser_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , bp::release_gil_policy()
+                , "Return the number of trajectory frames contained in this parser.\n  Trajectory frames contain coordinates andor velocities andor\n  forces data. It is possible for a parser to have zero frames,\n  e.g. if it only contains topology information.\n" );
+        
+        }
         { //::SireIO::MoleculeParser::null
         
             typedef ::SireIO::NullParser const & ( *null_function_type )(  );
@@ -355,6 +462,19 @@ void register_MoleculeParser_class(){
                 , ( bp::arg("filename") )
                 , bp::release_gil_policy()
                 , "Parse the passed set of files, returning the resulting Parsers" );
+        
+        }
+        { //::SireIO::MoleculeParser::parse
+        
+            typedef ::SireIO::MoleculeParserPtr ( *parse_function_type )( ::SireSystem::System const &,::QString const &,::SireBase::PropertyMap const & );
+            parse_function_type parse_function_value( &::SireIO::MoleculeParser::parse );
+            
+            MoleculeParser_exposer.def( 
+                "parse"
+                , parse_function_value
+                , ( bp::arg("system"), bp::arg("format"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "Parse the passed system, returning the resulting Parser. You must\n  specify the parser that you want to use\n" );
         
         }
         { //::SireIO::MoleculeParser::parse
@@ -662,6 +782,18 @@ void register_MoleculeParser_class(){
                 , usesParallel_function_value
                 , bp::release_gil_policy()
                 , "" );
+        
+        }
+        { //::SireIO::MoleculeParser::warnings
+        
+            typedef ::QStringList ( ::SireIO::MoleculeParser::*warnings_function_type)(  ) const;
+            warnings_function_type warnings_function_value( &::SireIO::MoleculeParser::warnings );
+            
+            MoleculeParser_exposer.def( 
+                "warnings"
+                , warnings_function_value
+                , bp::release_gil_policy()
+                , "Return any warnings that were generated when loading data\n  using this parser\n" );
         
         }
         { //::SireIO::MoleculeParser::write

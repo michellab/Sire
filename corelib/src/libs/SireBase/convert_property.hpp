@@ -5,6 +5,7 @@
 
 #include "property.h"
 #include "variantproperty.h"
+#include "generalunitproperty.h"
 
 namespace SireBase
 {
@@ -37,12 +38,45 @@ namespace detail
             return SireBase::PropertyPtr(SireBase::VariantProperty(QVariant::fromValue(value)));
         }
     };
+
+    template<int T>
+    struct convert_unit_property
+    {
+        template<class V>
+        static SireBase::PropertyPtr convert(const V &value);
+    };
+
+    template<>
+    struct convert_unit_property<true>
+    {
+        template<class V>
+        static SireBase::PropertyPtr convert(const V &value)
+        {
+            return SireBase::PropertyPtr(GeneralUnitProperty(value));
+        }
+    };
+
+    template<>
+    struct convert_unit_property<false>
+    {
+        template<class V>
+        static SireBase::PropertyPtr convert(const V &value)
+        {
+            return detail::convert_property<boost::is_base_of<SireBase::Property, V>::value>::convert(value);
+        }
+    };
 }
 
 template<class T>
-SireBase::PropertyPtr convert_property(const T &value)
+inline SireBase::PropertyPtr convert_property(const T &value)
 {
-    return detail::convert_property<boost::is_base_of<SireBase::Property, T>::value>::convert(value);
+    return detail::convert_unit_property<boost::is_base_of<SireUnits::Dimension::Unit, T>::value>::convert(value);
+}
+
+template<>
+inline SireBase::PropertyPtr convert_property(const SireUnits::Dimension::GeneralUnit &value)
+{
+    return SireBase::PropertyPtr(GeneralUnitProperty(value));
 }
 
 }

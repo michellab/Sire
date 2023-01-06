@@ -7,6 +7,8 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/generalunitproperty.h"
+
 #include "SireBase/parallel.h"
 
 #include "SireBase/stringproperty.h"
@@ -32,6 +34,8 @@ namespace bp = boost::python;
 #include "SireMol/moleditor.h"
 
 #include "SireMol/molidx.h"
+
+#include "SireMol/trajectory.h"
 
 #include "SireStream/shareddatastream.h"
 
@@ -178,6 +182,19 @@ void register_AmberRst7_class(){
                 , "Return the suffixes that RST7 files will typically have" );
         
         }
+        { //::SireIO::AmberRst7::getFrame
+        
+            typedef ::SireMol::Frame ( ::SireIO::AmberRst7::*getFrame_function_type)( int ) const;
+            getFrame_function_type getFrame_function_value( &::SireIO::AmberRst7::getFrame );
+            
+            AmberRst7_exposer.def( 
+                "getFrame"
+                , getFrame_function_value
+                , ( bp::arg("i") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireIO::AmberRst7::hasVelocities
         
             typedef bool ( ::SireIO::AmberRst7::*hasVelocities_function_type)(  ) const;
@@ -190,6 +207,18 @@ void register_AmberRst7_class(){
                 , "Return whether or not this restart file also provides velocities" );
         
         }
+        { //::SireIO::AmberRst7::isFrame
+        
+            typedef bool ( ::SireIO::AmberRst7::*isFrame_function_type)(  ) const;
+            isFrame_function_type isFrame_function_value( &::SireIO::AmberRst7::isFrame );
+            
+            AmberRst7_exposer.def( 
+                "isFrame"
+                , isFrame_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireIO::AmberRst7::nAtoms
         
             typedef int ( ::SireIO::AmberRst7::*nAtoms_function_type)(  ) const;
@@ -200,6 +229,18 @@ void register_AmberRst7_class(){
                 , nAtoms_function_value
                 , bp::release_gil_policy()
                 , "Return the number of atoms whose coordinates are contained in this restart file" );
+        
+        }
+        { //::SireIO::AmberRst7::nFrames
+        
+            typedef int ( ::SireIO::AmberRst7::*nFrames_function_type)(  ) const;
+            nFrames_function_type nFrames_function_value( &::SireIO::AmberRst7::nFrames );
+            
+            AmberRst7_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , bp::release_gil_policy()
+                , "" );
         
         }
         AmberRst7_exposer.def( bp::self != bp::self );

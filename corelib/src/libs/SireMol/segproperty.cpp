@@ -36,9 +36,11 @@ namespace SireMol
     template class SegProperty<qint64>;
     template class SegProperty<double>;
     template class SegProperty<QVariant>;
+    template class SegProperty<SireBase::PropertyPtr>;
 }
 
 static const RegisterMetaType<SegStringProperty> r_segstring;
 static const RegisterMetaType<SegIntProperty> r_segint;
 static const RegisterMetaType<SegFloatProperty> r_segfloat;
 static const RegisterMetaType<SegVariantProperty> r_segvariant;
+static const RegisterMetaType<SegPropertyProperty> r_segproprop;

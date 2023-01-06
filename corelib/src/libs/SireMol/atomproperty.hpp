@@ -42,6 +42,7 @@
 #include "SireBase/packedarray2d.hpp"
 #include "SireBase/quickcopy.hpp"
 #include "SireBase/variantproperty.h"
+#include "SireBase/slice.h"
 
 #include "SireError/errors.h"
 
@@ -73,6 +74,7 @@ typedef AtomProperty<QString>  AtomStringProperty;
 typedef AtomProperty<qint64>   AtomIntProperty;
 typedef AtomProperty<double>   AtomFloatProperty;
 typedef AtomProperty<QVariant> AtomVariantProperty;
+typedef AtomProperty<SireBase::PropertyPtr> AtomPropertyProperty;
 
 using SireBase::Property;
 using SireBase::PropertyPtr;
@@ -165,6 +167,10 @@ public:
     bool operator==(const AtomProperty<T> &other) const;
     bool operator!=(const AtomProperty<T> &other) const;
 
+    bool isEmpty() const;
+
+    QString toString() const;
+
     AtomProperty<QVariant> toVariant() const;
     static AtomProperty<T> fromVariant(const AtomProperty<QVariant> &variant);
 
@@ -174,8 +180,14 @@ public:
     const typename PackedArray2D<T>::Array& at(CGIdx cgidx) const;
     const typename PackedArray2D<T>::Array& get(CGIdx cgidx) const;
 
+    const T& operator[](int i) const;
     const T& operator[](const CGAtomIdx &cgatomidx) const;
+    QList<T> operator[](const QList<qint64> &idxs) const;
+    QList<T> operator[](const SireBase::Slice &slice) const;
+
+    const T& at(int i) const;
     const T& at(const CGAtomIdx &cgatomidx) const;
+    const T& get(int i) const;
     const T& get(const CGAtomIdx &cgatomidx) const;
 
     QVariant getAsVariant(const CGAtomIdx &cgatomidx) const;
@@ -193,10 +205,6 @@ public:
     const T* data(CGIdx cgidx) const;
     const T* constData(CGIdx cgidx) const;
 
-    QString toString() const;
-
-    bool isEmpty() const;
-
     int size() const;
     int count() const;
 
@@ -212,6 +220,9 @@ public:
 
     QVector<T> toVector() const;
     QVector<T> toVector(const AtomSelection &selection) const;
+
+    QList<T> toList() const;
+    QList<T> toList(const AtomSelection &selection) const;
 
     PropertyPtr merge(const MoleculeInfoData &molinfo) const;
     PropertyPtr divide(const QVector<AtomSelection> &beads) const;
@@ -492,6 +503,58 @@ const typename PackedArray2D<T>::Array& AtomProperty<T>::get(CGIdx cgidx) const
     return this->operator[](cgidx);
 }
 
+/** Return the property at the specified index */
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+const T& AtomProperty<T>::operator[](int i) const
+{
+    i = SireID::Index(i).map(this->nAtoms());
+
+    return props.constValueData()[i];
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+const T& AtomProperty<T>::at(int i) const
+{
+    return this->operator[](i);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+const T& AtomProperty<T>::get(int i) const
+{
+    return this->operator[](i);
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QList<T> AtomProperty<T>::operator[](const QList<qint64> &idxs) const
+{
+    QList<T> ret;
+
+    for (auto idx : idxs)
+    {
+        ret.append(this->operator[](idx));
+    }
+
+    return ret;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QList<T> AtomProperty<T>::operator[](const SireBase::Slice &slice) const
+{
+    QList<T> ret;
+
+    for (auto it = slice.begin(this->nAtoms()); not it.atEnd(); it.next())
+    {
+        ret.append(this->operator[](it.value()));
+    }
+
+    return ret;
+}
+
 /** Return the property for the atom at index 'cgatomidx'
 
     \throw SireError::invalid_index
@@ -596,16 +659,6 @@ const PackedArray2D<T>& AtomProperty<T>::array() const
     return props;
 }
 
-/** Return a string representation of this property */
-template<class T>
-SIRE_OUTOFLINE_TEMPLATE
-QString AtomProperty<T>::toString() const
-{
-    return QString("AtomProperty<%1>( %2 )")
-                .arg( QMetaType::typeName( qMetaTypeId<T>() ) )
-                .arg( Sire::toString(this->toVector()) );
-}
-
 /** Return a raw pointer to the array of arrays */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
@@ -646,20 +699,20 @@ const T* AtomProperty<T>::constData(CGIdx cgidx) const
     return this->at(cgidx).constData();
 }
 
-/** Return the number of CutGroups in the molecule */
+/** Return the number of atoms in the molecule */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 int AtomProperty<T>::size() const
 {
-    return props.count();
+    return this->nAtoms();
 }
 
-/** Return the number of CutGroups in the molecule */
+/** Return the number of atoms in the molecule */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 int AtomProperty<T>::count() const
 {
-    return props.count();
+    return this->nAtoms();
 }
 
 /** Return the number of CutGroups in the molecule */
@@ -670,20 +723,64 @@ int AtomProperty<T>::nCutGroups() const
     return props.count();
 }
 
+/** Return whether or not this is empty */
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+bool AtomProperty<T>::isEmpty() const
+{
+    return this->nAtoms() == 0;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QString AtomProperty<T>::toString() const
+{
+    if (this->isEmpty())
+    {
+        return QObject::tr("%1::empty").arg(this->what());
+    }
+    else
+    {
+        QStringList parts;
+
+        const auto n = this->count();
+
+        if (n <= 10)
+        {
+            for (int i=0; i<n; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                                        .arg(Sire::toString(this->operator[](i))));
+            }
+        }
+        else
+        {
+            for (int i=0; i<5; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                                        .arg(Sire::toString(this->operator[](i))));
+            }
+
+            parts.append("...");
+
+            for (int i=n-5; i<n; ++i)
+            {
+                parts.append(QObject::tr("%1: %2").arg(i)
+                                        .arg(Sire::toString(this->operator[](i))));
+            }
+        }
+
+        return QObject::tr("%1( size=%2\n%3\n)")
+                        .arg(this->what()).arg(n).arg(parts.join("\n"));
+    }
+}
+
 /** Return the total number of atoms in the molecule */
 template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 int AtomProperty<T>::nAtoms() const
 {
     return props.nValues();
-}
-
-/** Return whether or not this is empty */
-template<class T>
-SIRE_OUTOFLINE_TEMPLATE
-bool AtomProperty<T>::isEmpty() const
-{
-    return props.isEmpty();
 }
 
 /** Return the number of atoms in the CutGroup at index 'cgidx'
@@ -761,6 +858,26 @@ QVector<T> AtomProperty<T>::toVector() const
     QVector<T> ret( this->nAtoms() );
 
     SireBase::quickCopy<T>(ret.data(), props.constValueData(), this->nAtoms());
+
+    return ret;
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QList<T> AtomProperty<T>::toList() const
+{
+    const int nats = this->nAtoms();
+
+    if (nats == 0)
+        return QList<T>();
+
+    QList<T> ret;
+    ret.reserve(nats);
+
+    for (int i=0; i<nats; ++i)
+    {
+        ret.append(props.constValueData()[i]);
+    }
 
     return ret;
 }
@@ -854,6 +971,13 @@ QVector<T> AtomProperty<T>::toVector(const AtomSelection &selected_atoms) const
 
         return vals;
     }
+}
+
+template<class T>
+SIRE_OUTOFLINE_TEMPLATE
+QList<T> AtomProperty<T>::toList(const AtomSelection &selected_atoms) const
+{
+    return this->toVector().toList();
 }
 
 /** Copy into this atom property set the values from 'values'. The values
@@ -1188,6 +1312,7 @@ Q_DECLARE_METATYPE( SireMol::AtomStringProperty );
 Q_DECLARE_METATYPE( SireMol::AtomIntProperty );
 Q_DECLARE_METATYPE( SireMol::AtomFloatProperty );
 Q_DECLARE_METATYPE( SireMol::AtomVariantProperty );
+Q_DECLARE_METATYPE( SireMol::AtomPropertyProperty );
 
 SIRE_EXPOSE_CLASS( SireMol::AtomProp )
 
@@ -1195,12 +1320,14 @@ SIRE_EXPOSE_ATOM_PROPERTY( QString, SireMol::AtomStringProperty )
 SIRE_EXPOSE_ATOM_PROPERTY( qint64, SireMol::AtomIntProperty )
 SIRE_EXPOSE_ATOM_PROPERTY( double, SireMol::AtomFloatProperty )
 SIRE_EXPOSE_ATOM_PROPERTY( QVariant, SireMol::AtomVariantProperty )
+SIRE_EXPOSE_ATOM_PROPERTY( SireBase::PropertyPtr, SireMol::AtomPropertyProperty )
 
 #ifdef SIRE_INSTANTIATE_TEMPLATES
 template class SireMol::AtomProperty<QString>;
 template class SireMol::AtomProperty<qint64>;
 template class SireMol::AtomProperty<double>;
 template class SireMol::AtomProperty<QVariant>;
+template class SireMol::AtomProperty<SireBase::PropertyPtr>;
 #endif
 
 SIRE_END_HEADER

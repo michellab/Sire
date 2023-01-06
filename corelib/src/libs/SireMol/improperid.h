@@ -66,13 +66,13 @@ using SireBase::PropertyMap;
 
 using boost::tuple;
 
-/** This class provides a generic ID for an 
+/** This class provides a generic ID for an
     improper angle between four atoms. The improper
     angle is the angle 1-2-3-4, which has the effect of measuring
     the angle between the plane formed by the atoms 1,3,4 and the
     plane formed by the atoms 2,3,4. This measures by how much
     atom 1 lies out of the plane formed by the atoms 2,3,4.
-        
+
             1
             |
             2
@@ -80,7 +80,7 @@ using boost::tuple;
         3       4
 
     The internal move Monte Carlo move changes an improper
-    by splitting the molecule about the 1-2 bond, and then 
+    by splitting the molecule about the 1-2 bond, and then
     rotating the atom 1 group, and the atom 2-3-4 group about
     the vector 3-4, about point 2.
 
@@ -98,37 +98,39 @@ public:
                const AtomID &atom2, const AtomID &atom3);
 
     ImproperID(const ImproperID &other);
-    
+
     ~ImproperID();
-    
+
     static const char* typeName();
-    
+
     const char* what() const
     {
         return ImproperID::typeName();
     }
-    
+
     ImproperID* clone() const;
-    
+
     uint hash() const;
 
     QString toString() const;
-    
+
     bool isNull() const;
-    
+
     ImproperID& operator=(const ImproperID &other);
-    
+
     bool operator==(const SireID::ID &other) const;
-    
+
     bool operator==(const ImproperID &other) const;
     bool operator!=(const ImproperID &other) const;
 
     bool equivalent(const ImproperID &other) const;
 
-    tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx> 
+    const AtomID& operator[](int i) const;
+
+    tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx>
     map(const MoleculeInfoData &molinfo) const;
-    
-    tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx> 
+
+    tuple<AtomIdx,AtomIdx,AtomIdx,AtomIdx>
     map(const MoleculeInfoData &mol0info,
         const MoleculeInfoData &mol1info,
         const MoleculeInfoData &mol2info,
@@ -136,13 +138,13 @@ public:
 
     Torsion torsion(const MoleculeData &moldata,
                     const PropertyMap &map = PropertyMap()) const;
-                      
+
     Torsion torsion(const MoleculeData &mol0data,
                     const MoleculeData &mol1data,
                     const MoleculeData &mol2data,
                     const MoleculeData &mol3data,
                     const PropertyMap &map = PropertyMap()) const;
-                      
+
     Torsion torsion(const MoleculeData &mol0data,
                     const PropertyMap &map0,
                     const MoleculeData &mol1data,
@@ -155,12 +157,12 @@ public:
     SireUnits::Dimension::Angle size(const MoleculeData &moldata,
                                      const PropertyMap &map = PropertyMap()) const;
 
-    SireUnits::Dimension::Angle size(const MoleculeData &mol0data, 
+    SireUnits::Dimension::Angle size(const MoleculeData &mol0data,
                                      const MoleculeData &mol1data,
                                      const MoleculeData &mol2data,
                                      const MoleculeData &mol3data,
                                      const PropertyMap &map = PropertyMap()) const;
-                
+
     SireUnits::Dimension::Angle size(const MoleculeData &mol0data,
                                      const PropertyMap &map0,
                                      const MoleculeData &mol1data,
@@ -186,7 +188,7 @@ SIRE_ALWAYS_INLINE uint qHash(const ImproperID &improperid)
 {
     return improperid.hash();
 }
- 
+
 #endif // SIRE_SKIP_INLINE_FUNCTIONS
 
 }

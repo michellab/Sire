@@ -24,7 +24,6 @@ set ( WRAPUNITS_SOURCES
 
       _Units.main.cpp
 
-      generalunit.cpp
       sireunits_dimensions.cpp
       _Units_global_variables.pyman.cpp
 

@@ -41,6 +41,7 @@
 
 #include "mover.hpp"
 #include "selector.hpp"
+#include "selectormol.h"
 
 #include "core.h"
 
@@ -182,6 +183,16 @@ quint64 Molecule::version() const
 MolViewPtr Molecule::toSelector() const
 {
     return MolViewPtr(*this);
+}
+
+SelectorMol Molecule::selector() const
+{
+    return SelectorMol(*this);
+}
+
+SelectorMol Molecule::invert() const
+{
+    return SelectorMol();
 }
 
 /** Return the version number of the property at key 'key'.

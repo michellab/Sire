@@ -2,88 +2,72 @@
 Documentation
 =============
 
-Sire is composed of several modules:
+:mod:`sire` is implemented as a primary module, with a collection
+of submodules.
 
-* The :doc:`Sire <index_Sire>` top-level Python module. This has top-level
-  functions that should make it easy to use Sire without knowing about
-  or directly loading the other modules.
-  By convention, we normally import `Sire` under
-  the alias ``sr``.
+You import :mod:`sire` using;
 
-There are also a number of submodules. These provide additional functionality,
-going all the way up to letting you construct complete molecular simulation
-programs.
+>>> import sire as sr
 
-* The :doc:`sire.mol <index_Sire_Mol>` module. This contains all of the
-  classes and functions used to represent and manipulate molecules.
+This imports the main module, which is the primary gateway into all of
+the functionality of :mod:`sire`.
 
-* The :doc:`sire.system <index_Sire_System>` module. This contains
-  classes which represent systems (collections) of molecules. Systems
-  can combine molecules with other data, e.g. forcefields for calculating
-  energies, or additional properties such as the periodic box holding
-  the molecules.
+This is designed so that you (mostly) only need to call functions
+from this main module. These functions
+will create objects and call functions from the various sub-modules.
+You will rarely need to call functions or create classes from the
+sub-modules directly yourself.
 
-* The :doc:`sire.io <index_Sire_IO>` module. This provides lots of
-  parsers to read and write molecular information to a range of
-  different file formats (e.g. PDB, mol2, grotop etc.).
+For example, :func:`sire.load` will use the file parsers defined
+in :mod:`sire.io` to load molecules (each represented as a
+:class:`~sire.mol.Molecule`
+object from :mod:`sire.mol`), and will return the result as a
+:class:`~sire.system.System` (defined in :mod:`sire.system`).
 
-* The :doc:`sire.units <index_Sire_Units>` module. This contains
-  classes and functions for representing the units of physical
-  quantities.
+Key sub-modules are:
 
-* The :doc:`sire.cas <index_Sire_CAS>` module. This implements a
-  complete Computer Algebra System, which is used for, e.g. giving
-  the algebraic form of bond or dihedral functions.
+* :mod:`sire.mol` - defines all of the objects that are used to represent
+  and manipulate molecules (and views of molecules).
+* :mod:`sire.search` - provides the power behind the
+  :doc:`search functionality <../cheatsheet/search>`.
+* :mod:`sire.units` - implements a complete set of units so that all
+  physical quantities are represented by proper units / dimensions.
+* :mod:`sire.maths` - provides a collection of maths functions and classes
+  (e.g. points in space, represented via :class:`sire.maths.Vector`, or
+  spheres, represented via :class:`sire.maths.Sphere`).
+* :mod:`sire.cas` - this is a complete computer algebra system (CAS), used
+  to flexibly define interaction functions for calculating energies and
+  forces between atoms and molecules.
+* :mod:`sire.io` - all of the input/output classes used to read and write
+  molecular data to and from files.
+* :mod:`sire.mm` - a set of molecular mechanics (MM) forcefields that enables
+  :mod:`sire` to rapidly calculate energies and forces between atoms and
+  molecules.
+* :mod:`sire.base` - a set of base classes and functions that includes a
+  property system with associated containers for flexibly holding and
+  manipulating objects of different types, and mapping them between
+  the C++ and Python layers of :mod:`sire`.
+* :mod:`sire.stream` - provides functions that support streaming (pickling)
+  of all :mod:`sire` objects to an from a cross-platform, versioned binary
+  format. This allows all C++ objects to be pickled via standard
+  Python pickle.
+* :mod:`sire.vol` - provides different spaces (volumes) that can be used
+  to calculate distances between points with different boundary conditions.
+* :mod:`sire.utils` - a miscellaneous collection of utilities that
+  are Python-only, and don't fit neatly into any of the other sub-modules.
 
-* The :doc:`sire.move <index_Sire_Move>` module. This provides a
-  collection of moves, which can be used to move atoms or molecules
-  in a :class:`~sire.system.System` as part of a simulation.
-
-* The :doc:`sire.analysis <index_Sire_Analysis>` module. This
-  provides a set of analysis functionality that can be used
-  to analyse running simulations (e.g. calculating FEP and TI
-  free energies).
-
-* The :doc:`sire.ff <index_Sire_FF>` module. This provides the base
-  functionality for all forcefields (classes used to calculate the
-  energy or forces on molecules).
-
-* The :doc:`sire.mm <index_Sire_MM>` module. This provides code to calculate
-  energies and forces according to several molecular mechanics forcefields.
-
-* The :doc:`sire.squire <index_Sire_Squire>` module. This provides
-  interfaces to various quantum chemical packages, so that you can
-  calculate QM or QM/MM energies.
-
-* Other useful modules, such as; :doc:`sire.maths <index_Sire_Maths>`
-  (maths routines); :doc:`sire.base <index_Sire_Base>` (base utilities,
-  including the :class:`~sire.base.Property` class);
-  :doc:`sire.stream <index_Sire_Stream>` (functions relating to streaming/pickling
-  of Sire objects); :doc:`sire.id <index_Sire_ID>` (functions used to
-  implement Sire's identification system) and
-  :doc:`sire.vol <index_Sire_Vol>` (classes that represent different
-  simulation spaces, e.g. :class:`sire.vol.PeriodicBox`).
-
-Detail
-------
+Top-level documentation
+=======================
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 3
 
-   index_Sire
-   index_Sire_Analysis
-   index_Sire_Base
-   index_Sire_CAS
-   index_Sire_Error
-   index_Sire_FF
-   index_Sire_ID
-   index_Sire_IO
-   index_Sire_Maths
-   index_Sire_MM
-   index_Sire_Mol
-   index_Sire_Move
-   index_Sire_Squire
-   index_Sire_Stream
-   index_Sire_System
-   index_Sire_Units
-   index_Sire_Vol
+   sire
+
+Sub-module documentation
+========================
+
+.. toctree::
+   :maxdepth: 2
+
+   sire_modules

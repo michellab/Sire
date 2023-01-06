@@ -165,6 +165,11 @@ const char* Supplementary::what() const
     return Supplementary::typeName();
 }
 
+int Supplementary::nAtoms() const
+{
+    return 0;
+}
+
 /** Return the parser that has been constructed by reading in the passed
     file using the passed properties */
 MoleculeParserPtr Supplementary::construct(const QString &filename,
@@ -221,9 +226,7 @@ QStringList Supplementary::formatSuffix() const
     return suffixes;
 }
 
-/** Return whether or not this parser can follow another lead parser, and add
-    data to an existing molecular system. The Supplementary parser cannot follow. */
-bool Supplementary::canFollow() const
+bool Supplementary::isSupplementary() const
 {
-    return false;
+    return true;
 }

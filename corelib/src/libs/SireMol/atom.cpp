@@ -255,6 +255,12 @@ Selector<Atom> Atom::selector() const
     return Selector<Atom>(*this);
 }
 
+/** Return a selector that has everything except this view */
+Selector<Atom> Atom::invert() const
+{
+    return this->selector().invert();
+}
+
 /** Return whether or not this atom is part of a residue */
 bool Atom::isWithinResidue() const
 {

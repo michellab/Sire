@@ -65,6 +65,7 @@ void register_SireMM_containers()
     register_PackedArray< SireBase::PackedArray2D<LJParameter> >();
 
     register_list< QVector<LJParameter> >();
+    register_list< QList<LJParameter> >();
 
     register_list< QVector<TwoAtomFunction> >();
     register_list< QVector<ThreeAtomFunction> >();

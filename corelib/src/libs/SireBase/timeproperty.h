@@ -50,6 +50,11 @@ using SireUnits::Dimension::Time;
 
 /** This class provides a thin Property wrapper around times
 
+    This class is deprecated and only kept for compatibility with
+    old S3 files.
+
+    Now you should use GeneralUnitProperty for all units
+
     @author Christopher Woods
 */
 class SIREBASE_EXPORT TimeProperty : public ConcreteProperty<TimeProperty,Property>
@@ -63,23 +68,23 @@ public:
     TimeProperty(Time value);
 
     TimeProperty(const TimeProperty &other);
-    TimeProperty(const Property &other);    
-    
+    TimeProperty(const Property &other);
+
     ~TimeProperty();
-    
+
     static const char* typeName();
-    
+
     TimeProperty& operator=(const TimeProperty &other);
-    
+
     bool operator==(const TimeProperty &other) const;
     bool operator!=(const TimeProperty &other) const;
-    
+
     Time value() const;
-    
+
     QString toString() const;
-    
+
     operator Time() const;
-    
+
 private:
     Time val;
 };

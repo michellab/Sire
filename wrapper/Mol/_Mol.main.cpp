@@ -75,6 +75,8 @@
 
 #include "AtomPropertyList.pypp.hpp"
 
+#include "AtomPropertyProperty.pypp.hpp"
+
 #include "AtomRadicals.pypp.hpp"
 
 #include "AtomRadii.pypp.hpp"
@@ -119,6 +121,8 @@
 
 #include "BeadProp.pypp.hpp"
 
+#include "BeadPropertyProperty.pypp.hpp"
+
 #include "BeadStringProperty.pypp.hpp"
 
 #include "BeadVariantProperty.pypp.hpp"
@@ -157,6 +161,8 @@
 
 #include "CGProp.pypp.hpp"
 
+#include "CGPropertyProperty.pypp.hpp"
+
 #include "CGResID.pypp.hpp"
 
 #include "CGStringProperty.pypp.hpp"
@@ -186,6 +192,8 @@
 #include "ChainName.pypp.hpp"
 
 #include "ChainProp.pypp.hpp"
+
+#include "ChainPropertyProperty.pypp.hpp"
 
 #include "ChainResID.pypp.hpp"
 
@@ -228,6 +236,8 @@
 #include "EvaluatorM.pypp.hpp"
 
 #include "Force3D.pypp.hpp"
+
+#include "Frame.pypp.hpp"
 
 #include "GeometryPerturbation.pypp.hpp"
 
@@ -421,6 +431,8 @@
 
 #include "ResProp.pypp.hpp"
 
+#include "ResPropertyProperty.pypp.hpp"
+
 #include "ResStringProperty.pypp.hpp"
 
 #include "ResStructureEditor.pypp.hpp"
@@ -456,6 +468,8 @@
 #include "SegName.pypp.hpp"
 
 #include "SegProp.pypp.hpp"
+
+#include "SegPropertyProperty.pypp.hpp"
 
 #include "SegResID.pypp.hpp"
 
@@ -513,6 +527,8 @@
 
 #include "Stereoscopy.pypp.hpp"
 
+#include "Trajectory.pypp.hpp"
+
 #include "UserBeading.pypp.hpp"
 
 #include "Velocity3D.pypp.hpp"
@@ -544,6 +560,10 @@ namespace bp = boost::python;
 #include "SireMol/mgidentifier.h"
 
 #include "SireMol/moleculeinfo.h"
+
+#include "SireMol/selector.hpp"
+
+#include "SireMol/selectorm.hpp"
 
 BOOST_PYTHON_MODULE(_Mol){
     register_SireMol_objects();
@@ -690,6 +710,8 @@ BOOST_PYTHON_MODULE(_Mol){
 
     register_AtomIntegerArrayProperty_class();
 
+    register_AtomPropertyProperty_class();
+
     register_AtomPropertyList_class();
 
     register_AtomStringArrayProperty_class();
@@ -752,6 +774,8 @@ BOOST_PYTHON_MODULE(_Mol){
 
     register_BeadVariantProperty_class();
 
+    register_BeadPropertyProperty_class();
+
     register_BeadFloatProperty_class();
 
     register_BeadIntProperty_class();
@@ -786,6 +810,8 @@ BOOST_PYTHON_MODULE(_Mol){
 
     register_CGVariantProperty_class();
 
+    register_CGPropertyProperty_class();
+
     register_CGFloatProperty_class();
 
     register_CGIntProperty_class();
@@ -809,6 +835,8 @@ BOOST_PYTHON_MODULE(_Mol){
     register_ChainStringProperty_class();
 
     register_ChainVariantProperty_class();
+
+    register_ChainPropertyProperty_class();
 
     register_ChainFloatProperty_class();
 
@@ -857,6 +885,8 @@ BOOST_PYTHON_MODULE(_Mol){
     register_Evaluator_class();
 
     register_EvaluatorM_class();
+
+    register_Frame_class();
 
     register_GeometryPerturbations_class();
 
@@ -1006,6 +1036,8 @@ BOOST_PYTHON_MODULE(_Mol){
 
     register_ResVariantProperty_class();
 
+    register_ResPropertyProperty_class();
+
     register_ResFloatProperty_class();
 
     register_ResIntProperty_class();
@@ -1029,6 +1061,8 @@ BOOST_PYTHON_MODULE(_Mol){
     register_SegStringProperty_class();
 
     register_SegVariantProperty_class();
+
+    register_SegPropertyProperty_class();
 
     register_SegFloatProperty_class();
 
@@ -1060,6 +1094,8 @@ BOOST_PYTHON_MODULE(_Mol){
 
     register_Stereoscopy_class();
 
+    register_Trajectory_class();
+
     register_UserBeading_class();
 
     register_VolumeMap_class();
@@ -1089,6 +1125,16 @@ BOOST_PYTHON_MODULE(_Mol){
     bp::implicitly_convertible< SireMol::MoleculeInfoData, SireMol::MoleculeInfo >();
 
     bp::implicitly_convertible< SireMol::MoleculeInfo, SireMol::MoleculeInfoData >();
+
+    bp::implicitly_convertible< SireMol::Selector<SireMol::Atom>, SireMol::SelectorM<SireMol::Atom> >();
+
+    bp::implicitly_convertible< SireMol::Selector<SireMol::Residue>, SireMol::SelectorM<SireMol::Residue> >();
+
+    bp::implicitly_convertible< SireMol::Selector<SireMol::CutGroup>, SireMol::SelectorM<SireMol::CutGroup> >();
+
+    bp::implicitly_convertible< SireMol::Selector<SireMol::Chain>, SireMol::SelectorM<SireMol::Chain> >();
+
+    bp::implicitly_convertible< SireMol::Selector<SireMol::Segment>, SireMol::SelectorM<SireMol::Segment> >();
 
     register_free_functions();
 }

@@ -215,7 +215,7 @@ def findMolecule(system, molname):
 
 def addMoleculeToSystem(molecule, system, naming_scheme = NamingScheme()):
     """This function adds the passed molecule to the passed system
-       using the passed naming scheme to assign the molecule to the 
+       using the passed naming scheme to assign the molecule to the
        correct molecule group"""
 
     resnams = getResidueNames(molecule)
@@ -228,7 +228,7 @@ def addMoleculeToSystem(molecule, system, naming_scheme = NamingScheme()):
         system.add(molecule, MGName(naming_scheme.proteinsGroupName().value()))
     elif naming_scheme.isWater(resnams):
         system.add(molecule, MGName(naming_scheme.watersGroupName().value()))
-        system.add(molecule, MGName(naming_scheme.solventsGroupName().value()))    
+        system.add(molecule, MGName(naming_scheme.solventsGroupName().value()))
     elif naming_scheme.isIon(resnams):
         system.add(molecule, MGName(naming_scheme.ionsGroupName().value()))
         system.add(molecule, MGName(naming_scheme.solventsGroupName().value()))
@@ -257,7 +257,7 @@ def createSystemFrom(molecules, space, system_name, naming_scheme = NamingScheme
             molecule = molecules[molnum].molecule()
 
             if i % 100 == 0:
-                print("%d" % i)                
+                print("%d" % i)
                 sys.stdout.flush()
 
             elif i % 10 == 0:
@@ -350,7 +350,7 @@ def createSystemFrom(molecules, space, system_name, naming_scheme = NamingScheme
 
     for solvent in solvents:
         solvent_group.add(solvent)
-    
+
     for ion in ions:
         solvent_group.add(ion)
         ion_group.add(ion)
@@ -368,9 +368,9 @@ def createSystemFrom(molecules, space, system_name, naming_scheme = NamingScheme
         system.add(water_group)
 
     if ion_group.nMolecules() > 0:
-        system.add(ion_group)    
+        system.add(ion_group)
 
-    print("Number of solute molecules == %s" % solute_group.nMolecules()) 
+    print("Number of solute molecules == %s" % solute_group.nMolecules())
     print("Number of protein molecules == %s" % protein_group.nMolecules())
     print("Number of ions == %s" % ion_group.nMolecules())
     print("Number of water molecules == %s" % water_group.nMolecules())
@@ -387,10 +387,10 @@ def createSystemFrom(molecules, space, system_name, naming_scheme = NamingScheme
 
 
 def createSystem(top_file, crd_file, naming_scheme = NamingScheme()):
-    """Create a new System from the molecules read in from the passed amber 
+    """Create a new System from the molecules read in from the passed amber
        topology and coordinate files. This sorts the molecules into different
        molecule groups based on the passed naming scheme"""
-    
+
     system = MoleculeParser.read(top_file,crd_file)
 
     # Load all of the molecules and their parameters from
@@ -404,8 +404,8 @@ def createSystem(top_file, crd_file, naming_scheme = NamingScheme()):
 def centerSystem(system, molecule):
     print("Setting the origin of the system to the center of molecule %s (%s)..." % (molecule, molecule.number()))
     center = molecule.evaluate().centerOfMass()
-    print("This requires translating everything by %s..." % (-center))    
-    
+    print("This requires translating everything by %s..." % (-center))
+
     moved_mols = Molecules()
 
     for molnum in system.molNums():
@@ -448,7 +448,7 @@ def generateFlexibility(solute):
         flexibility.setMaximumDihedralVar( BASE_MAXVAR_D.val )
 
     # Redundant torsions are discarded according to the following algorithm
-    # 1) Do not sample a torsion at0-at1-at2-at3 if a variable torsion has 
+    # 1) Do not sample a torsion at0-at1-at2-at3 if a variable torsion has
     # already been defined around at1-at2 or at2-at1.
     # 2) Do not sample a torsion if it would break a ring
     #
@@ -463,16 +463,16 @@ def generateFlexibility(solute):
             at1 = dihedral.atom1()
             at2 = dihedral.atom2()
             at3 = dihedral.atom3()
-            # See if a one of the variable dihedral 
+            # See if a one of the variable dihedral
             # already rotates around the same torsion
             for vardih in var_dihedrals:
-                if ( ( at1 == vardih.atom1() and at2 == vardih.atom2() ) or 
+                if ( ( at1 == vardih.atom1() and at2 == vardih.atom2() ) or
                      ( at2 == vardih.atom1() and at1 == vardih.atom2() ) ):
-                    # Yes so will not move this torsion 
+                    # Yes so will not move this torsion
                     tomove = False
                     break
 
-            # If still wondering...See if a rotation around this dihedral would break a ring 
+            # If still wondering...See if a rotation around this dihedral would break a ring
             if tomove:
                 try:
                     dihbond = BondID(at1, at2)
@@ -486,10 +486,10 @@ def generateFlexibility(solute):
                         tomove = False
                     else:
                         # re-throw the exception
-                        raise error 
+                        raise error
 
             if tomove:
-                # Find out how many atoms would move 
+                # Find out how many atoms would move
                 #print dihedral
                 gr0, gr1 = connectivity.split(at1, at2)
                 ngr0 = gr0.nSelected()
@@ -530,7 +530,7 @@ def generateFlexibility(solute):
                     continue
                 else:
                     # re-throw the exception
-                    raise error 
+                    raise error
 
             gr0, gr1 = connectivity.split(at0, angle.atom1(), at2)
             ngr0 = gr0.nSelected()
@@ -547,7 +547,7 @@ def generateFlexibility(solute):
             if at0 not in moved_atoms:
                 moved_atoms.append(at0)
             if at2 not in moved_atoms:
-                moved_atoms.append(at2)    
+                moved_atoms.append(at2)
 
     # And the bonds...
     if dobonds.val:
@@ -562,7 +562,7 @@ def generateFlexibility(solute):
                     continue
                 else:
                     # re-throw the exception
-                    raise error 
+                    raise error
 
             gr0, gr1 = connectivity.split(bond.atom0(), bond.atom1() )
             ngr0 = gr0.nSelected()
@@ -589,24 +589,24 @@ def getCoordGroup(atoms, coords_property="coordinates"):
 
 
 def getAtomNearCOG( molecule ):
-        
+
     mol_centre = molecule.evaluate().center()
     mindist = 99999.0
-    
+
     for x in range(0, molecule.nAtoms()):
-        atom = molecule.atoms()[x]   
+        atom = molecule.atoms()[x]
         at_coords = atom.property('coordinates')
         dist = Vector().distance2(at_coords, mol_centre)
         if dist < mindist:
             mindist = dist
             nearest_atom = atom
-    
+
     return nearest_atom
 
 
 def addFlexibility(system, reflection_center=None, reflection_radius=None, \
                            naming_scheme=NamingScheme()):
-    
+
     print("Adding flexibility to the system...")
 
     # create a group for all of the fixed molecules and residues
@@ -666,7 +666,7 @@ def addFlexibility(system, reflection_center=None, reflection_radius=None, \
                 for i in range(0, protein_mol.nResidues()):
                     res = protein_mol.residue( ResIdx(i) )
                     distance = space.minimumDistance(CoordGroup(1,reflection_center), getCoordGroup(res.atoms()))
-          
+
                     if distance < reflection_radius.value():
                         # add the residue to the mobile sidechains group
                         mobile_sc_group.add(res)
@@ -674,7 +674,7 @@ def addFlexibility(system, reflection_center=None, reflection_radius=None, \
 
                         # now add the atoms needed from the residue to the mobile backbones group
                         atoms = protein_mol.select(ResIdx(i)).selection()
-    
+
                         # for the backbone move to work, the residue must contain
                         #  AtomName("CA", CaseInsensitive) and AtomName("N", CaseInsensitive) )
                         has_backbone = False
@@ -733,7 +733,7 @@ def addFlexibility(system, reflection_center=None, reflection_radius=None, \
                     mobile_sc_group.add(res)
 
                     atoms = protein_mol.select(ResIdx(i)).selection()
-    
+
                     if i < (protein_mol.nResidues()-1):
                         try:
                             atoms.deselect( hn_atoms + ResIdx(i) )
@@ -774,7 +774,7 @@ def addFlexibility(system, reflection_center=None, reflection_radius=None, \
 
             move_solute = True
 
-            # Only move the solute if it is within the sphere cutoff of the ligand (if a ligand and solvent 
+            # Only move the solute if it is within the sphere cutoff of the ligand (if a ligand and solvent
             # radius have been specified...)
             if reflection_radius:
                 move_solute = (Vector.distance(reflection_center, \
@@ -813,7 +813,7 @@ def addFlexibility(system, reflection_center=None, reflection_radius=None, \
 
     # add all of the mobile solvent molecules to the mobile_solvent_group
     if naming_scheme.solventsGroupName() in system.mgNames():
-        solvent_group = system[ naming_scheme.solventsGroupName() ]        
+        solvent_group = system[ naming_scheme.solventsGroupName() ]
 
         mobile_solvent_group = MoleculeGroup( naming_scheme.mobileSolventsGroupName().value() )
 
@@ -840,7 +840,7 @@ def addFlexibility(system, reflection_center=None, reflection_radius=None, \
         system.add(fixed_group)
 
     if boundary_group.nMolecules() > 0:
-        system.add(boundary_group)    
+        system.add(boundary_group)
 
     print("\nNumber of fixed (or partially fixed) molecules equals %s" % fixed_group.nMolecules())
 

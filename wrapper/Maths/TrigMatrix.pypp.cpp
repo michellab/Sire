@@ -21,10 +21,6 @@ namespace bp = boost::python;
 
 #include "nvector.h"
 
-#include "sire_blas.h"
-
-#include "sire_lapack.h"
-
 #include "trigmatrix.h"
 
 #include "vector.h"

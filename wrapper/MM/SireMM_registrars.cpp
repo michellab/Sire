@@ -6,6 +6,7 @@
 #include "Helpers/version_error_impl.h"
 
 #include "amberparams.h"
+#include "angle.h"
 #include "anglerestraint.h"
 #include "atomljs.h"
 #include "bond.h"
@@ -25,12 +26,14 @@
 #include "cljrffunction.h"
 #include "cljshiftfunction.h"
 #include "cljworkspace.h"
+#include "dihedral.h"
 #include "dihedralrestraint.h"
 #include "distancerestraint.h"
 #include "fouratomfunctions.h"
 #include "gridff.h"
 #include "gridff2.h"
 #include "gromacsparams.h"
+#include "improper.h"
 #include "intercljff.h"
 #include "intercoulombff.h"
 #include "interff.h"
@@ -38,6 +41,7 @@
 #include "interljff.h"
 #include "internalcomponent.h"
 #include "internalff.h"
+#include "internalgroupff.h"
 #include "internalparameters.h"
 #include "internalperturbation.h"
 #include "intersoftcljff.h"
@@ -55,8 +59,14 @@
 #include "restraint.h"
 #include "restraintcomponent.h"
 #include "restraintff.h"
+#include "selectorangle.h"
 #include "selectorbond.h"
+#include "selectordihedral.h"
+#include "selectorimproper.h"
+#include "selectormangle.h"
 #include "selectormbond.h"
+#include "selectormdihedral.h"
+#include "selectormimproper.h"
 #include "softcljcomponent.h"
 #include "switchingfunction.h"
 #include "threeatomfunctions.h"
@@ -74,6 +84,8 @@ void register_SireMM_objects()
     ObjectRegistry::registerConverterFor< SireMM::AmberDihedral >();
     ObjectRegistry::registerConverterFor< SireMM::AmberNB14 >();
     ObjectRegistry::registerConverterFor< SireMM::AmberNBDihPart >();
+    ObjectRegistry::registerConverterFor< SireMM::Angle >();
+    ObjectRegistry::registerConverterFor< SireMol::Mover<SireMM::Angle> >();
     ObjectRegistry::registerConverterFor< SireMM::AngleRestraint >();
     ObjectRegistry::registerConverterFor< SireMM::AtomLJs >();
     ObjectRegistry::registerConverterFor< SireMM::Bond >();
@@ -114,6 +126,8 @@ void register_SireMM_objects()
     ObjectRegistry::registerConverterFor< SireMM::CLJSoftShiftFunction >();
     ObjectRegistry::registerConverterFor< SireMM::CLJSoftIntraShiftFunction >();
     ObjectRegistry::registerConverterFor< SireMM::CLJWorkspace >();
+    ObjectRegistry::registerConverterFor< SireMM::Dihedral >();
+    ObjectRegistry::registerConverterFor< SireMol::Mover<SireMM::Dihedral> >();
     ObjectRegistry::registerConverterFor< SireMM::DihedralRestraint >();
     ObjectRegistry::registerConverterFor< SireMM::DistanceRestraint >();
     ObjectRegistry::registerConverterFor< SireMM::DoubleDistanceRestraint >();
@@ -126,6 +140,8 @@ void register_SireMM_objects()
     ObjectRegistry::registerConverterFor< SireMM::GromacsBond >();
     ObjectRegistry::registerConverterFor< SireMM::GromacsAngle >();
     ObjectRegistry::registerConverterFor< SireMM::GromacsDihedral >();
+    ObjectRegistry::registerConverterFor< SireMM::Improper >();
+    ObjectRegistry::registerConverterFor< SireMol::Mover<SireMM::Improper> >();
     ObjectRegistry::registerConverterFor< SireMM::InterCLJFFBase >();
     ObjectRegistry::registerConverterFor< SireMM::InterCLJFF >();
     ObjectRegistry::registerConverterFor< SireMM::InterGroupCLJFFBase >();
@@ -154,6 +170,7 @@ void register_SireMM_objects()
     ObjectRegistry::registerConverterFor< SireMM::Intra14Component >();
     ObjectRegistry::registerConverterFor< SireMM::InternalComponent >();
     ObjectRegistry::registerConverterFor< SireMM::InternalFF >();
+    ObjectRegistry::registerConverterFor< SireMM::InternalGroupFF >();
     ObjectRegistry::registerConverterFor< SireMM::InternalParameters >();
     ObjectRegistry::registerConverterFor< SireMM::InternalParameters3D >();
     ObjectRegistry::registerConverterFor< SireMM::TwoAtomPerturbation >();
@@ -189,9 +206,18 @@ void register_SireMM_objects()
     ObjectRegistry::registerConverterFor< SireMM::NullRestraint >();
     ObjectRegistry::registerConverterFor< SireMM::RestraintComponent >();
     ObjectRegistry::registerConverterFor< SireMM::RestraintFF >();
+    ObjectRegistry::registerConverterFor< SireMM::SelectorAngle >();
+    ObjectRegistry::registerConverterFor< SireMol::Mover<SireMM::SelectorAngle> >();
     ObjectRegistry::registerConverterFor< SireMM::SelectorBond >();
     ObjectRegistry::registerConverterFor< SireMol::Mover<SireMM::SelectorBond> >();
+    ObjectRegistry::registerConverterFor< SireMM::SelectorDihedral >();
+    ObjectRegistry::registerConverterFor< SireMol::Mover<SireMM::SelectorDihedral> >();
+    ObjectRegistry::registerConverterFor< SireMM::SelectorImproper >();
+    ObjectRegistry::registerConverterFor< SireMol::Mover<SireMM::SelectorImproper> >();
+    ObjectRegistry::registerConverterFor< SireMM::SelectorMAngle >();
     ObjectRegistry::registerConverterFor< SireMM::SelectorMBond >();
+    ObjectRegistry::registerConverterFor< SireMM::SelectorMDihedral >();
+    ObjectRegistry::registerConverterFor< SireMM::SelectorMImproper >();
     ObjectRegistry::registerConverterFor< SireMM::SoftCLJComponent >();
     ObjectRegistry::registerConverterFor< SireMM::NoCutoff >();
     ObjectRegistry::registerConverterFor< SireMM::HarmonicSwitchingFunction >();

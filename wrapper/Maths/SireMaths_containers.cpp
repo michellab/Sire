@@ -50,6 +50,7 @@
 #include "SireMaths/multidouble.h"
 #include "SireMaths/multiuint.h"
 #include "SireMaths/histogram.h"
+#include "SireMaths/sphere.h"
 #include "SireMaths/freeenergyaverage.h"
 
 using namespace SireMaths;
@@ -60,6 +61,7 @@ void register_SireMaths_containers()
 {
     register_list< QList<Vector> >();
     register_list< QVector<Vector> >();
+    register_list< QVector<Sphere> >();
 
     register_list< QVector<MultiFloat> >();
     register_list< QVector<MultiFixed> >();

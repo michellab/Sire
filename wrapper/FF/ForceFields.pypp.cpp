@@ -661,6 +661,32 @@ void register_ForceFields_class(){
                 , "Return whether or not any of the forcefields that match the ID ffid\ncontain the property with name name\nNote that because this operates on the level of individual forcefields,\nit can only return built-in properties, and ignores any\nuser-supplied properties\nThrow: SireFF::missing_forcefield\nThrow: SireError::invalid_index\n" );
         
         }
+        { //::SireFF::ForceFields::deleteFrame
+        
+            typedef void ( ::SireFF::ForceFields::*deleteFrame_function_type)( int ) ;
+            deleteFrame_function_type deleteFrame_function_value( &::SireFF::ForceFields::deleteFrame );
+            
+            ForceFields_exposer.def( 
+                "deleteFrame"
+                , deleteFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireFF::ForceFields::deleteFrame
+        
+            typedef void ( ::SireFF::ForceFields::*deleteFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            deleteFrame_function_type deleteFrame_function_value( &::SireFF::ForceFields::deleteFrame );
+            
+            ForceFields_exposer.def( 
+                "deleteFrame"
+                , deleteFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireFF::ForceFields::energies
         
             typedef ::SireCAS::Values ( ::SireFF::ForceFields::*energies_function_type)(  ) ;
@@ -1215,6 +1241,32 @@ void register_ForceFields_class(){
                 , "Return an array containing all of the forcefields in this set, ordered\nin the same order as they appear in this set" );
         
         }
+        { //::SireFF::ForceFields::loadFrame
+        
+            typedef void ( ::SireFF::ForceFields::*loadFrame_function_type)( int ) ;
+            loadFrame_function_type loadFrame_function_value( &::SireFF::ForceFields::loadFrame );
+            
+            ForceFields_exposer.def( 
+                "loadFrame"
+                , loadFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireFF::ForceFields::loadFrame
+        
+            typedef void ( ::SireFF::ForceFields::*loadFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            loadFrame_function_type loadFrame_function_value( &::SireFF::ForceFields::loadFrame );
+            
+            ForceFields_exposer.def( 
+                "loadFrame"
+                , loadFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireFF::ForceFields::map
         
             typedef ::QList< SireFF::FFIdx > ( ::SireFF::ForceFields::*map_function_type)( ::SireFF::FFID const & ) const;
@@ -1276,6 +1328,31 @@ void register_ForceFields_class(){
                 , nForceFields_function_value
                 , bp::release_gil_policy()
                 , "Return the number of forcefields in this set" );
+        
+        }
+        { //::SireFF::ForceFields::nFrames
+        
+            typedef int ( ::SireFF::ForceFields::*nFrames_function_type)(  ) const;
+            nFrames_function_type nFrames_function_value( &::SireFF::ForceFields::nFrames );
+            
+            ForceFields_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireFF::ForceFields::nFrames
+        
+            typedef int ( ::SireFF::ForceFields::*nFrames_function_type)( ::SireBase::PropertyMap const & ) const;
+            nFrames_function_type nFrames_function_value( &::SireFF::ForceFields::nFrames );
+            
+            ForceFields_exposer.def( 
+                "nFrames"
+                , nFrames_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireFF::ForceFields::names
@@ -1685,6 +1762,57 @@ void register_ForceFields_class(){
                 , ( bp::arg("name") )
                 , bp::release_gil_policy()
                 , "Remove the property with name name. Note that this can only\nremove user-level properties - it cannot remove built-in properties\nof the forcefields. This does nothing if there is no user-level\nproperty with this name" );
+        
+        }
+        { //::SireFF::ForceFields::saveFrame
+        
+            typedef void ( ::SireFF::ForceFields::*saveFrame_function_type)( int ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireFF::ForceFields::saveFrame );
+            
+            ForceFields_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("frame") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireFF::ForceFields::saveFrame
+        
+            typedef void ( ::SireFF::ForceFields::*saveFrame_function_type)(  ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireFF::ForceFields::saveFrame );
+            
+            ForceFields_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireFF::ForceFields::saveFrame
+        
+            typedef void ( ::SireFF::ForceFields::*saveFrame_function_type)( int,::SireBase::PropertyMap const & ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireFF::ForceFields::saveFrame );
+            
+            ForceFields_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("frame"), bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireFF::ForceFields::saveFrame
+        
+            typedef void ( ::SireFF::ForceFields::*saveFrame_function_type)( ::SireBase::PropertyMap const & ) ;
+            saveFrame_function_type saveFrame_function_value( &::SireFF::ForceFields::saveFrame );
+            
+            ForceFields_exposer.def( 
+                "saveFrame"
+                , saveFrame_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
         
         }
         { //::SireFF::ForceFields::setComponent

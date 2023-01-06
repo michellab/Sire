@@ -228,8 +228,17 @@ AABox EvaluatorM::aaBox() const
 
 AABox EvaluatorM::aaBox(const PropertyMap &map) const
 {
-    throw SireError::incomplete_code();
-    return AABox();
+    if (this->isEmpty())
+        return AABox();
+
+    auto box = this->vws[0].evaluate().aaBox(map);
+
+    for (int i=1; i<this->vws.count(); ++i)
+    {
+        box += this->vws[i].evaluate().aaBox(map);
+    }
+
+    return box;
 }
 
 Sphere EvaluatorM::boundingSphere() const
@@ -247,10 +256,34 @@ Vector EvaluatorM::centroid() const
     return this->centroid(PropertyMap());
 }
 
+/** Return the centroid of these atoms - this is the average
+    of the coordinates
+
+    \throw SireBase::missing_property
+    \throw SireError::invalid_cast
+*/
 Vector EvaluatorM::centroid(const PropertyMap &map) const
 {
-    throw SireError::incomplete_code();
-    return Vector();
+    Vector cent(0);
+    int natoms(0);
+
+    const auto coords_property = map["coordinates"];
+
+    for (int i=0; i<this->vws.count(); ++i)
+    {
+        const auto atoms = this->vws[i].atoms();
+
+        for (int j=0; j<atoms.count(); ++j)
+        {
+            natoms += 1;
+            cent += atoms(j).property<Vector>(coords_property);
+        }
+    }
+
+    if (natoms == 0)
+        return Vector(0);
+    else
+        return cent / natoms;
 }
 
 Vector EvaluatorM::centerOfGeometry() const
@@ -260,8 +293,7 @@ Vector EvaluatorM::centerOfGeometry() const
 
 Vector EvaluatorM::centerOfGeometry(const PropertyMap &map) const
 {
-    throw SireError::incomplete_code();
-    return Vector();
+    return this->aaBox(map).center();
 }
 
 Vector EvaluatorM::centerOfMass() const
@@ -271,6 +303,43 @@ Vector EvaluatorM::centerOfMass() const
 
 Vector EvaluatorM::centerOfMass(const PropertyMap &map) const
 {
-    throw SireError::incomplete_code();
-    return Vector();
+    const auto coords_property = map["coordinates"];
+    const auto mass_property = map["mass"];
+    const auto element_property = map["element"];
+
+    Vector com(0);
+    double mass(0);
+
+    for (int i=0; i<this->vws.count(); ++i)
+    {
+        const auto atoms = this->vws[i].atoms();
+
+        for (int j=0; j<atoms.count(); ++j)
+        {
+            const auto &atom = atoms(j);
+
+            double atommass = 0;
+
+            if (atom.hasProperty(mass_property))
+            {
+                atommass = atom.property<SireUnits::Dimension::MolarMass>(mass_property).value();
+            }
+            else if (atom.hasProperty(element_property))
+            {
+                atommass = atom.property<Element>(element_property).mass().value();
+            }
+            else
+            {
+                throw SireBase::missing_property(QObject::tr(
+                    "There is no mass or element property in %1, so it is "
+                    "not possible to calculate the center of mass.")
+                        .arg(atom.toString()), CODELOC);
+            }
+
+            mass += atommass;
+            com += atommass*atom.property<Vector>(coords_property);
+        }
+    }
+
+    return com / mass;
 }

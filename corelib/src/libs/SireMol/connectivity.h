@@ -101,6 +101,12 @@ public:
     bool operator==(const IDPair &other) const;
     bool operator!=(const IDPair &other) const;
 
+    bool operator<(const IDPair &other) const;
+    bool operator<=(const IDPair &other) const;
+
+    bool operator>(const IDPair &other) const;
+    bool operator>=(const IDPair &other) const;
+
     quint32 atom0;
     quint32 atom1;
 };
@@ -276,6 +282,8 @@ public:
     QVector< QVector<bool> > getBondMatrix(int order) const;
     QVector< QVector<bool> > getBondMatrix(int start, int end) const;
 
+    QStringList propertyKeys() const;
+
     bool hasProperty(const BondID &bond,
                      const SireBase::PropertyName &key) const;
 
@@ -288,7 +296,6 @@ public:
 
     SireBase::Properties properties(const BondID &bond) const;
 
-    QStringList propertyKeys() const;
     QStringList propertyKeys(const BondID &bond) const;
 
     const Property& property(const BondID &bond,
@@ -298,6 +305,75 @@ public:
                              const Property &default_value) const;
 
     void assertHasProperty(const BondID &bond,
+                           const SireBase::PropertyName &key) const;
+
+    bool hasProperty(const AngleID &ang,
+                     const SireBase::PropertyName &key) const;
+
+    template<class T>
+    bool hasPropertyOfType(const AngleID &ang,
+                           const SireBase::PropertyName &key) const;
+
+    const char* propertyType(const AngleID &ang,
+                             const SireBase::PropertyName &key) const;
+
+    SireBase::Properties properties(const AngleID &ang) const;
+
+    QStringList propertyKeys(const AngleID &ang) const;
+
+    const Property& property(const AngleID &ang,
+                             const SireBase::PropertyName &key) const;
+    const Property& property(const AngleID &ang,
+                             const SireBase::PropertyName &key,
+                             const Property &default_value) const;
+
+    void assertHasProperty(const AngleID &ang,
+                           const SireBase::PropertyName &key) const;
+
+    bool hasProperty(const DihedralID &dih,
+                     const SireBase::PropertyName &key) const;
+
+    template<class T>
+    bool hasPropertyOfType(const DihedralID &dih,
+                           const SireBase::PropertyName &key) const;
+
+    const char* propertyType(const DihedralID &dih,
+                             const SireBase::PropertyName &key) const;
+
+    SireBase::Properties properties(const DihedralID &dih) const;
+
+    QStringList propertyKeys(const DihedralID &dih) const;
+
+    const Property& property(const DihedralID &dih,
+                             const SireBase::PropertyName &key) const;
+    const Property& property(const DihedralID &dih,
+                             const SireBase::PropertyName &key,
+                             const Property &default_value) const;
+
+    void assertHasProperty(const DihedralID &dih,
+                           const SireBase::PropertyName &key) const;
+
+    bool hasProperty(const ImproperID &imp,
+                     const SireBase::PropertyName &key) const;
+
+    template<class T>
+    bool hasPropertyOfType(const ImproperID &imp,
+                           const SireBase::PropertyName &key) const;
+
+    const char* propertyType(const ImproperID &imp,
+                             const SireBase::PropertyName &key) const;
+
+    SireBase::Properties properties(const ImproperID &imp) const;
+
+    QStringList propertyKeys(const ImproperID &imp) const;
+
+    const Property& property(const ImproperID &imp,
+                             const SireBase::PropertyName &key) const;
+    const Property& property(const ImproperID &imp,
+                             const SireBase::PropertyName &key,
+                             const Property &default_value) const;
+
+    void assertHasProperty(const ImproperID &imp,
                            const SireBase::PropertyName &key) const;
 
 protected:
@@ -327,6 +403,15 @@ protected:
 
     /** Bond properties */
     QHash<detail::IDPair, SireBase::Properties> bond_props;
+
+    /** Angle properties */
+    QHash<SireMol::AngleID, SireBase::Properties> ang_props;
+
+    /** Dihedral properties */
+    QHash<SireMol::DihedralID, SireBase::Properties> dih_props;
+
+    /** Improper properties */
+    QHash<SireMol::ImproperID, SireBase::Properties> imp_props;
 
     /** The info object that describes the molecule */
     MoleculeInfo minfo;
@@ -449,10 +534,28 @@ public:
     ConnectivityEditor& setProperty(const BondID &bond,
                                     const QString &key, const Property &value);
 
-    ConnectivityEditor& removeProperty(const QString &key);
-    ConnectivityEditor& removeProperty(const BondID &bond, const QString &key);
+    ConnectivityEditor& setProperty(const AngleID &ang,
+                                    const QString &key, const Property &value);
 
+    ConnectivityEditor& setProperty(const DihedralID &dih,
+                                    const QString &key, const Property &value);
+
+    ConnectivityEditor& setProperty(const ImproperID &imp,
+                                    const QString &key, const Property &value);
+
+    ConnectivityEditor& removeProperty(const QString &key);
+
+    ConnectivityEditor& removeProperty(const BondID &bond, const QString &key);
     SireBase::PropertyPtr takeProperty(const BondID &bond, const QString &key);
+
+    ConnectivityEditor& removeProperty(const AngleID &ang, const QString &key);
+    SireBase::PropertyPtr takeProperty(const AngleID &ang, const QString &key);
+
+    ConnectivityEditor& removeProperty(const DihedralID &dih, const QString &key);
+    SireBase::PropertyPtr takeProperty(const DihedralID &dih, const QString &key);
+
+    ConnectivityEditor& removeProperty(const ImproperID &imp, const QString &key);
+    SireBase::PropertyPtr takeProperty(const ImproperID &imp, const QString &key);
 
     Connectivity commit() const;
 };

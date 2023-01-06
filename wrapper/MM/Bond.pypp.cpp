@@ -99,7 +99,7 @@ void register_Bond_class(){
         }
         { //::SireMM::Bond::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::Bond::*energy_function_type)(  ) const;
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireMM::Bond::*energy_function_type)(  ) const;
             energy_function_type energy_function_value( &::SireMM::Bond::energy );
             
             Bond_exposer.def( 
@@ -111,7 +111,7 @@ void register_Bond_class(){
         }
         { //::SireMM::Bond::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::Bond::*energy_function_type)( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireMM::Bond::*energy_function_type)( ::SireBase::PropertyMap const & ) const;
             energy_function_type energy_function_value( &::SireMM::Bond::energy );
             
             Bond_exposer.def( 
@@ -173,6 +173,18 @@ void register_Bond_class(){
                 , "" );
         
         }
+        { //::SireMM::Bond::invert
+        
+            typedef ::SireMM::SelectorBond ( ::SireMM::Bond::*invert_function_type)(  ) const;
+            invert_function_type invert_function_value( &::SireMM::Bond::invert );
+            
+            Bond_exposer.def( 
+                "invert"
+                , invert_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
         { //::SireMM::Bond::isEmpty
         
             typedef bool ( ::SireMM::Bond::*isEmpty_function_type)(  ) const;
@@ -205,6 +217,31 @@ void register_Bond_class(){
             Bond_exposer.def( 
                 "length"
                 , length_function_value
+                , ( bp::arg("map") )
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::Bond::measure
+        
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::Bond::*measure_function_type)(  ) const;
+            measure_function_type measure_function_value( &::SireMM::Bond::measure );
+            
+            Bond_exposer.def( 
+                "measure"
+                , measure_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::Bond::measure
+        
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::Bond::*measure_function_type)( ::SireBase::PropertyMap const & ) const;
+            measure_function_type measure_function_value( &::SireMM::Bond::measure );
+            
+            Bond_exposer.def( 
+                "measure"
+                , measure_function_value
                 , ( bp::arg("map") )
                 , bp::release_gil_policy()
                 , "" );
@@ -357,6 +394,18 @@ void register_Bond_class(){
             Bond_exposer.def( 
                 "selection"
                 , selection_function_value
+                , bp::release_gil_policy()
+                , "" );
+        
+        }
+        { //::SireMM::Bond::selector
+        
+            typedef ::SireMM::SelectorBond ( ::SireMM::Bond::*selector_function_type)(  ) const;
+            selector_function_type selector_function_value( &::SireMM::Bond::selector );
+            
+            Bond_exposer.def( 
+                "selector"
+                , selector_function_value
                 , bp::release_gil_policy()
                 , "" );
         

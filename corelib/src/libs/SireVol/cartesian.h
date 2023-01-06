@@ -45,13 +45,13 @@ namespace SireVol
 {
 
 /**
-This class overloads SimVolume to provide an infinite Cartesian 
-(3-dimensional, orthoganol dimensions) volume. This corresponds to 
+This class overloads SimVolume to provide an infinite Cartesian
+(3-dimensional, orthoganol dimensions) volume. This corresponds to
 a traditional gas-phase or no-boundary system.
 
 @author Christopher Woods
 */
-class SIREVOL_EXPORT Cartesian 
+class SIREVOL_EXPORT Cartesian
           : public SireBase::ConcreteProperty<Cartesian,Space>
 {
 
@@ -65,7 +65,7 @@ public:
     virtual ~Cartesian();
 
     Cartesian& operator=(const Cartesian &other);
-    
+
     bool operator==(const Cartesian &other) const;
     bool operator!=(const Cartesian &other) const;
 
@@ -106,7 +106,7 @@ public:
                         DistMatrix &mat) const;
 
     DistVector calcDistVector(const Vector &point0, const Vector &point1) const;
-    
+
     double calcDistVectors(const CoordGroup &group, DistVectorMatrix &distmat) const;
     double calcDistVectors(const CoordGroup &group1, const CoordGroup &group2,
                            DistVectorMatrix &distmat) const;
@@ -138,7 +138,7 @@ public:
 
     Vector getRandomPoint(const Vector &center, const RanGenerator &generator) const;
 
-	Vector getBoxCenter(const Vector &p) const;
+  	Vector getBoxCenter(const Vector &p) const;
     Vector getBoxCenter(const Vector &p, const Vector &center) const;
 
     CoordGroup getMinimumImage(const CoordGroup &group, const Vector &center) const;
@@ -148,7 +148,7 @@ public:
                                     bool translate_as_one=false) const;
 
     AABox getMinimumImage(const AABox &aabox, const Vector &center) const;
-    
+
     Vector getMinimumImage(const Vector &point, const Vector &center) const;
 
     QVector<Vector> getImagesWithin(const Vector &point, const Vector &center, double dist) const;

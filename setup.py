@@ -39,11 +39,10 @@ if os.path.abspath(os.path.dirname(sys.argv[0])) != curdir:
     sys.exit(-1)
 
 # We need to import the 'parse_requirements' function to get the list
-# of requirements
+# of requirements - this will be in the 'actions' directory
 sys.path.insert(0, os.path.join(curdir, "actions"))
-from parse_requirements import parse_requirements
 
-# Next we need to verify that this is a Python that is part of a
+# We need to verify that this is a Python that is part of a
 # conda installation
 
 # Find the path to the conda or mamba executable
@@ -254,6 +253,8 @@ def conda_install(dependencies, install_bss_reqs=False):
     else:
         conda_install = [mamba, "install", "--yes"]
 
+    dependencies = [f"\"{dep}\"" for dep in dependencies]
+
     cmd = [*conda_install, *dependencies]
     print("\nInstalling packages using: '%s'" % " ".join(cmd))
     status = subprocess.run(cmd)
@@ -268,6 +269,9 @@ def conda_install(dependencies, install_bss_reqs=False):
 
         if status.returncode != 0:
             print("Something went wrong installing dependencies!")
+            print("If the python or conda/mamba executables were updated")
+            print("in the last install, then this can prevent them")
+            print("from running again. Please re-execute this script.")
             sys.exit(-1)
 
 
@@ -285,6 +289,28 @@ def install_requires(install_bss_reqs=False):
               "script.")
         sys.exit(-1)
 
+    # install mamba if it doesn't exist already
+    global mamba
+
+    if mamba is None:
+        # install mamba first!
+        conda_install(["mamba"], install_bss_reqs)
+        mamba = find_mamba()
+
+    try:
+        import pip_requirements_parser as _pip_requirements_parser
+        from parse_requirements import parse_requirements
+    except Exception:
+        # this didn't import - maybe we are missing pip-requirements-parser
+        print("Installing pip-requirements-parser")
+        conda_install(["pip-requirements-parser"], install_bss_reqs)
+        try:
+            from parse_requirements import parse_requirements
+        except ImportError as e:
+            print("\n\n[ERROR] ** You need to install pip-requirements-parser")
+            print("Run `conda install -c conda-forge pip-requirements-parser\n\n")
+            raise e
+
     reqs = parse_requirements("requirements.txt")
     build_reqs = parse_requirements("requirements_build.txt")
 
@@ -292,19 +318,7 @@ def install_requires(install_bss_reqs=False):
         bss_reqs = parse_requirements("requirements_bss.txt")
         reqs = reqs + bss_reqs
 
-    print("\nUsing dependencies:")
     dependencies = build_reqs + reqs
-
-    for dep in dependencies:
-        print(dep)
-
-    global mamba
-
-    if mamba is None:
-        # install mamba first!
-        conda_install(["mamba"])
-        mamba = find_mamba()
-
     conda_install(dependencies, install_bss_reqs)
 
 
@@ -408,20 +422,31 @@ def build(ncores: int = 1, npycores: int = 1,
         try:
             CXX = glob.glob(os.path.join(bindir, "clang++"))[0]
             CC = glob.glob(os.path.join(bindir, "clang"))[0]
-        except:
-            print("Cannot find the conda clang++ binaries!")
-            print("Please install these, e.g. via")
-            print("conda install clang clangxx")
-            sys.exit(-1)
+        except Exception:
+            conda_install(["clang", "clangxx"], False)
+            try:
+                CXX = glob.glob(os.path.join(bindir, "clang++"))[0]
+                CC = glob.glob(os.path.join(bindir, "clang"))[0]
+            except Exception:
+                print("Cannot find the conda clang++ binaries!")
+                print("Please install these, e.g. via")
+                print("conda install clang clangxx")
+                sys.exit(-1)
+
     elif is_linux:
         try:
             CXX = glob.glob(os.path.join(bindir, "*-g++"))[0]
             CC = glob.glob(os.path.join(bindir, "*-gcc"))[0]
-        except:
-            print("Cannot find the conda g++ binaries!")
-            print("Please install these, e.g. via")
-            print("conda install gcc gxx")
-            sys.exit(-1)
+        except Exception:
+            conda_install(["gcc", "gxx"], False)
+            try:
+                CXX = glob.glob(os.path.join(bindir, "*-g++"))[0]
+                CC = glob.glob(os.path.join(bindir, "*-gcc"))[0]
+            except Exception:
+                print("Cannot find the conda g++ binaries!")
+                print("Please install these, e.g. via")
+                print("conda install gcc gxx")
+                sys.exit(-1)
 
     print(f"Using compilers {CC} | {CXX}")
 

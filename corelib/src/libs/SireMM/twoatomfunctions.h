@@ -68,7 +68,7 @@ using SireMol::BondID;
 using SireMol::AtomSelection;
 using SireMol::AtomMatcher;
 
-/** This class holds a function that acts using the 
+/** This class holds a function that acts using the
     coordinate information of just two atoms */
 class SIREMM_EXPORT TwoAtomFunction : public AtomFunction
 {
@@ -80,18 +80,18 @@ public:
     TwoAtomFunction();
     TwoAtomFunction(const CGAtomIdx &atom0, const CGAtomIdx &atom1,
                     const SireCAS::Expression &function);
-                  
+
     TwoAtomFunction(const TwoAtomFunction &other);
-    
+
     ~TwoAtomFunction();
 
     TwoAtomFunction& operator=(const TwoAtomFunction &other);
-    
+
     bool operator==(const TwoAtomFunction &other) const;
     bool operator!=(const TwoAtomFunction &other) const;
 
     QString toString() const;
-    
+
     const CGAtomIdx& atom0() const;
     const CGAtomIdx& atom1() const;
 
@@ -108,14 +108,27 @@ class IDPair
 public:
     IDPair(quint32 atom0=0, quint32 atom1=0);
     IDPair(const IDPair &other);
-    
+
     ~IDPair();
-    
+
     IDPair& operator=(const IDPair &other);
-    
+
     bool operator==(const IDPair &other) const;
     bool operator!=(const IDPair &other) const;
-    
+
+    bool operator<(const IDPair &other) const;
+    bool operator<=(const IDPair &other) const;
+    bool operator>(const IDPair &other) const;
+    bool operator>=(const IDPair &other) const;
+
+    quint32 operator[](int i) const
+    {
+        if (i == 0)
+            return atom0;
+        else
+            return atom1;
+    }
+
     quint32 atom0;
     quint32 atom1;
 };
@@ -129,7 +142,7 @@ SIRE_ALWAYS_INLINE uint qHash(const IDPair &idpair)
 
 /** This class holds the set of TwoAtomFunction potentials that
     act between the atoms in a molecule
-    
+
     @author Christopher Woods
 */
 class SIREMM_EXPORT TwoAtomFunctions
@@ -141,18 +154,18 @@ friend SIREMM_EXPORT QDataStream& ::operator>>(QDataStream&, TwoAtomFunctions&);
 
 public:
     TwoAtomFunctions();
-    
+
     TwoAtomFunctions(const MoleculeData &moldata);
     TwoAtomFunctions(const MoleculeInfoData &molinfo);
-    
+
     TwoAtomFunctions(const TwoAtomFunctions &other);
-    
+
     ~TwoAtomFunctions();
-    
+
     static const char* typeName();
-    
+
     TwoAtomFunctions& operator=(const TwoAtomFunctions &other);
-    
+
     bool operator==(const TwoAtomFunctions &other) const;
     bool operator!=(const TwoAtomFunctions &other) const;
 
@@ -160,10 +173,10 @@ public:
 
     void set(AtomIdx atom0, AtomIdx atom1,
              const Expression &expression);
-             
+
     void set(const AtomID &atom0, const AtomID &atom1,
              const Expression &expression);
-             
+
     void set(const BondID &bondid, const Expression &expression);
 
     void clear(AtomIdx atom);
@@ -172,19 +185,19 @@ public:
     void clear(AtomIdx atom0, AtomIdx atom1);
     void clear(const AtomID &atom0, const AtomID &atom1);
     void clear(const BondID &bondid);
-    
+
     void clear();
 
     void substitute(const Identities &identities);
 
     bool isEmpty() const;
-    
+
     int nFunctions() const;
 
     Expression potential(AtomIdx atom0, AtomIdx atom1) const;
     Expression potential(const AtomID &atom0, const AtomID &atom1) const;
     Expression potential(const BondID &bondid) const;
-    
+
     Expression force(AtomIdx atom0, AtomIdx atom1, const Symbol &symbol) const;
     Expression force(const AtomID &atom0, const AtomID &atom1,
                      const Symbol &symbol) const;
@@ -192,7 +205,7 @@ public:
 
     QVector<TwoAtomFunction> potentials() const;
     QVector<TwoAtomFunction> forces(const Symbol &symbol) const;
-    
+
     TwoAtomFunctions includeOnly(const AtomSelection &selection,
                                  bool isstrict=true) const;
 
@@ -201,7 +214,7 @@ protected:
                                                   const AtomMatcher &atommatcher) const;
     SireBase::PropertyPtr _pvt_makeCompatibleWith(const MoleculeInfoData &molinfo,
                                                   const QHash<AtomIdx,AtomIdx> &map) const;
-    
+
 private:
     void removeSymbols(QSet<Symbol> symbols);
 

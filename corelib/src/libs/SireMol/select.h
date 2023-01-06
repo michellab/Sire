@@ -127,12 +127,16 @@ class SIREMOL_EXPORT SelectEngine
 public:
     enum ObjType { COMPLEX = 0,
                    ATOM = 1,
-                   CUTGROUP = 2,
-                   RESIDUE = 3,
-                   CHAIN = 4,
-                   SEGMENT = 5,
-                   MOLECULE = 6,
-                   BOND = 7 };
+                   BOND = 2,
+                   ANGLE = 3,
+                   DIHEDRAL = 4,
+                   IMPROPER = 5,
+                   RESIDUE = 6,
+                   CHAIN = 7,
+                   SEGMENT = 8,
+                   CUTGROUP = 9,
+                   MOLECULE = 10,
+                   VIEW = 99 };
 
     virtual ~SelectEngine();
 

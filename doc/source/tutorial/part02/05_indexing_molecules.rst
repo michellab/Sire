@@ -171,7 +171,7 @@ SelectorMol( size=631
 629: Molecule( WAT:631 num_atoms=3 num_residues=1 )
 630: Molecule( WAT:632 num_atoms=3 num_residues=1 )
 )
->>> print(mols["molnum 5:10, 30, 40"])
+>>> print(mols["molnum 5:11, 30, 40"])
 SelectorMol( size=8
 0: Molecule( WAT:5   num_atoms=3 num_residues=1 )
 1: Molecule( WAT:6   num_atoms=3 num_residues=1 )
@@ -311,7 +311,7 @@ Selector<SireMol::Atom>( size=22
    Note how the index operator will return a single molecule ``Selector_Atom_``
    when only a single molecule matches the search.
 
->>> print(mols["residues in molnum 10:20"])
+>>> print(mols["residues in molnum 10:21"])
 SelectorMol( size=11
 0: Molecule( WAT:10  num_atoms=3 num_residues=1 )
 1: Molecule( WAT:11  num_atoms=3 num_residues=1 )
@@ -457,3 +457,33 @@ SelectorMol( size=630
 628: Molecule( WAT:631 num_atoms=3 num_residues=1 )
 629: Molecule( WAT:632 num_atoms=3 num_residues=1 )
 )
+
+You can also search for protein molecules using ``protein``, e.g.
+
+>>> mols = sr.load("7SA1")
+>>> print(mols["protein"])
+Molecule( 7SA1:633 num_atoms=11728 num_residues=1518 )
+
+This searches for all molecules that contain at least five residues
+that are named one of the standard amino acid names.
+
+You can see which names are matched using;
+
+>>> print(sr.search.get_protein_residue_names())
+['cyx', 'gly', 'val', 'thr', 'hip', 'his', 'tyr', 'ile', 'trp',
+ 'ala', 'pro', 'glh', 'ash', 'lys', 'ser', 'gln', 'arg', 'asn',
+ 'asp', 'cys', 'met', 'phe', 'leu', 'glu', 'hid', 'hie']
+
+and you can see the minimum number of residues that should be
+matched using
+
+>>> print(sr.search.get_min_protein_residues())
+5
+
+You can set these parameters using the :func:`~sire.search.set_protein_residue_names`
+and :func:`~sire.search.set_min_protein_residues` functions.
+
+.. note::
+
+   Note that the residue names are case insensitive, i.e. `ala` will
+   match `ala`, `Ala`, `ALA` etc.

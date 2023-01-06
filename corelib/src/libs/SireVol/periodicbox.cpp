@@ -74,13 +74,13 @@ QDataStream &operator<<(QDataStream &ds, const PeriodicBox &box)
 QDataStream &operator>>(QDataStream &ds, PeriodicBox &box)
 {
     VersionID v = readHeader(ds, r_box);
-    
+
     if (v == 2)
     {
         Vector dimensions;
-    
+
         ds >> dimensions >> static_cast<Cartesian&>(box);
-        
+
         box.setDimensions(dimensions);
     }
     else if (v == 1)
@@ -103,7 +103,7 @@ QDataStream &operator>>(QDataStream &ds, PeriodicBox &box)
 const Vector max_boxlength( std::pow(0.9 * std::numeric_limits<double>::max(),
                                      1.0/3.0) );
 
-/** Set the dimensions of this box to 'dimensions' (the lengths of the 
+/** Set the dimensions of this box to 'dimensions' (the lengths of the
     three sides of this box) */
 void PeriodicBox::setDimensions(const Vector &dimensions)
 {
@@ -129,13 +129,13 @@ void PeriodicBox::setDimensions(const Vector &dimensions)
     }
 }
 
-/** Set the dimensions of the box so that they span from 'mincoords'  
+/** Set the dimensions of the box so that they span from 'mincoords'
     to 'maxcoords' */
 void PeriodicBox::setDimensions(const Vector &mincoords, const Vector &maxcoords)
 {
     Vector maxval = maxcoords;
     maxval.setMax(mincoords);
-    
+
     Vector minval = mincoords;
     minval.setMin(maxcoords);
 
@@ -184,7 +184,7 @@ PeriodicBox& PeriodicBox::operator=(const PeriodicBox &other)
         invlength = other.invlength;
         Cartesian::operator=(other);
     }
-    
+
     return *this;
 }
 
@@ -234,7 +234,7 @@ Vector PeriodicBox::maxCoords(const Vector &center) const
 QString PeriodicBox::toString() const
 {
     return QObject::tr("PeriodicBox( %1 )")
-                .arg( this->dimensions().toString() ); 
+                .arg( this->dimensions().toString() );
 }
 
 /** Return the number of boxes that are covered by the distance 'del', where
@@ -264,6 +264,13 @@ SIRE_ALWAYS_INLINE Vector PeriodicBox::wrapDelta(const Vector &v0, const Vector 
                    getWrapVal( v1.z()-v0.z(), invlength.z(), halflength.z())
                                           * boxlength.z()
                  );
+}
+
+SireUnits::Dimension::Length PeriodicBox::maximumCutoff() const
+{
+    return SireUnits::Dimension::Length(
+        std::min(0.5 * boxlength.x(),
+                std::min(0.5 * boxlength.y(), 0.5 * boxlength.z())));
 }
 
 /** Return the volume of the central box of this space.  */
@@ -344,18 +351,18 @@ double PeriodicBox::calcDist(const CoordGroup &group0, const CoordGroup &group1,
     {
         //version of the algorithm suitable for use with SSE2 or above
         const int remainder = n1 % 2;
-    
+
         for (int i=0; i<n0; ++i)
         {
             //add the delta to the coordinates of atom0
             Vector point0 = array0[i] + wrapdelta;
-            
+
             #ifdef SIRE_TIME_ROUTINES
             nflops += 3;
             #endif
-            
+
             mat.setOuterIndex(i);
- 
+
             const double *p0 = point0.constData();
 
             __m128d sse_x0 = _mm_load1_pd( p0 );
@@ -363,24 +370,24 @@ double PeriodicBox::calcDist(const CoordGroup &group0, const CoordGroup &group1,
             __m128d sse_z0 = _mm_load1_pd( p0+2 );
 
             __m128d sse_mindist = _mm_load1_pd(&mindist);
-    
+
             //process the other points, two at a time
             for (int j=0; j < n1-remainder; j+=2)
             {
                 const Vector &point1 = array1[j];
                 const Vector &point2 = array1[j+1];
-        
+
                 __m128d sse_x1 = _mm_setr_pd( point1.x(), point2.x() );
                 __m128d sse_y1 = _mm_setr_pd( point1.y(), point2.y() );
                 __m128d sse_z1 = _mm_setr_pd( point1.z(), point2.z() );
-            
+
                 __m128d dx = _mm_sub_pd(sse_x0, sse_x1);    // 2 flops
                 __m128d tmpdist = _mm_mul_pd(dx, dx);       // 2 flops
-            
+
                 dx = _mm_sub_pd(sse_y0, sse_y1);            // 2 flops
                 dx = _mm_mul_pd(dx, dx);                    // 2 flops
                 tmpdist = _mm_add_pd(tmpdist, dx);          // 2 flops
-            
+
                 dx = _mm_sub_pd(sse_z0, sse_z1);            // 2 flops
                 dx = _mm_mul_pd(dx, dx);                    // 2 flops
                 tmpdist = _mm_add_pd(tmpdist, dx);          // 2 flops
@@ -397,18 +404,18 @@ double PeriodicBox::calcDist(const CoordGroup &group0, const CoordGroup &group1,
                 mat[j] = *((const double*)&tmpdist);
                 mat[j+1] = *( ((const double*)&tmpdist) + 1 );
             }
-        
+
             mindist = qMin( *((const double*)&sse_mindist),
                             *( ((const double*)&sse_mindist) + 1 ) );
-        
+
             if (remainder == 1)
             {
                 const double tmpdist = Vector::distance(point0, array1[n1-1]);
-                
+
                 #ifdef SIRE_TIME_ROUTINES
                 nflops += 9;
                 #endif
-                
+
                 mindist = qMin(tmpdist,mindist);
                 mat[n1-1] = tmpdist;
             }
@@ -421,21 +428,21 @@ double PeriodicBox::calcDist(const CoordGroup &group0, const CoordGroup &group1,
         {
             //add the delta to the coordinates of atom0
             Vector point0 = array0[i] + wrapdelta;
-            
+
             #ifdef SIRE_TIME_ROUTINES
             nflops += 3;
             #endif
-            
+
             mat.setOuterIndex(i);
 
             for (int j=0; j<n1; ++j)
             {
                 const double dist = Vector::distance(point0, array1[j]);
-                
+
                 #ifdef SIRE_TIME_ROUTINES
                 nflops += 9;
                 #endif
-                
+
                 mindist = qMin(mindist, dist);
                 mat[j] = dist;
             }
@@ -452,7 +459,7 @@ double PeriodicBox::calcDist(const CoordGroup &group0, const CoordGroup &group1,
 }
 
 /** Populate the matrix 'mat' with the distances between all of the
-    atoms of the passed CoordGroup to the passed point. Return the shortest 
+    atoms of the passed CoordGroup to the passed point. Return the shortest
     distance. */
 double PeriodicBox::calcDist(const CoordGroup &group, const Vector &point,
                              DistMatrix &mat) const
@@ -482,15 +489,15 @@ double PeriodicBox::calcDist(const CoordGroup &group, const Vector &point,
     {
         //version of the algorithm suitable for use with SSE2 or above
         const int remainder = n % 2;
-    
+
         #ifdef SIRE_TIME_ROUTINES
         nflops += 3;
         #endif
-            
+
         mat.setOuterIndex(0);
-    
+
         Vector wrapped_point = point + wrapdelta;
- 
+
         const double *p = wrapped_point.constData();
 
         __m128d sse_x0 = _mm_load1_pd( p );
@@ -498,24 +505,24 @@ double PeriodicBox::calcDist(const CoordGroup &group, const Vector &point,
         __m128d sse_z0 = _mm_load1_pd( p+2 );
 
         __m128d sse_mindist = _mm_load1_pd(&mindist);
-    
+
         //process the other points, two at a time
         for (int j=0; j < n-remainder; j+=2)
         {
             const Vector &point1 = array[j];
             const Vector &point2 = array[j+1];
-        
+
             __m128d sse_x1 = _mm_setr_pd( point1.x(), point2.x() );
             __m128d sse_y1 = _mm_setr_pd( point1.y(), point2.y() );
             __m128d sse_z1 = _mm_setr_pd( point1.z(), point2.z() );
-            
+
             __m128d dx = _mm_sub_pd(sse_x0, sse_x1);    // 2 flops
             __m128d tmpdist = _mm_mul_pd(dx, dx);       // 2 flops
-            
+
             dx = _mm_sub_pd(sse_y0, sse_y1);            // 2 flops
             dx = _mm_mul_pd(dx, dx);                    // 2 flops
             tmpdist = _mm_add_pd(tmpdist, dx);          // 2 flops
-          
+
             dx = _mm_sub_pd(sse_z0, sse_z1);            // 2 flops
             dx = _mm_mul_pd(dx, dx);                    // 2 flops
             tmpdist = _mm_add_pd(tmpdist, dx);          // 2 flops
@@ -532,18 +539,18 @@ double PeriodicBox::calcDist(const CoordGroup &group, const Vector &point,
             mat[j] = *((const double*)&tmpdist);
             mat[j+1] = *( ((const double*)&tmpdist) + 1 );
         }
-        
+
         mindist = qMin( *((const double*)&sse_mindist),
                         *( ((const double*)&sse_mindist) + 1 ) );
-        
+
         if (remainder == 1)
         {
             const double tmpdist = Vector::distance(point, array[n-1]);
-               
+
             #ifdef SIRE_TIME_ROUTINES
             nflops += 9;
             #endif
-                
+
             mindist = qMin(tmpdist,mindist);
             mat[n-1] = tmpdist;
         }
@@ -552,21 +559,21 @@ double PeriodicBox::calcDist(const CoordGroup &group, const Vector &point,
     {
         //add the delta to the coordinates of atom0
         Vector wrapped_point = point + wrapdelta;
-            
+
         #ifdef SIRE_TIME_ROUTINES
         nflops += 3;
         #endif
-            
+
         mat.setOuterIndex(0);
 
         for (int j=0; j<n; ++j)
         {
             const double dist = Vector::distance(wrapped_point, array[j]);
-                
+
             #ifdef SIRE_TIME_ROUTINES
             nflops += 9;
             #endif
-                
+
             mindist = qMin(mindist, dist);
             mat[j] = dist;
         }
@@ -582,7 +589,7 @@ double PeriodicBox::calcDist(const CoordGroup &group, const Vector &point,
 }
 
 /** Populate the matrix 'mat' with the distances squared between all of the
-    atoms of the passed CoordGroup to the passed point. Return the shortest 
+    atoms of the passed CoordGroup to the passed point. Return the shortest
     distance. */
 double PeriodicBox::calcDist2(const CoordGroup &group, const Vector &point,
                               DistMatrix &mat) const
@@ -612,15 +619,15 @@ double PeriodicBox::calcDist2(const CoordGroup &group, const Vector &point,
     {
         //version of the algorithm suitable for use with SSE2 or above
         const int remainder = n % 2;
-    
+
         #ifdef SIRE_TIME_ROUTINES
         nflops += 3;
         #endif
-            
+
         mat.setOuterIndex(0);
-    
+
         Vector wrapped_point = point + wrapdelta;
- 
+
         const double *p = wrapped_point.constData();
 
         __m128d sse_x0 = _mm_load1_pd( p );
@@ -628,24 +635,24 @@ double PeriodicBox::calcDist2(const CoordGroup &group, const Vector &point,
         __m128d sse_z0 = _mm_load1_pd( p+2 );
 
         __m128d sse_mindist2 = _mm_load1_pd(&mindist2);
-    
+
         //process the other points, two at a time
         for (int j=0; j < n-remainder; j+=2)
         {
             const Vector &point1 = array[j];
             const Vector &point2 = array[j+1];
-        
+
             __m128d sse_x1 = _mm_setr_pd( point1.x(), point2.x() );
             __m128d sse_y1 = _mm_setr_pd( point1.y(), point2.y() );
             __m128d sse_z1 = _mm_setr_pd( point1.z(), point2.z() );
-            
+
             __m128d dx = _mm_sub_pd(sse_x0, sse_x1);    // 2 flops
             __m128d tmpdist2 = _mm_mul_pd(dx, dx);      // 2 flops
-            
+
             dx = _mm_sub_pd(sse_y0, sse_y1);            // 2 flops
             dx = _mm_mul_pd(dx, dx);                    // 2 flops
             tmpdist2 = _mm_add_pd(tmpdist2, dx);        // 2 flops
-          
+
             dx = _mm_sub_pd(sse_z0, sse_z1);            // 2 flops
             dx = _mm_mul_pd(dx, dx);                    // 2 flops
             tmpdist2 = _mm_add_pd(tmpdist2, dx);        // 2 flops
@@ -660,18 +667,18 @@ double PeriodicBox::calcDist2(const CoordGroup &group, const Vector &point,
             mat[j] = *((const double*)&tmpdist2);
             mat[j+1] = *( ((const double*)&tmpdist2) + 1 );
         }
-        
+
         mindist2 = qMin( *((const double*)&sse_mindist2),
                          *( ((const double*)&sse_mindist2) + 1 ) );
-        
+
         if (remainder == 1)
         {
             const double tmpdist2 = Vector::distance2(point, array[n-1]);
-               
+
             #ifdef SIRE_TIME_ROUTINES
             nflops += 8;
             #endif
-                
+
             mindist2 = qMin(tmpdist2,mindist2);
             mat[n-1] = tmpdist2;
         }
@@ -680,21 +687,21 @@ double PeriodicBox::calcDist2(const CoordGroup &group, const Vector &point,
     {
         //add the delta to the coordinates of atom0
         Vector wrapped_point = point + wrapdelta;
-            
+
         #ifdef SIRE_TIME_ROUTINES
         nflops += 3;
         #endif
-            
+
         mat.setOuterIndex(0);
 
         for (int j=0; j<n; ++j)
         {
             const double dist2 = Vector::distance2(wrapped_point, array[j]);
-                
+
             #ifdef SIRE_TIME_ROUTINES
             nflops += 8;
             #endif
-                
+
             mindist2 = qMin(mindist2, dist2);
             mat[j] = dist2;
         }
@@ -846,7 +853,7 @@ double PeriodicBox::calcInvDist2(const CoordGroup &group0, const CoordGroup &gro
 }
 
 /** Calculate the distance vector between two points */
-DistVector PeriodicBox::calcDistVector(const Vector &point0, 
+DistVector PeriodicBox::calcDistVector(const Vector &point0,
                                        const Vector &point1) const
 {
     Vector wrapdelta = this->wrapDelta(point0, point1);
@@ -945,8 +952,8 @@ Angle PeriodicBox::calcAngle(const Vector &point0, const Vector &point1,
 }
 
 /** Calculate the torsion angle between the passed four points. This should
-    return the torsion angle measured clockwise when looking down the 
-    torsion from point0-point1-point2-point3. This will lie between 0 and 360 
+    return the torsion angle measured clockwise when looking down the
+    torsion from point0-point1-point2-point3. This will lie between 0 and 360
     degrees */
 Angle PeriodicBox::calcDihedral(const Vector &point0, const Vector &point1,
                                 const Vector &point2, const Vector &point3) const
@@ -958,7 +965,7 @@ Angle PeriodicBox::calcDihedral(const Vector &point0, const Vector &point1,
     return Vector::dihedral(p0, point1, p2, p3);
 }
 
-/** Return whether or not two groups enclosed by the AABoxes 'aabox0' and 
+/** Return whether or not two groups enclosed by the AABoxes 'aabox0' and
     'aabox1' are definitely beyond the cutoff distance 'dist' */
 bool PeriodicBox::beyond(double dist, const AABox &aabox0, const AABox &aabox1) const
 {
@@ -1003,12 +1010,12 @@ double PeriodicBox::minimumDistance(const AABox &box0, const AABox &box1) const
     }
 
     delta = Vector( std::abs(delta.x()), std::abs(delta.y()), std::abs(delta.z()) );
-    
+
     delta -= box0.halfExtents();
     delta -= box1.halfExtents();
-    
+
     delta = delta.max( Vector(0) );
-    
+
     return delta.length();
 }
 
@@ -1101,7 +1108,7 @@ CoordGroupArray PeriodicBox::_pvt_getMinimumImage(const CoordGroupArray &groups,
     point 'point', according to the minimum image convention.
     The effect of this is to move each 'group' into the box which is
     now centered on 'point'. If 'translate_as_one' is true,
-    then this treats all groups as being part of one larger 
+    then this treats all groups as being part of one larger
     group, and so it translates it together. This is useful
     to get the minimum image of a molecule as a whole, rather
     than breaking the molecule across a box boundary */
@@ -1112,7 +1119,7 @@ CoordGroupArray PeriodicBox::getMinimumImage(const CoordGroupArray &groups,
     if (translate_as_one or groups.nCoordGroups() == 1)
     {
         Vector wrapdelta = wrapDelta(groups.aaBox().center(), point);
-        
+
         if (wrapdelta.isZero())
         {
             return groups;
@@ -1121,7 +1128,7 @@ CoordGroupArray PeriodicBox::getMinimumImage(const CoordGroupArray &groups,
         {
             CoordGroupArray wrapped_groups( groups );
             wrapped_groups.translate(wrapdelta);
-            
+
             return wrapped_groups;
         }
     }
@@ -1156,20 +1163,20 @@ CoordGroupArray PeriodicBox::getMinimumImage(const CoordGroupArray &groups,
 AABox PeriodicBox::getMinimumImage(const AABox &aabox, const Vector &center) const
 {
     Vector wrapdelta = wrapDelta(aabox.center(), center);
-    
+
     if (wrapdelta.isZero())
         return aabox;
     else
     {
         AABox ret(aabox);
         ret.translate(wrapdelta);
-        
+
         return ret;
     }
 }
 
 /** Return the copy of the point 'point' which is the closest minimum image
-    to 'center' */    
+    to 'center' */
 Vector PeriodicBox::getMinimumImage(const Vector &point, const Vector &center) const
 {
     return point + wrapDelta(point, center);
@@ -1222,7 +1229,7 @@ QVector<Vector> PeriodicBox::getImagesWithin(const Vector &point, const Vector &
             }
         }
     }
-    
+
     return points;
 }
 
@@ -1323,13 +1330,13 @@ PeriodicBox::getCopiesWithin(const CoordGroup &group, const CoordGroup &center,
 
 /** Return a random point within the box (placing the center of the box
     is at the center 'center') */
-Vector PeriodicBox::getRandomPoint(const Vector &center, 
+Vector PeriodicBox::getRandomPoint(const Vector &center,
                                    const RanGenerator &generator) const
 {
     return Vector( generator.rand( -halflength[0], halflength[0] ),
                    generator.rand( -halflength[1], halflength[1] ),
                    generator.rand( -halflength[2], halflength[2] ) )
-        
+
                + center;
 }
 

@@ -273,6 +273,12 @@ Selector<CutGroup> CutGroup::selector() const
     return Selector<CutGroup>(*this);
 }
 
+/** Return a selector that has everything except this view */
+Selector<CutGroup> CutGroup::invert() const
+{
+    return this->selector().invert();
+}
+
 /** Return the number of atoms in this CutGroup */
 int CutGroup::nAtoms() const
 {

@@ -1,21 +1,3 @@
-"""
-.. currentmodule:: sire.legacy.Error
-
-This module is used to map between Sire's C++ exceptions and
-standard Python exceptions.
-
-
-Functions
-=========
-
-.. autosummary::
-    :toctree: generated/
-
-    get_back_trace
-    print_error
-    get_last_error_details
-
-"""
 
 from .. import Qt as _Qt
 

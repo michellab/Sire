@@ -53,6 +53,11 @@ class Matrix;
 class Transform;
 }
 
+namespace SireBase
+{
+class Slice;
+}
+
 namespace SireVol
 {
 class Space;
@@ -103,6 +108,10 @@ public:
 
     AtomProperty<Vector>* clone() const;
 
+    bool isEmpty() const;
+
+    QString toString() const;
+
     bool isCompatibleWith(const MoleculeInfoData &molinfo) const;
 
     bool operator==(const AtomProperty<Vector> &other) const;
@@ -121,9 +130,15 @@ public:
     const CoordGroup& at(CGIdx cgidx) const;
     const CoordGroup& get(CGIdx cgidx) const;
 
+    const Vector& operator[](int i) const;
     const Vector& operator[](const CGAtomIdx &cgatomidx) const;
+    const Vector& at(int i) const;
     const Vector& at(const CGAtomIdx &cgatomidx) const;
+    const Vector& get(int i) const;
     const Vector& get(const CGAtomIdx &cgatomidx) const;
+
+    QList<Vector> operator[](const QList<qint64> &idxs) const;
+    QList<Vector> operator[](const SireBase::Slice &slice) const;
 
     QVariant getAsVariant(const CGAtomIdx &cgatomidx) const;
     PropertyPtr getAsProperty(const CGAtomIdx &cgatomidx) const;
@@ -170,6 +185,9 @@ public:
 
     QVector<Vector> toVector() const;
     QVector<Vector> toVector(const AtomSelection &selection) const;
+
+    QList<Vector> toList() const;
+    QList<Vector> toList(const AtomSelection &selection) const;
 
     void copyFrom(const QVector<Vector> &values);
     void copyFrom(const QVector<Vector> &values, const AtomSelection &selection);

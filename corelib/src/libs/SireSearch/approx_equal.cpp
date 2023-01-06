@@ -61,11 +61,36 @@ namespace SireSearch
         double delta = abs(val1 - val0);
         double eps = get_approx_epsilon();
 
-        //check absolute difference is less than epsilon**2
-        if (delta <= (eps*eps))
+        //check absolute difference is less than epsilon
+        if (delta <= eps)
             return true;
 
         //check relative difference is less than eps
         return delta <= 0.5 * eps * (abs(val0) + abs(val1));
+    }
+
+    bool SIRESEARCH_EXPORT approx_not_equal(double val0, double val1)
+    {
+        return not approx_equal(val0, val1);
+    }
+
+    bool SIRESEARCH_EXPORT approx_greater(double val0, double val1)
+    {
+        return val1 > val0 and approx_not_equal(val0, val1);
+    }
+
+    bool SIRESEARCH_EXPORT approx_less(double val0, double val1)
+    {
+        return val1 < val0 and approx_not_equal(val0, val1);
+    }
+
+    bool SIRESEARCH_EXPORT approx_greater_equal(double val0, double val1)
+    {
+        return val1 > val0 or approx_equal(val0, val1);
+    }
+
+    bool SIRESEARCH_EXPORT approx_less_equal(double val0, double val1)
+    {
+        return val1 < val0 or approx_equal(val0, val1);
     }
 }

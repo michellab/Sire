@@ -61,6 +61,8 @@
 #include "SireBase/errors.h"
 #include "SireError/errors.h"
 
+#include "SireVol/space.h"
+
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 
@@ -75,6 +77,7 @@ using namespace SireFF;
 using namespace SireMol;
 using namespace SireBase;
 using namespace SireCAS;
+using namespace SireVol;
 using namespace SireStream;
 
 using SireUnits::Dimension::MolarEnergy;
@@ -2524,7 +2527,7 @@ const FFName& ForceFields::ffName(const FFID &ffid) const
 /** Return a string representation of this set */
 QString ForceFields::toString() const
 {
-    return QObject::tr("FFPtr( nForceFields() == %1 )").arg(this->nForceFields());
+    return QObject::tr("ForceFields( nForceFields() == %1 )").arg(this->nForceFields());
 }
 
 /** Return the energy associated with the symbol 'component'. This component
@@ -5727,6 +5730,118 @@ void ForceFields::accept()
             ffs[i].edit().accept();
         }
     }
+}
+
+int ForceFields::nFrames() const
+{
+    return this->nFrames(PropertyMap());
+}
+
+int ForceFields::nFrames(const SireBase::PropertyMap &map) const
+{
+    return MolGroupsBase::nFrames(map);
+}
+
+void ForceFields::loadFrame(int frame)
+{
+    this->loadFrame(frame, PropertyMap());
+}
+
+void ForceFields::saveFrame(int frame)
+{
+    this->saveFrame(frame, PropertyMap());
+}
+
+void ForceFields::saveFrame()
+{
+    this->saveFrame(PropertyMap());
+}
+
+void ForceFields::deleteFrame(int frame)
+{
+    this->deleteFrame(frame, PropertyMap());
+}
+
+void ForceFields::loadFrame(int frame, const SireBase::PropertyMap &map)
+{
+    this->accept();
+    this->mustNowRecalculateFromScratch();
+    MolGroupsBase::loadFrame(frame, map);
+
+    // we must get the space property
+    SpacePtr old_space;
+
+    const auto space_property = map["space"];
+
+    if (not space_property.hasSource())
+    {
+        //nothing to do
+        return;
+    }
+
+    try
+    {
+        old_space = this->property(space_property.source()).asA<Space>();
+    }
+    catch(...)
+    {
+        // no default space
+        old_space = Cartesian();
+    }
+
+    SpacePtr new_space = Cartesian();
+
+    const auto groups = this->getGroups();
+
+    for (auto it = groups.constBegin();
+         it != groups.constEnd();
+         ++it)
+    {
+        bool found = false;
+
+        for (const auto &mol : (*it)->molecules())
+        {
+            try
+            {
+                new_space = mol.data().property(space_property.source()).asA<Space>();
+                found = true;
+            }
+            catch(...)
+            {}
+
+            if (found)
+                break;
+        }
+
+        if (found)
+            break;
+    }
+
+    if (not old_space.read().equals(*new_space))
+    {
+        this->setProperty(space_property.source(), new_space);
+    }
+}
+
+void ForceFields::saveFrame(int frame, const SireBase::PropertyMap &map)
+{
+    this->accept();
+    this->mustNowRecalculateFromScratch();
+    MolGroupsBase::saveFrame(frame, map);
+}
+
+void ForceFields::saveFrame(const SireBase::PropertyMap &map)
+{
+    this->accept();
+    this->mustNowRecalculateFromScratch();
+    MolGroupsBase::saveFrame(map);
+}
+
+void ForceFields::deleteFrame(int frame, const SireBase::PropertyMap &map)
+{
+    this->accept();
+    this->mustNowRecalculateFromScratch();
+    MolGroupsBase::deleteFrame(frame, map);
 }
 
 const char* ForceFields::typeName()

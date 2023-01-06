@@ -21,11 +21,16 @@
 #include "SireFF/ffdetail.h"
 #include "SireIO/errors.h"
 #include "SireMM/mmdetail.h"
+#include "SireMol/core.h"
 #include "SireMol/molecule.h"
+#include "SireMol/moleditor.h"
+#include "SireMol/trajectory.h"
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 #include "SireSystem/system.h"
+#include "filetrajectory.h"
 #include "moleculeparser.h"
+#include "supplementary.h"
 #include <QDebug>
 #include <QElapsedTimer>
 #include <QFile>

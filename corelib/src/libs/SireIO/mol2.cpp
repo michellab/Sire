@@ -41,6 +41,7 @@
 #include "SireMol/atomelements.h"
 #include "SireMol/molecule.h"
 #include "SireMol/moleditor.h"
+#include "SireMol/trajectory.h"
 #include "SireMol/core.h"
 
 #include "SireStream/datastream.h"
@@ -1808,6 +1809,28 @@ const char* Mol2::typeName()
 const char* Mol2::what() const
 {
     return Mol2::typeName();
+}
+
+bool Mol2::isTopology() const
+{
+    return true;
+}
+
+bool Mol2::isFrame() const
+{
+    return true;
+}
+
+int Mol2::nFrames() const
+{
+    return 1;
+}
+
+Frame Mol2::getFrame(int i) const
+{
+    i = SireID::Index(i).map(this->nFrames());
+
+    return SireMol::Frame();
 }
 
 /** Return the parser that has been constructed by reading in the passed

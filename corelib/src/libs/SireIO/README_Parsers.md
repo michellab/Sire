@@ -1,6 +1,6 @@
 # Sire MoleculeParser System
 
-The Sire MoleculeParser system has been built to simplify the 
+The Sire MoleculeParser system has been built to simplify the
 user experience of loading and saving molecules. At a top level,
 the user can load a SireSystem::System of molecules, and then
 save them back to the same file format by simply typing;
@@ -61,7 +61,7 @@ Once the files have been parsed, they must next be converted into a
 `SireSystem::System` object. How this works depends on whether the
 parser is a "lead" parser, or a follower.
 
-If `MoleculeParser.isLead()` is true, then the parser is a lead parser,
+If `MoleculeParser.isTopology()` is true, then the parser is a lead parser,
 and so has the responsibility of leading the whole conversion operation.
 The parser creates the `SireSystem::System` and populates it with the
 molecules that have been parsed from the file. It then delegates control
@@ -71,8 +71,8 @@ their respective files. Note, currently Sire only supports creating
 systems from a set of parsers in which only a single member of the set
 is a lead parser. This requirement may change in future versions.
 
-When a `SireSystem::System` has been loaded, it is tagged with the 
-IDs of the parsers that were used to create that system (using the 
+When a `SireSystem::System` has been loaded, it is tagged with the
+IDs of the parsers that were used to create that system (using the
 `fileformat` property). The call to `MoleculeParser.save()` will
 look for this property and will choose the same parsers to write
 out the file. Where more than one parser is used, it will write
@@ -103,7 +103,7 @@ into a `SireSystem::System` is a three step process:
    data indexed by keys etc. The purpose is to parse the data into an
    easy to access datastructure that can be used in the next stage.
 
-2. The parsed data is queried to extract all relevant information. 
+2. The parsed data is queried to extract all relevant information.
    The information is extracted in terms of the molecular/system data
    that is provided by the file. This means converting the raw string
    or numeric data from the file into information that has chemical
@@ -129,9 +129,9 @@ The same process is used in reverse to write data back to a file.
 2. The chemical information is then converted back into the raw arrays
    of text and numeric data that is needed to go back into the file
 
-3. The raw arrays of data are then back-parsed to write a file of 
+3. The raw arrays of data are then back-parsed to write a file of
    the specified name. For text files, you need to write an array
-   of `QString` objects, which are then written directly by 
+   of `QString` objects, which are then written directly by
    `MoleculeParser` to a file. For binary files you need to handle
    writing yourself, e.g. by using interfaces such as the
    `SireIO::NetCDFFile` interface to write a binary NetCDF file.
@@ -139,12 +139,12 @@ The same process is used in reverse to write data back to a file.
 ## Example three step process for AmberPrm
 
 The `SireIO::AmberPrm` class is used to parse Amber prmtop topology
-files. The three steps of the parse process are handled by the 
+files. The three steps of the parse process are handled by the
 following classes:
 
 1. `SireIO::AmberPrm` is responsible for converting the raw text
-   of the file into the arrays of text and numeric information 
-   present from the file. This provides a nice API that lets 
+   of the file into the arrays of text and numeric information
+   present from the file. This provides a nice API that lets
    you query this data, e.g. `AmberPrm.floatData(flag)` will
    return the array of floating point data associated with a particular
    Amber prmtop flag, while `AmberPrm.nAtoms()` will return the number
@@ -155,16 +155,16 @@ following classes:
    chemical information that is contained within an amber topology
    file for an individual molecule. This provides a nice API for
    easy access to this raw chemical data, e.g. `AmberParams::charges()`
-   returns the raw charge information, `AmberParams::bonds()` 
+   returns the raw charge information, `AmberParams::bonds()`
    returns the raw bond information. The `SireMM::AmberParams` class
    comes with associated classes, e.g. `SireMM::AmberBond`. These
    associated classes are used to provide a nice API to access
-   aspects of the information, e.g. `SireMM::AmberBond` holds 
+   aspects of the information, e.g. `SireMM::AmberBond` holds
    the `k` and `theta0` data for an individual amber bond, while
    `SireMM::AmberDihedral` holds the series of `SireMM::AmberDihTerm`
    dihedral terms, which contain the phase, force constant etc.
    for each cosine term in an Amber dihedral.
-   
+
 3. `SireMol::Molecule` and its associated classes represent
     the molecule within Sire. The molecular information is
     held within the `SireMol::Molecule` using the property
@@ -221,15 +221,15 @@ make sure to use `map` so that a user's property naming system is respected.
 
 The classes are used in reverse when writing a file. So an `AmberBond`
 can be constructed from a `SireCAS::Expression`, which will try to interpret
-that expression to extract the `k` and `theta0` values for Amber. 
+that expression to extract the `k` and `theta0` values for Amber.
 Similarly, an `AmberDihedral` will interpret a `SireCAS::Expression` to
 extract the series of `AmberDihTerms` that make up the cosine terms
 of the Amber dihedral. These are packaged with charges, LJ parameters
 etc. to create an `AmberParams` object for each molecule, which is passed
-to `AmberPrm` to assemble into arrays of numbers and text that 
+to `AmberPrm` to assemble into arrays of numbers and text that
 represent the parsed Amber prm file. This is then converted back to
 text and written. Important functions to look at are the `AmberBond`,
-`AmberAngle` and `AngleDihedral` constructors, that show how to 
+`AmberAngle` and `AngleDihedral` constructors, that show how to
 extract information from a `SireCAS::Expression`, and the static
 functions in `amberprm.cpp` called `getBondData`, `getAngleData` and
 `getDihedralData` that show how the parsed bond, angle and dihedral
@@ -260,6 +260,6 @@ the same chemical information that it contains.
 The answer to (2) is because, when we write a file, we should immediately
 prove that we can re-read it ourselves. By re-reading the file we ensure
 that the data written to disk is consistent with the information that
-is contained within the `AmberPrm` object. Any errors when re-reading 
+is contained within the `AmberPrm` object. Any errors when re-reading
 are immediately caught, ensuring that bugs are found and the 'writer'
 part of the parser is always consistent with its 'reader' part.
