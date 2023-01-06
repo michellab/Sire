@@ -44,6 +44,90 @@ Here is the changelog for this stage of development.
 
 ..
 
+    [2023.0.3] January 2023: Added the beginnings of a new sphinx-based website
+               (in the `doc` folder), which includes the sire API documentation.
+               Cleaned up the new sire API via use of `__all__` in all of the
+               new modules. The public API is very limited at the moment, but
+               will grow as we port in more classes.  However, the aim is that
+               users will mostly not create classes directly, but will instead
+               implicitly create them as they load molecular systems and call
+               functions on those systems. Added a tutorial to this website
+               that will be used to demonstrate and teach the new sire API.
+               Fully updated the search functionality, making it more robust,
+               more consistent and more powerful. Added a detailed guide on the
+               search grammar to the new website. Added a set of Cursor classes
+               for editing, and made these work consistently with most of the
+               property types. Getting and setting properties should now be
+               easier, with auto-wrapping and expanding of properties. Made
+               the AtomProperty classes behave more like standard python
+               containers.  This makes them easier to work with, and is the
+               first step to hiding them completely (they will eventually be
+               auto-converted to/from standard Python containers or NumPy
+               arrays. Added `apply` and `apply_reduce` functions that let you
+               map functions across all objects in a molecular container.
+               Cleaned up the handling of units - now everything maps into
+               GeneralUnit and GeneralUnitProperty, which are auto-converted
+               when exposed to Python. Added Python wrapping and
+               monkey-patching to sire.maths.Vector so that it has length units.
+               Improved the printing of units to the screen (using the correct
+               unicode). Added functions that empower the userto choose their
+               own default units, e.g. changing angstroms to picometers, or
+               switching to full SI units. This only impacts the Python layer
+               when rendering the unit, or auto-converting numbers to units,
+               so does not break or change the C++ layer. Any view can now be
+               assigned a GeneralUnit property. Added Bond, Angle, Dihedral,
+               Improper and their related molecule view container classes (e.g.
+               SelectorBond, SelectorMBond etc). This allows you to have
+               molecule views that represent bonds, angles and dihedrals (or
+               collections of these). Added measurement functions so that you
+               can easily get their lengths or sizes. Added `.energy()` to let
+               you calculate energies of views (or views with views). This uses
+               the parameters / forcefield loaded with the molecule(s). You can
+               get energies of any views of sub-views. Also created an proper
+               return type for energies that embeds the energy components.
+               Now `view.energy().components()` works as you would expect.
+               Added `.energies()` to molecule containers so that you can get
+               the energies of each view in the container. Added support for
+               progress bars using Rich so that the user has an indication of
+               progress. Added initial support for trajectories. Reworked the
+               molecular parser so that multiple "frame" types files will load
+               multiple frames of a trajectory (e.g. so that a trajectory can
+               be loaded from multiple PDB files, or from multiple DCD or traj
+               files). Added a TrajectoryIterator class that lets you easily
+               iterate over and query trajectories. Fully documented this in
+               the tutorial. You can now do cool things like measure bonds over
+               trajectories, or evaluate energies. Added a `.view()` function
+               based on NGLView that lets you easily see any molecule view (or
+               collection of molecule views). Added a `save_to_string` function
+               that writes a text-based molecule file to an in-memory string
+               rather than a file (so that you don't have to use temporary
+               files with NGLView). Added support for viewing trajectories, so
+               that trajectories that are loaded in sire are also playable in
+               NGLView. Added movement functions to the Cursor classes so that
+               you can more easily move molecules (or molecule views).
+               Documented this in the tutorial. Re-worked the way PropertyMap is
+               passed via Python. Now have a sire.base.create_map function that
+               can create a PropertyMap from anything that is passed. This has
+               some examples in its documentation that show how is can be used.
+               Made sure that all of the new functionality can use PropertyMap
+               and uses `create_map` to support function calls like
+               `cursor.translate( (1,2,3), map={"coordinates":"coords2"} )`.
+               Speaking of which, also updated `sire.maths.Vector` adding in
+               functions that allow auto-conversion of list-like python objects
+               to `sire.maths.Vector`. It should almost be the case that a user
+               will not have to use this class directly themselves, as things
+               should just auto-convert. Added support for creating Vectors
+               from plain numbers or length units, using the default length
+               unit if plain numbers are used. Fixed lots of bugs and expanded
+               the unit test suite to test the above functionality. Removed
+               lots of unnecessary files. Moved some files into the website
+               docs so that there is a single source of truth. Began the process
+               of updating paths and links to point to the new locations in
+               OpenBioSim. Fixed CI build issues on Windows by building in the
+               right directory. Updated the pythonizing framework so that we
+               only pythonize the C++ layer, and avoid the circular dependencies
+               that were causing random import errors (particularly on Windows).
+
     [2023.0.2] December 2023: Fix multiple distance restraint bug in SOMD
                (@fjclark). Add support for PME FEP with SOMD and fix
                associated bugs (@halx, @jmichel80). Fix CI issues so that
