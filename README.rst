@@ -2,12 +2,12 @@
 `Sire <http://sire.openbiosim.org>`__
 ****
 
-.. image:: https://github.com/OpenBioSim/sire/workflows/Build/badge.svg
-   :target: https://github.com/OpenBioSim/sire/actions?query=workflow%3ABuild)
+.. image:: https://github.com/Sire/sire/workflows/Build/badge.svg
+   :target: https://github.com/Sire/sire/actions?query=workflow%3ABuild)
    :alt: Build status
 
-.. image:: https://anaconda.org/OpenBioSim/sire/badges/downloads.svg
-   :target: https://anaconda.org/OpenBioSim/sire
+.. image:: https://anaconda.org/michellab/sire/badges/downloads.svg
+   :target: https://anaconda.org/michellab/sire
    :alt: Downloads
 
 .. image:: https://img.shields.io/badge/License-GPL%20v3-blue.svg
