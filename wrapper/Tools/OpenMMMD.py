@@ -703,6 +703,8 @@ def setupForcefields(system, space):
 
         for molnum in molnums:
             mol = molecules.molecule(molnum)[0].molecule()
+            if not mol.hasProperty("restrainedAtoms"):
+                continue
             try:
                 mol_restrained_atoms = propertyToAtomNumVectorList(
                     mol.property("restrainedatoms")
@@ -2284,6 +2286,7 @@ def run():
             system = centerSolute(system, space)
 
         if use_restraints.val:
+            print ("Using positional restraints.")
             system = setupRestraints(system)
 
         if turn_on_restraints_mode.val:
