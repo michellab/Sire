@@ -2,8 +2,8 @@
 `Sire <http://sire.openbiosim.org>`__
 ****
 
-.. image:: https://github.com/Sire/sire/workflows/Build/badge.svg
-   :target: https://github.com/Sire/sire/actions?query=workflow%3ABuild)
+.. image:: https://github.com/michellab/Sire/workflows/Build/badge.svg
+   :target: https://github.com/michellab/Sire/actions?query=workflow%3ABuild)
    :alt: Build status
 
 .. image:: https://anaconda.org/michellab/sire/badges/downloads.svg
