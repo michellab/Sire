@@ -9,7 +9,7 @@ script = os.path.abspath(sys.argv[0])
 # (this script is in Sire/actions/)
 srcdir = os.path.dirname(os.path.dirname(script))
 
-print(f"Sire source is in {srcdir}\n")
+print(f"sire source is in {srcdir}\n")
 
 # Get the anaconda token to authorise uploads
 if "ANACONDA_TOKEN" in os.environ:
@@ -17,17 +17,17 @@ if "ANACONDA_TOKEN" in os.environ:
 else:
     conda_token = "TEST"
 
-# get the build directory
-if "BUILD_DIR" in os.environ:
-    conda_bld = os.environ["BUILD_DIR"]
-else:
-    conda_bld = os.path.join("..", "build")
+# get the root conda directory
+conda = os.environ["CONDA"]
+
+# Set the path to the conda-bld directory.
+conda_bld = os.path.join(conda, "envs", "sire_build", "conda-bld")
 
 print(f"conda_bld = {conda_bld}")
 
 # Find the packages to upload
 sire_pkg = glob.glob(os.path.join(conda_bld, "*-*", "sire-*.tar.bz2"))
-fkcombu_pkg = glob.glob(os.path.join(conda_bld, "*-*", "fkcombu-*.tar.bz2"))
+kcombu_pkg = glob.glob(os.path.join(conda_bld, "*-*", "kcombu-*.tar.bz2"))
 
 if len(sire_pkg) == 0:
     print("No sire packages to upload?")
@@ -35,8 +35,8 @@ if len(sire_pkg) == 0:
 
 packages = sire_pkg
 
-if len(fkcombu_pkg) == 0:
-    packages = packages + fkcombu_pkg
+if len(kcombu_pkg) == 0:
+    packages = packages + kcombu_pkg
 
 print(f"Uploading packages:")
 print(" * ", "\n *  ".join(packages))
@@ -68,7 +68,7 @@ cmd = f"anaconda --token {conda_token} upload --user michellab {label} --force {
 print(f"\nUpload command:\n\n{cmd}\n")
 
 # Label release packages with main and dev so that dev is at least as new as
-# main. Only need to uncomment the libcpuid and fkcombu package uploads when
+# main. Only need to uncomment the libcpuid and kcombu package uploads when
 # there new versions are released.
 if conda_token == "TEST":
     print("Not uploading as the ANACONDA_TOKEN is not set!")
