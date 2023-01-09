@@ -29,7 +29,7 @@ class _tutorial_url:
         return self._value.startswith(value)
 
 
-tutorial_url = _tutorial_url("https://siremol.org/m")
+tutorial_url = _tutorial_url("https://sire.openbiosim.org/m")
 
 _range = range
 
@@ -272,8 +272,8 @@ def expand(base: str, path: _Union[str, _List[str]], *args, **kwargs):
          The list of expanded filenames or URLs
 
      Examples:
-         >>> expand("https://siremol.org/m", "urea.gro", "urea.top")
-         ["https://siremol.org/m/urea.gro", "https://siremol.org/n/urea.top"]
+         >>> expand("https://sire.openbiosim.org/m", "urea.gro", "urea.top")
+         ["https://sire.openbiosim.org/m/urea.gro", "https://sire.openbiosim.org/n/urea.top"]
 
          >>> expand("input", ["ala.top", "ala.crd"])
          ["input/ala.top", "input/ala.crd"]
@@ -312,33 +312,39 @@ def expand(base: str, path: _Union[str, _List[str]], *args, **kwargs):
     return expanded
 
 
-def load(path: _Union[str, _List[str]], *args, show_warnings=False, **kwargs):
-    """Load the molecular system at 'path'. This can be a filename
+def load(path: _Union[str, _List[str]], *args, show_warnings=True, **kwargs):
+    """
+    Load the molecular system at 'path'. This can be a filename
     of a URL. If it is a URL, then the file will be downloaded
     to the current directory and loaded from there.
 
     Args:
      path (str or list[str]):
-         The filename (or names) or the URL or URLS of the molecular
-         system to load. This allows multiple paths to be input
-         as some molecular file formats split molecular information
-         across multiple files. Multiple paths can also be passed
-         as multiple arguments to this function.
+        The filename (or names) or the URL or URLS of the molecular
+        system to load. This allows multiple paths to be input
+        as some molecular file formats split molecular information
+        across multiple files. Multiple paths can also be passed
+        as multiple arguments to this function.
 
      log (dict):
-         Optional dictionary that you can pass in that will be populated
-         with any error messages or warnings from the parsers as they
-         attempt to load in the molecular data. This can be helpful
-         in diagnosing why your file wasn't loaded.
+        Optional dictionary that you can pass in that will be populated
+        with any error messages or warnings from the parsers as they
+        attempt to load in the molecular data. This can be helpful
+        in diagnosing why your file wasn't loaded.
+
+     show_warnings (bool):
+        Whether or not to print out any warnings that are encountered
+        when loading your file(s). This is default True, and may lead
+        to noisy output. Set `show_warnings=False` to silence this output.
 
      directory (str):
-         Optional directory which will be used when creating any
-         files (e.g. as a download from a URL or which unzipping files)
+        Optional directory which will be used when creating any
+        files (e.g. as a download from a URL or which unzipping files)
 
     Returns:
-         sire.system.System:
-         The molecules that have been loaded are returned as
-         a sire.system.System
+        sire.system.System:
+        The molecules that have been loaded are returned as
+        a sire.system.System
 
     Examples:
          >>> mols = load("caffeine.pdb")
