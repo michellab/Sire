@@ -35,9 +35,9 @@ watchdog
 # The below are packages that aren't available on all
 # platforms/OSs and so need to be conditionally included
 
-alchemlyb ; platform_machine == "x86_64"    # Needs pymbar, not on Linux/arm64
-alchemlyb ; sys_platform == "darwin"
-alchemlyb ; sys_platform == "win32"
+alchemlyb<2 ; platform_machine == "x86_64"    # Needs pymbar, not on Linux/arm64
+alchemlyb<2 ; sys_platform == "darwin"
+alchemlyb<2 ; sys_platform == "win32"
 
 kcombu_bss ; platform_machine == "x86_64"   # not on Linux/arm64
 kcombu_bss ; sys_platform == "darwin"
