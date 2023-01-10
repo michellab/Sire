@@ -703,16 +703,11 @@ def setupForcefields(system, space):
 
         for molnum in molnums:
             mol = molecules.molecule(molnum)[0].molecule()
-            try:
-                mol_restrained_atoms = propertyToAtomNumVectorList(
-                    mol.property("restrainedatoms")
-                )
-            except UserWarning as error:
-                error_type = re.search(r"(Sire\w*::\w*)", str(error)).group(0)
-                if error_type == "SireBase::missing_property":
-                    continue
-                else:
-                    raise error
+            if not mol.hasProperty("restrainedatoms"):
+                continue
+            mol_restrained_atoms = propertyToAtomNumVectorList(
+                mol.property("restrainedatoms")
+            )
 
             for restrained_line in mol_restrained_atoms:
                 atnum = restrained_line[0]
@@ -2284,6 +2279,7 @@ def run():
             system = centerSolute(system, space)
 
         if use_restraints.val:
+            print ("Using positional restraints.")
             system = setupRestraints(system)
 
         if turn_on_restraints_mode.val:
@@ -2503,6 +2499,7 @@ def runFreeNrg():
             system = centerSolute(system, space)
 
         if use_restraints.val:
+            print("Using positional restraints.")
             system = setupRestraints(system)
 
         if turn_on_restraints_mode.val:
