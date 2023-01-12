@@ -8,8 +8,18 @@
 
 import os,sys, random
 import math
+from Sire.Base import VariantProperty 
+from Sire.CAS import Symbol, Max
+from Sire.FF import FFName
+from Sire.IO import Amber
+from Sire.Maths import FreeEnergyAverage
+from Sire.MM import IntraCLJFF, InterCLJFF, IntraSoftCLJFF, IntraGroupSoftCLJFF, InterGroupSoftCLJFF, InterGroupCLJFF, CHARMMSwitchingFunction
+from Sire.Mol import AtomIdx, MGIdx, MoleculeGroup, MGName, AtomCoords
+from Sire.System import System, PropertyConstraint, PerturbationConstraint
 from Sire.Tools.OpenMMMD import *
 from Sire.Tools import Parameter, resolveParameters
+from Sire.Units import gram, centimeter, angstrom, g_per_mol, kcal_per_mol, mod_electron
+from Sire.Vol import PeriodicBox
 
 # Python dependencies
 #
