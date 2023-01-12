@@ -180,6 +180,18 @@ def setupLJFF(system, space, cutoff=10* angstrom):
 
 def addAnalyticalLRC(system, cutoff, bulk_density):
 
+    molecules = system[MGName("molecules")]
+    molnums = molecules.molNums()
+    #updated = []
+    for molnum in molnums:
+        mol = molecules.molecule(molnum)[0].molecule()
+        editmol = mol.edit()
+        for x in range(0,mol.nAtoms()):
+            editatom = editmol.atom(AtomIdx(x))
+            editatom.setProperty("charge", 0 * mod_electron)
+            editmol = editatom.molecule()
+        mol = editmol.commit()
+        system.update(mol)
     # 1) Collect all solvent particles
     # 2) Average all solvent sigma/epsilon parameters
     solvent = system[MGName("solvent")]
@@ -192,15 +204,21 @@ def addAnalyticalLRC(system, cutoff, bulk_density):
     avg_sigma = 0.0 * angstrom
     avg_epsilon = 0.0 * kcal_per_mol
     LJsites = 0
-    # Is this always the right molecule?
-    mol = solvent_mols.first()[0].molecule()
-    if (mol.nAtoms() == 1):
-        print ("This does not seem to be a solvent molecule. Picking up another one...")
-        mol = solvent_mols.last().molecule()
-        if (mol.nAtoms() == 1):
-            print ("This also does not seem to be a solvent molecule ! Abort!")
+
+    # Loop over all solvent molecules to find something which
+    # is not an ion or a protein
+    # TODO: Make this more robust - there could be other non-ligand
+    # molecules with n_atoms > 1 < 30
+    n_solvent_mols = len(solvent_molnums)
+    for i, molnum in enumerate(solvent_molnums):
+        mol = solvent_mols.molecule(molnum)[0].molecule()
+        if (mol.nAtoms() != 1) and (mol.nAtoms() < 30):
+            print (f"Solvent molecule identified with {mol.nAtoms()} atoms")
+            break
+        if i == n_solvent_mols - 1:
+            print ("Unable to identify solvent molecule ! Abort!")
             sys.exit(-1)
-    #molecule(molnum).molecule()
+
     atoms = mol.atoms()
     natoms = mol.nAtoms()
     solv_mol_mass = 0 * g_per_mol
