@@ -900,10 +900,10 @@ def boreschDistRestraintToProperty(boresch_dict):
 
     prop = Sire.Base.Properties()
 
-    prop.setProperty("AtomNum0", VariantProperty(boresch_dict['anchor_points']['l1']))
-    prop.setProperty("AtomNum1", VariantProperty(boresch_dict['anchor_points']['r1']))
-    prop.setProperty("equil_val", VariantProperty(boresch_dict['equilibrium_values']['r0']))
-    prop.setProperty("force_const", VariantProperty(boresch_dict['force_constants']['kr']))
+    prop.setProperty("AtomNum0", Sire.Base.VariantProperty(boresch_dict['anchor_points']['l1']))
+    prop.setProperty("AtomNum1", Sire.Base.VariantProperty(boresch_dict['anchor_points']['r1']))
+    prop.setProperty("equil_val", Sire.Base.VariantProperty(boresch_dict['equilibrium_values']['r0']))
+    prop.setProperty("force_const", Sire.Base.VariantProperty(boresch_dict['force_constants']['kr']))
 
     return prop
 
@@ -927,15 +927,15 @@ def boreschAngleRestraintsToProperty(boresch_dict):
         if boresch_dict["force_constants"][f"k{angle}"] != 0:
             for j in range(3):
                 prop.setProperty(f"AtomNum{j}-{i}",
-                    VariantProperty(boresch_dict['anchor_points'][angle_anchor_dict[angle][j]]))
+                    Sire.Base.VariantProperty(boresch_dict['anchor_points'][angle_anchor_dict[angle][j]]))
             prop.setProperty(f"equil_val-{i}",
-                VariantProperty(boresch_dict["equilibrium_values"][f"{angle}0"]))
+                Sire.Base.VariantProperty(boresch_dict["equilibrium_values"][f"{angle}0"]))
             prop.setProperty(f"force_const-{i}",
-                VariantProperty(boresch_dict["force_constants"][f"k{angle}"]))
+                Sire.Base.VariantProperty(boresch_dict["force_constants"][f"k{angle}"]))
 
             i += 1
 
-    prop.setProperty("n_boresch_angle_restraints", VariantProperty(i));
+    prop.setProperty("n_boresch_angle_restraints", Sire.Base.VariantProperty(i));
 
     return prop
 
@@ -960,15 +960,15 @@ def boreschDihedralRestraintsToProperty(boresch_dict):
         if boresch_dict["force_constants"][f"k{dihedral}"] != 0:
             for j in range(4):
                 prop.setProperty(f"AtomNum{j}-{i}",
-                    VariantProperty(boresch_dict['anchor_points'][dihedral_anchor_dict[dihedral][j]]))
+                    Sire.Base.VariantProperty(boresch_dict['anchor_points'][dihedral_anchor_dict[dihedral][j]]))
             prop.setProperty(f"equil_val-{i}",
-                VariantProperty(boresch_dict["equilibrium_values"][f"{dihedral}0"]))
+                Sire.Base.VariantProperty(boresch_dict["equilibrium_values"][f"{dihedral}0"]))
             prop.setProperty(f"force_const-{i}",
-                VariantProperty(boresch_dict["force_constants"][f"k{dihedral}"]))
+                Sire.Base.VariantProperty(boresch_dict["force_constants"][f"k{dihedral}"]))
 
             i += 1
 
-    prop.setProperty("n_boresch_dihedral_restraints", VariantProperty(i));
+    prop.setProperty("n_boresch_dihedral_restraints", Sire.Base.VariantProperty(i));
 
     return prop
 
@@ -1056,7 +1056,7 @@ def saveTurnOnRestraintsModeProperty(system):
     the distance or Boresch restraint information is also stored."""
     solute = getSolute(system)
     solute = solute.edit().setProperty("turn_on_restraints_mode",
-                                    VariantProperty(turn_on_restraints_mode.val)).commit()
+                                    Sire.Base.VariantProperty(turn_on_restraints_mode.val)).commit()
     system.update(solute)
 
     return(system)
