@@ -418,7 +418,7 @@ def runLambda():
         #print (system_shortc.energy())
         #print (system_longc.energy())
         system_shortc = updateSystemfromTraj(system_shortc, frames_xyz, cell_lengths, cell_angles)
-        system_longcc = updateSystemfromTraj(system_longc, frames_xyz, cell_lengths, cell_angles)
+        system_longc = updateSystemfromTraj(system_longc, frames_xyz, cell_lengths, cell_angles)
         #print (system_shortc.energy())
         #print (system_longc.energy())
         delta_nrg = (system_longc.energy()+E_lrc_full - system_shortc.energy())
