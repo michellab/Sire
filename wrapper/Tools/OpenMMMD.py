@@ -898,7 +898,7 @@ def boreschDistRestraintToProperty(boresch_dict):
         set up the Boresch distance restraint
     """
 
-    prop = Properties()
+    prop = Sire.Base.Properties()
 
     prop.setProperty("AtomNum0", VariantProperty(boresch_dict['anchor_points']['l1']))
     prop.setProperty("AtomNum1", VariantProperty(boresch_dict['anchor_points']['r1']))
@@ -918,7 +918,7 @@ def boreschAngleRestraintsToProperty(boresch_dict):
         set up the Boresch angle restraints
     """
 
-    prop = Properties()
+    prop = Sire.Base.Properties()
 
     angle_anchor_dict = {"thetaA":["r2", "r1", "l1"], "thetaB":["r1", "l1", "l2"]}
 
@@ -950,7 +950,7 @@ def boreschDihedralRestraintsToProperty(boresch_dict):
         set up the Boresch dihedral restraints
     """
 
-    prop = Properties()
+    prop = Sire.Base.Properties()
 
     dihedral_anchor_dict = {"phiA":["r3", "r2", "r1", "l1"], "phiB":["r2", "r1", "l1", "l2"],
                             "phiC":["r1", "l1", "l2", "l3"]}
