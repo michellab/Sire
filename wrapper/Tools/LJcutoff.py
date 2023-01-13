@@ -18,7 +18,7 @@ from Sire.Mol import AtomIdx, MGIdx, MoleculeGroup, MGName, AtomCoords
 from Sire.System import System, PropertyConstraint, PerturbationConstraint
 from Sire.Tools.OpenMMMD import *
 from Sire.Tools import Parameter, resolveParameters
-from Sire.Units import gram, centimeter, angstrom, g_per_mol, kcal_per_mol, mod_electron
+from Sire.Units import gram, centimeter, angstrom, g_per_mol, kcal_per_mol, mod_electron, k_boltz
 from Sire.Vol import PeriodicBox
 
 # Python dependencies
@@ -33,7 +33,7 @@ try:
 except:
     pass
 
-import numpy as np
+import numpy as _np
 #try:
 #    import mdtraj
 #except ImportError:
@@ -197,10 +197,7 @@ def addAnalyticalLRC(system, cutoff, bulk_density):
     solvent = system[MGName("solvent")]
     solvent_mols = solvent.molecules()
     solvent_molnums = solvent_mols.molNums()
-    #
-    # What if solvent contains more than one type of molecule?
-    #
-    #for molnum in solvent_molnums:
+
     avg_sigma = 0.0 * angstrom
     avg_epsilon = 0.0 * kcal_per_mol
     LJsites = 0
@@ -208,7 +205,7 @@ def addAnalyticalLRC(system, cutoff, bulk_density):
     # Loop over all solvent molecules to find something which
     # is not an ion or a protein
     # TODO: Make this more robust - there could be other non-ligand
-    # molecules with n_atoms > 1 < 30
+    # molecules with n_atoms > 1 < 30 or more than one type of solvent
     n_solvent_mols = len(solvent_molnums)
     for i, molnum in enumerate(solvent_molnums):
         mol = solvent_mols.molecule(molnum)[0].molecule()
@@ -348,10 +345,16 @@ def updateSystemfromTraj(system, frame_xyz, cell_lengths, cell_angles):
     return system
 
 def getFreeEnergy(delta_nrgs):
+    # Subtract mean value from all energies
+    # to avoid overflow during exponentiation
+    delta_nrgs = _np.array([nrg.value() for nrg in delta_nrgs])
+    mean_nrg = delta_nrgs.mean()
+    delta_nrgs -= mean_nrg
     free_nrg = FreeEnergyAverage(temperature.val)
     for nrg in delta_nrgs:
-        free_nrg.accumulate(nrg.value())
-    deltaG = free_nrg.average() * kcal_per_mol
+        free_nrg.accumulate(nrg)
+    # Add back the mean
+    deltaG = (free_nrg.average() + mean_nrg)* kcal_per_mol
     return deltaG
 
 def resample(values):
@@ -387,15 +390,11 @@ def runLambda():
     # !!! NEED TO DISABLE CHANGE IN COULOMBIC CUTOFF !!
     #system = zeroCharges(system)
 
-    #import pdb; pdb.set_trace()
-
     # THIS IS THE ONE WITH SHORT CUTOFF
     system_shortc = System()
     system_shortc.copy(system)
-    #import pdb; pdb.set_trace()
     system_shortc = setupLJFF(system_shortc, space, \
                               cutoff=cutoff_dist.val)
-    #import pdb; pdb.set_trace()
 
     # Determine longest cutoff that can be used. Take lowest space dimension,
     # and decrease by 5%
@@ -413,7 +412,6 @@ def runLambda():
                              cutoff=long_cutoff)
     # NOW ADD ANALYTICAL CORRECTION TERM TO longc
     E_lrc_full = addAnalyticalLRC(system_longc, long_cutoff, bulk_rho.val)
-    #import pdb; pdb.set_trace()
     # Now loop over snapshots in dcd and accumulate energies
     start_frame = 1
     end_frame = 1000000000
@@ -448,7 +446,7 @@ def runLambda():
     deltaG = getFreeEnergy(delta_nrgs)
     #print (deltaG)
     nbootstrap = 100
-    deltaG_bootstrap = np.zeros(nbootstrap)
+    deltaG_bootstrap = _np.zeros(nbootstrap)
     for x in range(0,nbootstrap):
         resampled_nrgs = resample(delta_nrgs)
         dG = getFreeEnergy(resampled_nrgs)
