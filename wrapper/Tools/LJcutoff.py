@@ -453,3 +453,5 @@ def runLambda():
         deltaG_bootstrap[x] = dG.value()
     dev = deltaG_bootstrap.std()
     print ("DG_LJ = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (deltaG.value(), dev))
+
+    return deltaG, dev

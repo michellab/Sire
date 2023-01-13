@@ -174,10 +174,13 @@ def resolveParameters(func):
         try:
             retval = func()
         except:
+            retval = None
             sys.exc_info()[0]
             Parameter.pop()
             raise
 
         Parameter.pop()
+
+        return retval
 
     return inner
